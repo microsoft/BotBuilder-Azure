@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license.
 // 
@@ -31,10 +31,26 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import { BotServiceConnector } from './BotServiceConnector';
-import { TableBotStorage } from './TableBotStorage';
+import * as builder from 'botbuilder';
+import * as async from 'async';
 
-declare var exports: any;
+export interface ITableBotStorageOptions {
+    /** If true the data will be gzipped prior to writing to storage. */
+    gzipData?: boolean;    
+}
 
-exports.BotServiceConnector = BotServiceConnector;
-exports.TableBotStorage = TableBotStorage;
+export class TableBotStorage implements builder.IBotStorage {
+    constructor(private options: ITableBotStorageOptions) {
+
+    }
+
+    /** Reads in data from storage. */
+    public getData(context: builder.IBotStorageContext, callback: (err: Error, data: builder.IBotStorageData) => void): void {
+
+    }
+    
+    /** Writes out data to storage. */
+    public saveData(context: builder.IBotStorageContext, data: builder.IBotStorageData, callback?: (err: Error) => void): void {
+
+    }
+}

@@ -187,6 +187,12 @@ export interface IBotServiceConnectorSettings {
     gzipData?: boolean;    
 }
 
+/** Optionas used to initialize a TableBotStorage instance. */
+export interface ITableBotStorageOptions {
+    /** If true the data will be gzipped prior to writing to storage. */
+    gzipData?: boolean;    
+}
+
 
 //=============================================================================
 //
@@ -219,5 +225,22 @@ export class BotServiceConnector implements IBotStorage {
     getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
 
     /** Writes out data to the Bot Frameworks state service. */
+    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+}
+
+
+/** Azure Table Staorage based implementation of IBotStorage. */
+export class TableBotStorage implements IBotStorage {
+
+    /** 
+     * Creates a new instnace of the TableBotStorage.
+     * @param options (Optional) config params that let you specify the bots App ID & Password you were assigned in the Bot Frameworks developer portal. 
+     */
+    constructor(options: ITableBotStorageOptions);
+    
+    /** Reads in data from the table. */
+    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
+
+    /** Writes out data to the table. */
     saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
 }

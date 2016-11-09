@@ -23,6 +23,10 @@
   "main": "./lib/botbuilder-azure.js",
   "typings": "./lib/botbuilder-azure.d.ts",
   "dependencies": {
+    "async": "^2.1.2",
     "botbuilder": "^3.4.4"
+  },
+  "devDependencies": {
+    "@types/async": "^2.0.32"
   }
 }
