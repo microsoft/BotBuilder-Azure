@@ -1,0 +1,90 @@
+---
+---
+<!doctype html>
+<html class="default no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{#ifCond model.name '==' project.name}}{{project.name}}{{else}}{{model.name}} | {{project.name}}{{/ifCond}} | Bot Framework</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+    <link rel="stylesheet" href="{{relativeURL "assets/css/main.css"}}">
+    <script src="{{relativeURL "assets/js/modernizr.js"}}"></script>
+	<link rel="stylesheet" href="/css/documentation.css" />
+	<script src="/css/documents.js"></script>	
+  <!-- START OF SmartSource Data Collector TAG v10.4.23 -->
+  <!-- Copyright (c) 2016 Webtrends Inc.  All rights reserved. -->
+  <script type="text/javascript" src="/js/webtrends.load.js"></script>
+  <!-- 
+    appInsights
+  -->
+  <script type="text/javascript">
+    var appInsights=window.appInsights||function(config){
+      function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;for(s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js",u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t
+      }({
+          instrumentationKey:"ecf7f29d-de8c-4169-a492-bdce0a32c300"
+      });
+        
+      window.appInsights=appInsights;
+      appInsights.trackPageView();
+  </script>  
+</head>
+<body>
+<div id="app-body">
+	<div class="fullWidth">
+
+			{{> header}}
+			<div class="outline">
+				<article class="post">
+				<div id="side-nav">
+				{% include leftnav.html %}
+				</div>
+				<div id="doc-content">
+
+			{{> docs-header}}
+				<div class="container container-main">
+					<div class="row">
+						<div class="col-8 col-content">
+							{{{contents}}}
+						</div>
+						<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+							<nav class="tsd-navigation primary">
+								<ul>
+									{{#each navigation.children}}
+										{{> navigation}}
+									{{/each}}
+								</ul>
+							</nav>
+
+							<nav class="tsd-navigation secondary menu-sticky">
+								<ul class="before-current">
+									{{#each toc.children}}
+										{{> toc.root}}
+									{{/each}}
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			{{> footer}}
+				</div>
+				</article>
+			</div>
+			{{> ms-footer}}
+
+			<div class="overlay"></div>
+			<script src="{{relativeURL "assets/js/main.js"}}"></script>
+			<script>if (location.protocol == 'file:') document.write('<script src="{{relativeURL "assets/js/search.js"}}"><' + '/script>');</script>
+
+			{{> analytics}}
+	</div>
+</div>
+<script src="https://bot-framework.azureedge.net/libs/svgxuse.js"></script>
+
+<script src="https://static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100954936); }catch(e){}</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="https://in.getclicky.com/100954936ns.gif" /></p></noscript>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+/**/node_modules
+/**/.vscode
+/**/*.VC.db
+/built
+/docs/doc

@@ -1,0 +1,28 @@
+{
+  "name": "botbuilder-azure",
+  "version": "0.0.1",
+  "description": "Azure related components for Bot Builder SDK.",
+  "author": "Microsoft Corp.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Microsoft/BotBuilder-Azure/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/BotBuilder-Azure.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "botbuilder",
+    "bots",
+    "chatbots",
+    "azure"
+  ],
+  "main": "./lib/botbuilder-azure.js",
+  "typings": "./lib/botbuilder-azure.d.ts",
+  "dependencies": {
+    "botbuilder": "^3.4.4"
+  }
+}
