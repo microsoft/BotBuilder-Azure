@@ -103,30 +103,36 @@ export class TableBotStorage implements builder.IBotStorage {
 
                 this.azureTableClient.retrieve(entry.partitionKey, entry.rowKey, function(error: any, entity: any, response: IHttpResponse){
                     if (!error) {
-                        let botData = entity.Data['_'] ? entity.Data['_'] : {};
-                        let isCompressed = entity.IsCompressed['_'];
-                            
-                        if (isCompressed) {
-                            // Decompress gzipped data
-                            zlib.gunzip(new Buffer(botData, Consts.base64), (err, result) => {
-                                if (!err) {
-                                    try {
-                                        var txt = result.toString();
-                                        (<any>data)[entry.field + Consts.hash] = txt;
-                                        (<any>data)[entry.field] = JSON.parse(txt);
-                                    } catch (e) {
-                                        err = e;
+                        if(entity != null) {
+                            let botData = (entity != null && entity.Data['_']) ? entity.Data['_'] : {};
+                            let isCompressed = (entity != null) ? entity.IsCompressed['_'] : false;
+                                
+                            if (isCompressed) {
+                                // Decompress gzipped data
+                                zlib.gunzip(new Buffer(botData, Consts.base64), (err, result) => {
+                                    if (!err) {
+                                        try {
+                                            var txt = result.toString();
+                                            (<any>data)[entry.field + Consts.hash] = txt;
+                                            (<any>data)[entry.field] = txt != null ? JSON.parse(txt) : null;
+                                        } catch (e) {
+                                            err = e;
+                                        }
                                     }
+                                    cb(err);
+                                });
+                            } else {
+                                try {
+                                    (<any>data)[entry.field + Consts.hash] = botData;
+                                    (<any>data)[entry.field] = botData != null ? JSON.parse(botData) : null;
+                                } catch (e) {
+                                    error = e;
                                 }
-                                cb(err);
-                            });
-                        } else {
-                            try {
-                                (<any>data)[entry.field + Consts.hash] = JSON.stringify(botData);
-                                (<any>data)[entry.field] = botData;
-                            } catch (e) {
-                                error = e;
+                                cb(error);
                             }
+                        } else {
+                            (<any>data)[entry.field + Consts.hash] = null;
+                            (<any>data)[entry.field] = null;
                             cb(error);
                         }
                     } else {
@@ -154,8 +160,8 @@ export class TableBotStorage implements builder.IBotStorage {
             var list: any[] = [];
             
             function addWrite(field: string, partitionKey: string, rowKey: string, botData: any) {
-                var hashKey = field + Consts.hash; 
-                var hash = JSON.stringify(botData);
+                let hashKey = field + Consts.hash; 
+                let hash = JSON.stringify(botData);
                 if (!(<any>data)[hashKey] || hash !== (<any>data)[hashKey]) {
                     (<any>data)[hashKey] = hash;
                     list.push({ field: field, partitionKey: partitionKey, rowKey: rowKey, botData: botData, hash: hash });
@@ -167,16 +173,16 @@ export class TableBotStorage implements builder.IBotStorage {
                 if (context.userId) {
                     if (context.persistUserData) {
                         // Write userData
-                        addWrite(Consts.Fields.UserDataField, context.userId, Consts.Fields.UserDataField, data.userData || {});
+                        addWrite(Consts.Fields.UserDataField, context.userId, Consts.Fields.UserDataField, data.userData);
                     }
                     if (context.conversationId) {
                         // Write privateConversationData
-                        addWrite(Consts.Fields.PrivateConversationDataField, context.conversationId, context.userId, data.privateConversationData || {});
+                        addWrite(Consts.Fields.PrivateConversationDataField, context.conversationId, context.userId, data.privateConversationData);
                     }
                 }
                 if (context.persistConversationData && context.conversationId) {
                     // Write conversationData
-                    addWrite(Consts.Fields.ConversationDataField, context.conversationId, Consts.Fields.ConversationDataField, data.conversationData || {});
+                    addWrite(Consts.Fields.ConversationDataField, context.conversationId, Consts.Fields.ConversationDataField, data.conversationData);
                 }
 
                 // Execute writes in parallel
@@ -197,7 +203,7 @@ export class TableBotStorage implements builder.IBotStorage {
                             }
                         });
                     } else if (entry.hash.length < Consts.maxDataLength) {
-                        this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.botData, false, function(error: any, eTag: any, response: IHttpResponse){
+                        this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.hash, false, function(error: any, eTag: any, response: IHttpResponse){
                             errorCallback(error);
                         });
                     } else {

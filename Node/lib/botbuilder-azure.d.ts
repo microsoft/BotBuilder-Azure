@@ -197,7 +197,6 @@ export interface ITableBotStorageOptions {
     accountKey: string;    
 }
 
-
 //=============================================================================
 //
 // CLASSES

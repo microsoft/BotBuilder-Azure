@@ -32,20 +32,14 @@
 //
 
 import * as builder from 'botbuilder';
-import * as async from 'async';
-var azure = require('azure-storage');
+import * as builderazure from '../../';
 
-import { IAzureTableClient } from './AzureTableClient';
-import { AzureTableClient } from './AzureTableClient';
-import { IHttpResponse } from './AzureTableClient';
-import { IStorageError } from './AzureTableClient';
+export class FaultyAzureTableClient implements builderazure.IAzureTableClient {
 
-export class FaultyAzureTableClient implements IAzureTableClient {
-
-    private readonly tableClient: IAzureTableClient;
+    private readonly tableClient: builderazure.IAzureTableClient;
     private readonly faultSettings: IFaultSettings;
 
-    constructor(client: IAzureTableClient, faultSettings: IFaultSettings) {
+    constructor(client: builderazure.IAzureTableClient, faultSettings: IFaultSettings) {
         this.tableClient = client;
         this.faultSettings = faultSettings;
     }
@@ -53,27 +47,27 @@ export class FaultyAzureTableClient implements IAzureTableClient {
     public initialize(callback: (error: Error) => void): void {
         
         if(this.faultSettings.shouldFailInitialize){
-            callback(AzureTableClient.getError(this.faultSettings.error, this.faultSettings.response));
+            callback((<any>builderazure.AzureTableClient).getError(this.faultSettings.error, this.faultSettings.response));
         } 
         else {
             this.tableClient.initialize(callback);
         }
     }
 
-    public insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void {
+    public insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: builderazure.IHttpResponse) => void): void {
         
         if(this.faultSettings.shouldFailInsert){
-            callback(AzureTableClient.getError(this.faultSettings.error, this.faultSettings.response), null, this.faultSettings.response);
+            callback((<any>builderazure.AzureTableClient).getError(this.faultSettings.error, this.faultSettings.response), null, this.faultSettings.response);
         } 
         else {
             this.tableClient.insertOrReplace(partitionKey, rowKey, data, isCompressed, callback);
         }
     }
 
-    public retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void {
+    public retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: builderazure.IHttpResponse) => void): void {
         
         if(this.faultSettings.shouldFailRetrieve){
-            callback(AzureTableClient.getError(this.faultSettings.error, this.faultSettings.response), null, this.faultSettings.response);
+            callback((<any>builderazure.AzureTableClient).getError(this.faultSettings.error, this.faultSettings.response), null, this.faultSettings.response);
         } 
         else {
             this.tableClient.retrieve(partitionKey, rowKey, callback);
@@ -85,6 +79,6 @@ export interface IFaultSettings {
     shouldFailInsert: boolean;
     shouldFailInitialize: boolean;
     shouldFailRetrieve: boolean;
-    error: IStorageError;
-    response: IHttpResponse;
+    error: builderazure.IStorageError;
+    response: builderazure.IHttpResponse;
 }

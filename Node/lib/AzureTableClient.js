@@ -1,6 +1,6 @@
 "use strict";
+var Consts = require('./Consts');
 var azure = require('azure-storage');
-var DEVELOPMENT_CONNECTION_STRING = 'UseDevelopmentStorage=true';
 var AzureTableClient = (function () {
     function AzureTableClient(tableName, accountName, accountKey) {
         if (!accountName && !accountKey) {
@@ -35,12 +35,17 @@ var AzureTableClient = (function () {
     AzureTableClient.prototype.retrieve = function (partitionKey, rowKey, callback) {
         var tableService = this.buildTableService();
         tableService.retrieveEntity(this.tableName, partitionKey, rowKey, function (error, result, response) {
-            callback(AzureTableClient.getError(error, response), result, response);
+            if (response.statusCode == Consts.HttpStatusCodes.NotFound) {
+                callback(null, null, response);
+            }
+            else {
+                callback(AzureTableClient.getError(error, response), result, response);
+            }
         });
     };
     AzureTableClient.prototype.buildTableService = function () {
         var tableService = this.useDevelopmentStorage
-            ? azure.createTableService(DEVELOPMENT_CONNECTION_STRING)
+            ? azure.createTableService(Consts.developmentConnectionString)
             : azure.createTableService(this.accountName, this.accountKey);
         return tableService.withFilter(new azure.ExponentialRetryPolicyFilter());
     };

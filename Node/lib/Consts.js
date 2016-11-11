@@ -9,6 +9,9 @@ exports.Fields = {
 exports.tableName = 'BotStore';
 exports.hash = 'Hash';
 exports.base64 = 'base64';
+exports.HttpStatusCodes = {
+    NotFound: '404'
+};
 exports.ErrorCodes = {
     MessageSize: 'EMSGSIZE',
     BadMessage: 'EBADMSG'

@@ -44,8 +44,12 @@ export var tableName = 'BotStore';
 export var hash = 'Hash';
 export var base64 = 'base64';
 
+export var HttpStatusCodes = {
+    NotFound: '404'
+};
+
 export var ErrorCodes = {
     MessageSize: 'EMSGSIZE',
     BadMessage: 'EBADMSG'
-}
+};
 

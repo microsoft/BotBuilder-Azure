@@ -1,72 +1,59 @@
 "use strict";
 var async = require('async');
 var Promise = require('promise');
+var Consts = require('./Consts');
 var zlib = require('zlib');
 var AzureTableClient_1 = require('./AzureTableClient');
 var azure = require('azure-storage');
-var MAX_DATA_LENGTH = 65000;
-var USER_DATA_FIELD = 'userData';
-var CONVERSATION_DATA_FIELD = 'conversationData';
-var PRIVATE_CONVERSATION_DATA_FIELD = 'privateConversationData';
-var TABLE_NAME = 'BotStore';
-var HASH = 'Hash';
-var BASE_64 = 'base64';
-var ERROR_MESSAGE_SIZE = 'EMSGSIZE';
-var ERROR_BAD_MESSAGE = 'EBADMSG';
 var TableBotStorage = (function () {
-    function TableBotStorage(options, tableClient) {
+    function TableBotStorage(options, azureTableClient) {
         this.options = options;
-        this.botStorageTableName = TABLE_NAME;
-        this.settings = options;
-        if (!tableClient) {
-            this.azureTableClient = new AzureTableClient_1.AzureTableClient(this.botStorageTableName, options.accountName, options.accountKey);
-        }
-        else {
-            this.azureTableClient = tableClient;
+        this.azureTableClient = azureTableClient;
+        if (!this.azureTableClient) {
+            this.azureTableClient = new AzureTableClient_1.AzureTableClient(Consts.tableName, options.accountName, options.accountKey);
         }
     }
     TableBotStorage.prototype.getData = function (context, callback) {
         var _this = this;
-        try {
-            var promise = this.initializeTableClient();
-            promise.done(function () {
-                var list = [];
-                if (context.userId) {
-                    if (context.persistUserData) {
-                        list.push({
-                            partitionKey: context.userId,
-                            rowKey: USER_DATA_FIELD,
-                            field: USER_DATA_FIELD
-                        });
-                    }
-                    if (context.conversationId) {
-                        list.push({
-                            partitionKey: context.conversationId,
-                            rowKey: context.userId,
-                            field: PRIVATE_CONVERSATION_DATA_FIELD
-                        });
-                    }
-                }
-                if (context.persistConversationData && context.conversationId) {
+        this.initializeTableClient().done(function () {
+            var list = [];
+            if (context.userId) {
+                if (context.persistUserData) {
                     list.push({
-                        partitionKey: context.conversationId,
-                        rowKey: CONVERSATION_DATA_FIELD,
-                        field: CONVERSATION_DATA_FIELD
+                        partitionKey: context.userId,
+                        rowKey: Consts.Fields.UserDataField,
+                        field: Consts.Fields.UserDataField
                     });
                 }
-                var data = {};
-                async.each(list, function (entry, cb) {
-                    _this.azureTableClient.retrieve(entry.partitionKey, entry.rowKey, function (error, entity, response) {
-                        if (!error) {
-                            var botData = entity.Data['_'] ? entity.Data['_'] : {};
-                            var isCompressed = entity.IsCompressed['_'];
+                if (context.conversationId) {
+                    list.push({
+                        partitionKey: context.conversationId,
+                        rowKey: context.userId,
+                        field: Consts.Fields.PrivateConversationDataField
+                    });
+                }
+            }
+            if (context.persistConversationData && context.conversationId) {
+                list.push({
+                    partitionKey: context.conversationId,
+                    rowKey: Consts.Fields.ConversationDataField,
+                    field: Consts.Fields.ConversationDataField
+                });
+            }
+            var data = {};
+            async.each(list, function (entry, cb) {
+                _this.azureTableClient.retrieve(entry.partitionKey, entry.rowKey, function (error, entity, response) {
+                    if (!error) {
+                        if (entity != null) {
+                            var botData = (entity != null && entity.Data['_']) ? entity.Data['_'] : {};
+                            var isCompressed = (entity != null) ? entity.IsCompressed['_'] : false;
                             if (isCompressed) {
-                                zlib.gunzip(new Buffer(botData, BASE_64), function (err, result) {
+                                zlib.gunzip(new Buffer(botData, Consts.base64), function (err, result) {
                                     if (!err) {
                                         try {
                                             var txt = result.toString();
-                                            data[entry.field + HASH] = txt;
-                                            data[entry.field] = JSON.parse(txt);
+                                            data[entry.field + Consts.hash] = txt;
+                                            data[entry.field] = txt != null ? JSON.parse(txt) : null;
                                         }
                                         catch (e) {
                                             err = e;
@@ -77,8 +64,8 @@ var TableBotStorage = (function () {
                             }
                             else {
                                 try {
-                                    data[entry.field + HASH] = JSON.stringify(botData);
-                                    data[entry.field] = botData;
+                                    data[entry.field + Consts.hash] = botData;
+                                    data[entry.field] = botData != null ? JSON.parse(botData) : null;
                                 }
                                 catch (e) {
                                     error = e;
@@ -87,23 +74,25 @@ var TableBotStorage = (function () {
                             }
                         }
                         else {
+                            data[entry.field + Consts.hash] = null;
+                            data[entry.field] = null;
                             cb(error);
                         }
-                    });
-                }, function (err) {
-                    if (!err) {
-                        callback(null, data);
                     }
                     else {
-                        var m = err.toString();
-                        callback(err instanceof Error ? err : new Error(m), null);
+                        cb(error);
                     }
                 });
-            }, function (err) { return callback(err, null); });
-        }
-        catch (e) {
-            callback(e instanceof Error ? e : new Error(e.toString()), null);
-        }
+            }, function (err) {
+                if (!err) {
+                    callback(null, data);
+                }
+                else {
+                    var m = err.toString();
+                    callback(err instanceof Error ? err : new Error(m), null);
+                }
+            });
+        }, function (err) { return callback(err, null); });
     };
     TableBotStorage.prototype.saveData = function (context, data, callback) {
         var _this = this;
@@ -111,7 +100,7 @@ var TableBotStorage = (function () {
         promise.done(function () {
             var list = [];
             function addWrite(field, partitionKey, rowKey, botData) {
-                var hashKey = field + HASH;
+                var hashKey = field + Consts.hash;
                 var hash = JSON.stringify(botData);
                 if (!data[hashKey] || hash !== data[hashKey]) {
                     data[hashKey] = hash;
@@ -121,21 +110,21 @@ var TableBotStorage = (function () {
             try {
                 if (context.userId) {
                     if (context.persistUserData) {
-                        addWrite(USER_DATA_FIELD, context.userId, USER_DATA_FIELD, data.userData || {});
+                        addWrite(Consts.Fields.UserDataField, context.userId, Consts.Fields.UserDataField, data.userData);
                     }
                     if (context.conversationId) {
-                        addWrite(PRIVATE_CONVERSATION_DATA_FIELD, context.conversationId, context.userId, data.privateConversationData || {});
+                        addWrite(Consts.Fields.PrivateConversationDataField, context.conversationId, context.userId, data.privateConversationData);
                     }
                 }
                 if (context.persistConversationData && context.conversationId) {
-                    addWrite(PRIVATE_CONVERSATION_DATA_FIELD, context.conversationId, PRIVATE_CONVERSATION_DATA_FIELD, data.conversationData || {});
+                    addWrite(Consts.Fields.ConversationDataField, context.conversationId, Consts.Fields.ConversationDataField, data.conversationData);
                 }
                 async.each(list, function (entry, errorCallback) {
-                    if (_this.settings.gzipData) {
+                    if (_this.options.gzipData) {
                         zlib.gzip(entry.hash, function (err, result) {
-                            if (!err && result.length > MAX_DATA_LENGTH) {
-                                err = new Error("Data of " + result.length + " bytes gzipped exceeds the " + MAX_DATA_LENGTH + " byte limit. Can't post to: " + entry.url);
-                                err.code = ERROR_MESSAGE_SIZE;
+                            if (!err && result.length > Consts.maxDataLength) {
+                                err = new Error("Data of " + result.length + " bytes gzipped exceeds the " + Consts.maxDataLength + " byte limit. Can't post to: " + entry.url);
+                                err.code = Consts.ErrorCodes.MessageSize;
                             }
                             if (!err) {
                                 _this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, result.toString('base64'), true, function (error, eTag, response) {
@@ -147,14 +136,14 @@ var TableBotStorage = (function () {
                             }
                         });
                     }
-                    else if (entry.hash.length < MAX_DATA_LENGTH) {
-                        _this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.botData, false, function (error, eTag, response) {
+                    else if (entry.hash.length < Consts.maxDataLength) {
+                        _this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.hash, false, function (error, eTag, response) {
                             errorCallback(error);
                         });
                     }
                     else {
-                        var err = new Error("Data of " + entry.hash.length + " bytes exceeds the " + MAX_DATA_LENGTH + " byte limit. Consider setting connectors gzipData option. Can't post to: " + entry.url);
-                        err.code = ERROR_MESSAGE_SIZE;
+                        var err = new Error("Data of " + entry.hash.length + " bytes exceeds the " + Consts.maxDataLength + " byte limit. Consider setting connectors gzipData option. Can't post to: " + entry.url);
+                        err.code = Consts.ErrorCodes.MessageSize;
                         errorCallback(err);
                     }
                 }, function (err) {
@@ -172,7 +161,7 @@ var TableBotStorage = (function () {
             catch (e) {
                 if (callback) {
                     var err = e instanceof Error ? e : new Error(e.toString());
-                    err.code = ERROR_BAD_MESSAGE;
+                    err.code = Consts.ErrorCodes.BadMessage;
                     callback(err);
                 }
             }

@@ -96,7 +96,13 @@ export class AzureTableClient implements IAzureTableClient {
         let tableService = this.buildTableService();
 
         tableService.retrieveEntity(this.tableName, partitionKey, rowKey, function(error: IStorageError, result: any, response: IHttpResponse){
-            callback(AzureTableClient.getError(error, response), result, response);
+            //404 on retrieve means the entity does not exist. Just return null
+            if(response.statusCode == Consts.HttpStatusCodes.NotFound){
+                callback(null, null, response);
+            } 
+            else{
+                callback(AzureTableClient.getError(error, response), result, response);
+            }            
         });
     }
 
