@@ -24,9 +24,13 @@
   "typings": "./lib/botbuilder-azure.d.ts",
   "dependencies": {
     "async": "^2.1.2",
-    "botbuilder": "^3.4.4"
+    "azure-storage": "^1.3.2",
+    "botbuilder": "^3.4.4",
+    "promise": "^7.1.1"
   },
   "devDependencies": {
-    "@types/async": "^2.0.32"
+    "@types/async": "^2.0.32",
+    "@types/node": "^6.0.46",
+    "@types/promise": "^7.1.30"
   }
 }

@@ -187,6 +187,16 @@ export interface IBotServiceConnectorSettings {
     gzipData?: boolean;    
 }
 
+/** Options used to initialize a TableBotStorage instance. */
+export interface ITableBotStorageOptions {
+    /** If true the data will be gzipped prior to writing to storage. */
+    gzipData?: boolean;   
+    /** Storage account name used to persist bot data. */
+    accountName: string;
+    /** Storage account key used to persist bot data. */
+    accountKey: string;    
+}
+
 
 //=============================================================================
 //
@@ -220,4 +230,112 @@ export class BotServiceConnector implements IBotStorage {
 
     /** Writes out data to the Bot Frameworks state service. */
     saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+}
+
+
+/** Azure Table Storage based implementation of IBotStorage. */
+export class TableBotStorage implements IBotStorage {
+
+    /** 
+     * Creates a new instance of the TableBotStorage.
+     * @param options config params that let you specify storage preferences 
+     * @param optional table client to be injected, used for testing and fault injection 
+     */
+    constructor(options: ITableBotStorageOptions, tableClient?: IAzureTableClient);
+    
+    /** Reads in data from the table. */
+    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
+
+    /** Writes out data to the table. */
+    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+}
+
+export interface IAzureTableClient {
+    
+    /** Initializes the Azure Table client */
+    initialize(callback: (error: Error) => void): void;
+
+    /** Inserts or replaces an entity in the table */
+    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+
+    /** Retrieves an entity from the table */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+}
+
+export class AzureTableClient implements IAzureTableClient {
+
+    /** 
+     * Creates a new instance of the TableBotStorage.
+     * @param name of the table to be used in Azure Table 
+     * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started
+     * @param optional Azure storage account key. If not specified, development storage is used and Azure Storage Emulator should be started 
+     */
+    constructor(tableName: string, accountName?: string, accountKey?: string);
+
+    /** Initializes the azure table client */
+    initialize(callback: (error: Error) => void): void;
+
+    /** Inserts or replaces an entity in the table */
+    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+
+    /** Retrieves an entity from the table */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+}
+
+export interface IHttpResponse {
+    
+    /** Whether the Http request was successful */
+    isSuccessful: boolean;
+    
+    /** Http status code */
+    statusCode: string;   
+}
+
+export interface IStorageError {
+
+    /** Error code from Azure Table */
+    code: string;
+
+    /** Error message from Azure Table */
+    message: string;
+
+    /** Status code from Azure Table */
+    statusCode: string;
+}
+
+export class FaultyAzureTableClient implements IAzureTableClient {
+
+    /** 
+     * Creates a new instance of the FaultyAzureTableClient, a rudimentary fault injection implementation of IAzureTableClient
+     * @param underlying table client to be used on calls that should not fault 
+     * @param specification of when and with what error faults should be injected 
+     */
+    constructor(client: IAzureTableClient, faultSettings: IFaultSettings);
+
+    /** Initializes the azure table client */
+    initialize(callback: (error: Error) => void): void;
+
+    /** Inserts or replaces an entity in the table */
+    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+
+    /** Retrieves an entity from the table */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+}
+
+export interface IFaultSettings {
+
+    /** Whether calls to insertOrReplace should fail */
+    shouldFailInsert: boolean;
+
+    /** Whether calls to initialize should fail */
+    shouldFailInitialize: boolean;
+
+    /** Whether calls to retrieve should fail */
+    shouldFailRetrieve: boolean;
+
+    /** The error that should be reported when failures occur */
+    error: IStorageError;
+
+    /** The Http response that should be reported when failures occur */
+    response: IHttpResponse;
 }

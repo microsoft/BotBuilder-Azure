@@ -33,8 +33,15 @@
 
 import { BotServiceConnector } from './BotServiceConnector';
 import { TableBotStorage } from './TableBotStorage';
+import { ITableBotStorageOptions } from './TableBotStorage';
+import { IAzureTableClient } from './AzureTableClient';
+import { AzureTableClient } from './AzureTableClient';
+import { FaultyAzureTableClient } from './FaultyAzureTableClient';
+import { IFaultSettings } from './FaultyAzureTableClient';
 
 declare var exports: any;
 
 exports.BotServiceConnector = BotServiceConnector;
 exports.TableBotStorage = TableBotStorage;
+exports.AzureTableClient = AzureTableClient;
+exports.FaultyAzureTableClient = FaultyAzureTableClient;
