@@ -33,9 +33,9 @@
 
 import * as builder from 'botbuilder';
 import * as async from 'async';
-var azure = require('azure-storage');
+import Consts = require('./Consts');
 
-var DEVELOPMENT_CONNECTION_STRING = 'UseDevelopmentStorage=true';
+var azure = require('azure-storage');
 
 export interface IAzureTableClient {
     initialize(callback: (error: any) => void): void;
@@ -102,7 +102,7 @@ export class AzureTableClient implements IAzureTableClient {
 
     private buildTableService(): any {
         let tableService = this.useDevelopmentStorage 
-            ? azure.createTableService(DEVELOPMENT_CONNECTION_STRING) 
+            ? azure.createTableService(Consts.developmentConnectionString) 
             : azure.createTableService(this.accountName, this.accountKey);
         return tableService.withFilter(new azure.ExponentialRetryPolicyFilter());
     }

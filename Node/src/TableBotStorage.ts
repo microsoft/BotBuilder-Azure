@@ -34,24 +34,13 @@
 import * as builder from 'botbuilder';
 import * as async from 'async';
 import * as Promise from 'promise';
-
+import Consts = require('./Consts');
 import zlib = require('zlib');
 
-import { IAzureTableClient } from './AzureTableClient';
-import { AzureTableClient } from './AzureTableClient';
-import { IHttpResponse } from './AzureTableClient';
+
+import { IAzureTableClient, AzureTableClient, IHttpResponse } from './AzureTableClient';
 
 var azure = require('azure-storage');
-
-var MAX_DATA_LENGTH = 65000;
-var USER_DATA_FIELD = 'userData';
-var CONVERSATION_DATA_FIELD = 'conversationData';
-var PRIVATE_CONVERSATION_DATA_FIELD = 'privateConversationData';
-var TABLE_NAME = 'BotStore';
-var HASH = 'Hash';
-var BASE_64 = 'base64';
-var ERROR_MESSAGE_SIZE = 'EMSGSIZE';
-var ERROR_BAD_MESSAGE = 'EBADMSG';
 
 export interface ITableBotStorageOptions {
     /** If true the data will be gzipped prior to writing to storage. */
@@ -64,110 +53,95 @@ export interface ITableBotStorageOptions {
 
 export class TableBotStorage implements builder.IBotStorage {
 
-    private readonly azureTableClient: IAzureTableClient;
-    private readonly botStorageTableName: string = TABLE_NAME;
-    private readonly settings: ITableBotStorageOptions;
-
     private initializeTableClientPromise: Promise.IThenable<boolean>;
     private tableClientInitialized: boolean;
 
-    constructor(private options: ITableBotStorageOptions, tableClient?: IAzureTableClient) {
+    constructor(private options: ITableBotStorageOptions, private azureTableClient?: IAzureTableClient) {
 
-        this.settings = options;
-
-        if(!tableClient){
+        if(!this.azureTableClient){
             // If no client was injected, use the default implementation
-            this.azureTableClient = new AzureTableClient(this.botStorageTableName, options.accountName, options.accountKey);
-        }
-        else {
-            // A table client was injected, use it as underlying store
-            this.azureTableClient = tableClient;
+            this.azureTableClient = new AzureTableClient(Consts.tableName, options.accountName, options.accountKey);
         }
     }
 
     /** Reads in data from storage. */
     public getData(context: builder.IBotStorageContext, callback: (err: Error, data: builder.IBotStorageData) => void): void {
-        try {
-            // We initialize on every call, but only block on the first call. The reason for this is that we can't run asynchronous initialization in the class ctor
-            let promise = this.initializeTableClient();
-            promise.done(() => {
-                // Build list of read commands
-                var list: any[] = [];
-                if (context.userId) {
-                    // Read userData
-                    if (context.persistUserData) {
-                        list.push({ 
-                            partitionKey: context.userId, 
-                            rowKey: USER_DATA_FIELD,
-                            field: USER_DATA_FIELD
-                        });
-                    }
-                    if (context.conversationId) {
-                        // Read privateConversationData
-                        list.push({
-                            partitionKey: context.conversationId, 
-                            rowKey: context.userId,
-                            field: PRIVATE_CONVERSATION_DATA_FIELD
-                        });
-                    }
-                }
-                if (context.persistConversationData && context.conversationId) {
-                    // Read conversationData
+        // We initialize on every call, but only block on the first call. The reason for this is that we can't run asynchronous initialization in the class ctor
+        this.initializeTableClient().done(() => {
+            // Build list of read commands
+            var list: any[] = [];
+            if (context.userId) {
+                // Read userData
+                if (context.persistUserData) {
                     list.push({ 
-                        partitionKey: context.conversationId, 
-                        rowKey: CONVERSATION_DATA_FIELD,
-                        field: CONVERSATION_DATA_FIELD
+                        partitionKey: context.userId, 
+                        rowKey: Consts.Fields.UserDataField,
+                        field: Consts.Fields.UserDataField
                     });
                 }
+                if (context.conversationId) {
+                    // Read privateConversationData
+                    list.push({
+                        partitionKey: context.conversationId, 
+                        rowKey: context.userId,
+                        field: Consts.Fields.PrivateConversationDataField
+                    });
+                }
+            }
+            if (context.persistConversationData && context.conversationId) {
+                // Read conversationData
+                list.push({ 
+                    partitionKey: context.conversationId, 
+                    rowKey: Consts.Fields.ConversationDataField,
+                    field: Consts.Fields.ConversationDataField
+                });
+            }
 
-                // Execute reads in parallel
-                var data: builder.IBotStorageData = {};
-                async.each(list, (entry, cb) => {
+            // Execute reads in parallel
+            var data: builder.IBotStorageData = {};
+            async.each(list, (entry, cb) => {
 
-                    this.azureTableClient.retrieve(entry.partitionKey, entry.rowKey, function(error: any, entity: any, response: IHttpResponse){
-                        if (!error) {
-                            let botData = entity.Data['_'] ? entity.Data['_'] : {};
-                            let isCompressed = entity.IsCompressed['_'];
-                             
-                            if (isCompressed) {
-                                // Decompress gzipped data
-                                zlib.gunzip(new Buffer(botData, BASE_64), (err, result) => {
-                                    if (!err) {
-                                        try {
-                                            var txt = result.toString();
-                                            (<any>data)[entry.field + HASH] = txt;
-                                            (<any>data)[entry.field] = JSON.parse(txt);
-                                        } catch (e) {
-                                            err = e;
-                                        }
+                this.azureTableClient.retrieve(entry.partitionKey, entry.rowKey, function(error: any, entity: any, response: IHttpResponse){
+                    if (!error) {
+                        let botData = entity.Data['_'] ? entity.Data['_'] : {};
+                        let isCompressed = entity.IsCompressed['_'];
+                            
+                        if (isCompressed) {
+                            // Decompress gzipped data
+                            zlib.gunzip(new Buffer(botData, Consts.base64), (err, result) => {
+                                if (!err) {
+                                    try {
+                                        var txt = result.toString();
+                                        (<any>data)[entry.field + Consts.hash] = txt;
+                                        (<any>data)[entry.field] = JSON.parse(txt);
+                                    } catch (e) {
+                                        err = e;
                                     }
-                                    cb(err);
-                                });
-                            } else {
-                                try {
-                                    (<any>data)[entry.field + HASH] = JSON.stringify(botData);
-                                    (<any>data)[entry.field] = botData;
-                                } catch (e) {
-                                    error = e;
                                 }
-                                cb(error);
-                            }
+                                cb(err);
+                            });
                         } else {
+                            try {
+                                (<any>data)[entry.field + Consts.hash] = JSON.stringify(botData);
+                                (<any>data)[entry.field] = botData;
+                            } catch (e) {
+                                error = e;
+                            }
                             cb(error);
                         }
-                    });
-                }, (err) => {
-                    if (!err) {
-                        callback(null, data);
                     } else {
-                        var m = err.toString();
-                        callback(err instanceof Error ? err : new Error(m), null);
+                        cb(error);
                     }
                 });
-            }, (err) => callback(err, null));
-        } catch (e) {
-            callback(e instanceof Error ? e : new Error(e.toString()), null);
-        }
+            }, (err) => {
+                if (!err) {
+                    callback(null, data);
+                } else {
+                    var m = err.toString();
+                    callback(err instanceof Error ? err : new Error(m), null);
+                }
+            });
+        }, (err) => callback(err, null));
     }
     
     /** Writes out data to storage. */
@@ -180,7 +154,7 @@ export class TableBotStorage implements builder.IBotStorage {
             var list: any[] = [];
             
             function addWrite(field: string, partitionKey: string, rowKey: string, botData: any) {
-                var hashKey = field + HASH; 
+                var hashKey = field + Consts.hash; 
                 var hash = JSON.stringify(botData);
                 if (!(<any>data)[hashKey] || hash !== (<any>data)[hashKey]) {
                     (<any>data)[hashKey] = hash;
@@ -193,25 +167,25 @@ export class TableBotStorage implements builder.IBotStorage {
                 if (context.userId) {
                     if (context.persistUserData) {
                         // Write userData
-                        addWrite(USER_DATA_FIELD, context.userId, USER_DATA_FIELD, data.userData || {});
+                        addWrite(Consts.Fields.UserDataField, context.userId, Consts.Fields.UserDataField, data.userData || {});
                     }
                     if (context.conversationId) {
                         // Write privateConversationData
-                        addWrite(PRIVATE_CONVERSATION_DATA_FIELD, context.conversationId, context.userId, data.privateConversationData || {});
+                        addWrite(Consts.Fields.PrivateConversationDataField, context.conversationId, context.userId, data.privateConversationData || {});
                     }
                 }
                 if (context.persistConversationData && context.conversationId) {
                     // Write conversationData
-                    addWrite(PRIVATE_CONVERSATION_DATA_FIELD, context.conversationId, PRIVATE_CONVERSATION_DATA_FIELD, data.conversationData || {});
+                    addWrite(Consts.Fields.ConversationDataField, context.conversationId, Consts.Fields.ConversationDataField, data.conversationData || {});
                 }
 
                 // Execute writes in parallel
                 async.each(list, (entry, errorCallback) => {
-                    if (this.settings.gzipData) {
+                    if (this.options.gzipData) {
                         zlib.gzip(entry.hash, (err, result) => {
-                            if (!err && result.length > MAX_DATA_LENGTH) {
-                                err = new Error("Data of " + result.length + " bytes gzipped exceeds the " + MAX_DATA_LENGTH + " byte limit. Can't post to: " + entry.url);
-                                (<any>err).code = ERROR_MESSAGE_SIZE;
+                            if (!err && result.length > Consts.maxDataLength) {
+                                err = new Error("Data of " + result.length + " bytes gzipped exceeds the " + Consts.maxDataLength + " byte limit. Can't post to: " + entry.url);
+                                (<any>err).code = Consts.ErrorCodes.MessageSize;
                             }
                             if (!err) {
                                 //Insert gzipped entry
@@ -222,13 +196,13 @@ export class TableBotStorage implements builder.IBotStorage {
                                 errorCallback(err);
                             }
                         });
-                    } else if (entry.hash.length < MAX_DATA_LENGTH) {
+                    } else if (entry.hash.length < Consts.maxDataLength) {
                         this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.botData, false, function(error: any, eTag: any, response: IHttpResponse){
                             errorCallback(error);
                         });
                     } else {
-                        var err = new Error("Data of " + entry.hash.length + " bytes exceeds the " + MAX_DATA_LENGTH + " byte limit. Consider setting connectors gzipData option. Can't post to: " + entry.url);
-                        (<any>err).code = ERROR_MESSAGE_SIZE;
+                        var err = new Error("Data of " + entry.hash.length + " bytes exceeds the " + Consts.maxDataLength + " byte limit. Consider setting connectors gzipData option. Can't post to: " + entry.url);
+                        (<any>err).code = Consts.ErrorCodes.MessageSize;
                         errorCallback(err);
                     }
                 }, (err) => {
@@ -244,7 +218,7 @@ export class TableBotStorage implements builder.IBotStorage {
             } catch (e) {
                 if (callback) {
                     var err = e instanceof Error ? e : new Error(e.toString());
-                    (<any>err).code = ERROR_BAD_MESSAGE;
+                    (<any>err).code = Consts.ErrorCodes.BadMessage;
                     callback(err);
                 }
             }

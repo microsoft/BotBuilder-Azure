@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license.
 // 
@@ -31,14 +31,21 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import { BotServiceConnector } from './BotServiceConnector';
-import { TableBotStorage } from './TableBotStorage';
-import { ITableBotStorageOptions } from './TableBotStorage';
-import { IAzureTableClient } from './AzureTableClient';
-import { AzureTableClient } from './AzureTableClient';
+export var developmentConnectionString = 'UseDevelopmentStorage=true';
+export var maxDataLength = 65000;
 
-declare var exports: any;
+export var Fields = {
+    UserDataField: 'userData',
+    ConversationDataField: 'conversationData',
+    PrivateConversationDataField: 'privateConversationData'
+};
 
-exports.BotServiceConnector = BotServiceConnector;
-exports.TableBotStorage = TableBotStorage;
-exports.AzureTableClient = AzureTableClient;
+export var tableName = 'BotStore';
+export var hash = 'Hash';
+export var base64 = 'base64';
+
+export var ErrorCodes = {
+    MessageSize: 'EMSGSIZE',
+    BadMessage: 'EBADMSG'
+}
+
