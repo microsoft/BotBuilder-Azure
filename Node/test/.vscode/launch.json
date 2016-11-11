@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/TableBotStorageFaultTest.js",
+            "program": "${workspaceRoot}/TableBotStorageFaultTests.js",
             "cwd": "${workspaceRoot}"
         },
         {

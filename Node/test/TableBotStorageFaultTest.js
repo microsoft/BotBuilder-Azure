@@ -32,7 +32,7 @@
 //
 
 var azure = require('../');
-var faults = require('./')
+var faults = require('./lib/FaultyAzureTableClient');
 var assert = require('assert');
 var builder = require('botbuilder');
 
