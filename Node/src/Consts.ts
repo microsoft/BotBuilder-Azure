@@ -53,3 +53,5 @@ export var ErrorCodes = {
     BadMessage: 'EBADMSG'
 };
 
+export var DocDbRootQuery = 'SELECT * FROM root r WHERE r.id = @id'
+export var DocDbIdParam = '@id'

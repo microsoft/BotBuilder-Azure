@@ -98,9 +98,9 @@ export class DocumentDbClient implements IStorageClient {
 
         let id = partitionKey + ',' + rowKey;
         let querySpec = {
-            query: 'SELECT * FROM root r WHERE r.id = @id',
+            query: Consts.DocDbRootQuery,
             parameters: [{
-                name: '@id',
+                name: Consts.DocDbIdParam,
                 value: id
             }]
         };
@@ -129,9 +129,9 @@ export class DocumentDbClient implements IStorageClient {
     private getOrCreateDatabase(callback: (error: QueryError, database: DatabaseMeta) => void): void {
 
         let querySpec = {
-            query: 'SELECT * FROM root r WHERE r.id = @id',
+            query: Consts.DocDbRootQuery,
             parameters: [{
-                name: '@id',
+                name: Consts.DocDbIdParam,
                 value: this.options.database
             }]
         };
@@ -159,9 +159,9 @@ export class DocumentDbClient implements IStorageClient {
     private getOrCreateCollection(callback: (error: QueryError, collection: CollectionMeta) => void): void {
 
         let querySpec = {
-            query: 'SELECT * FROM root r WHERE r.id = @id',
+            query: Consts.DocDbRootQuery,
             parameters: [{
-                name: '@id',
+                name: Consts.DocDbIdParam,
                 value: this.options.collection
             }]
         };
