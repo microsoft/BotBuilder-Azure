@@ -212,7 +212,7 @@ export interface IStorageClient {
     initialize(callback: (error: any) => void): void;
 
     /** Inserts or replaces an entity in the table */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the table */
     retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: IBotEntity, response: IHttpResponse) => void): void;
@@ -232,7 +232,7 @@ export interface IAzureTableClient {
     initialize(callback: (error: Error) => void): void;
 
     /** Inserts or replaces an entity in the table */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the table */
     retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
@@ -243,10 +243,10 @@ export interface IStorageClient {
     initialize(callback: (error: any) => void): void;
 
     /** Inserts or replaces an entity in the store */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the store */
-    retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: any, response: IHttpResponse) => void): void;
+    retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
 export interface IDocumentDbOptions {
@@ -297,10 +297,10 @@ export class FaultyAzureTableClient implements IAzureTableClient {
     initialize(callback: (error: Error) => void): void;
 
     /** Inserts or replaces an entity in the table */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the table */
-    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
 export interface IFaultSettings {
@@ -404,10 +404,10 @@ export class AzureTableClient implements IAzureTableClient {
     initialize(callback: (error: Error) => void): void;
 
     /** Inserts or replaces an entity in the table */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the table */
-    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
 export class DocumentDbClient implements IStorageClient {
@@ -418,9 +418,9 @@ export class DocumentDbClient implements IStorageClient {
     initialize(callback: (error: Error) => void): void;
 
     /** Inserts or replaces an entity in the DocumentDb */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the DocumentDb */
-    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 

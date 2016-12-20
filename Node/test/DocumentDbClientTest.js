@@ -40,7 +40,7 @@ describe('DocumentDbClient', function() {
         
         var partitionKey = 'pk';
         var rowKey = 'rk';
-        var data = 'data';
+        var data = { field1: 'data', field2: 3};
 
         const options = {
             host: 'https://localhost:8081',
@@ -66,7 +66,7 @@ describe('DocumentDbClient', function() {
                                 done(error);
                             }
                             else{
-                                assert.equal(data, entity.data);
+                                assert.deepEqual(data, entity.data);
                                 done();
                             }
                         });
@@ -80,8 +80,8 @@ describe('DocumentDbClient', function() {
         
         var partitionKey = 'pk';
         var rowKey = 'rk';
-        var data = 'data';
-        var data2 = 'data2';
+        var data = { field1: 'data', field2: 3};
+        var data2 = { field1: 'data2', field2: 3};
 
         var client = new azure.AzureTableClient('testTable1');
         client.initialize(function(error){
@@ -105,7 +105,7 @@ describe('DocumentDbClient', function() {
                                         done(error);
                                     }
                                     else{
-                                        assert.equal(data2, entity.data);
+                                        assert.deepEqual(data2, entity.data);
                                         done();
                                     }
                                 });

@@ -84,11 +84,11 @@ export class DocumentDbClient implements IStorageClient {
     }
 
     /** Inserts or replaces an entity in the table */
-    public insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void {
+    public insertOrReplace(partitionKey: string, rowKey: string, entity: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void {
 
-        let entity: IDocDbEntity = { id: partitionKey + ',' + rowKey, data: data, isCompressed: isCompressed };
+        let docDbEntity: IDocDbEntity = { id: partitionKey + ',' + rowKey, data: entity, isCompressed: isCompressed };
 
-        this.client.upsertDocument(this.collection._self, entity, {}, (error: QueryError, collection: RetrievedDocument<IDocDbEntity>, responseHeaders: any): void => {
+        this.client.upsertDocument(this.collection._self, docDbEntity, {}, (error: QueryError, collection: RetrievedDocument<IDocDbEntity>, responseHeaders: any): void => {
             callback(DocumentDbClient.getError(error), null, responseHeaders);
         });
     }

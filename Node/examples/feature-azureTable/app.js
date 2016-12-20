@@ -17,10 +17,10 @@ This Bot demonstrates how to use Azure DocumentDb for bot storage.
     
 -----------------------------------------------------------------------------*/
 
-var builder = require('E:\\Repos\\BotBuilder\\Node\\core');
-var azure = require('../../../');
+var builder = require('botbuilder');
+var azure = require('../../');
 
-var tableName = 'BotStor1e';
+var tableName = 'BotStore';
 
 var azureTableClient = new azure.AzureTableClient(tableName);
 

@@ -35,12 +35,12 @@ import * as builder from 'botbuilder';
 
 export interface IStorageClient {
     initialize(callback: (error: any) => void): void;
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, entity: any, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
     retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
 export interface IBotEntity {
-    data: string;
+    data: any;
     isCompressed: boolean;
 }
 

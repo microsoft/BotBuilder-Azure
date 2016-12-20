@@ -125,8 +125,8 @@ export class AzureBotStorage implements builder.IBotStorage {
                                 });
                             } else {
                                 try {
-                                    (<any>data)[entry.field + Consts.hash] = botData;
-                                    (<any>data)[entry.field] = botData != null ? JSON.parse(botData) : null;
+                                    (<any>data)[entry.field + Consts.hash] = botData ? JSON.stringify(botData) : null ;
+                                    (<any>data)[entry.field] = botData != null ? botData : null;
                                 } catch (e) {
                                     error = e;
                                 }
@@ -205,7 +205,7 @@ export class AzureBotStorage implements builder.IBotStorage {
                             }
                         });
                     } else if (entry.hash.length < Consts.maxDataLength) {
-                        this.storageClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.hash, false, function(error: any, eTag: any, response: IHttpResponse){
+                        this.storageClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.botData, false, function(error: any, eTag: any, response: IHttpResponse){
                             errorCallback(error);
                         });
                     } else {

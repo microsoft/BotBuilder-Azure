@@ -75,7 +75,7 @@ export class AzureTableClient implements IStorageClient {
     }
 
     /** Inserts or replaces an entity in the table */
-    public insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void {
+    public insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void {
         let tableService = this.buildTableService();
 
         let entityGenerator = azure.TableUtilities.entityGenerator;
@@ -83,7 +83,7 @@ export class AzureTableClient implements IStorageClient {
         let entity = {
             PartitionKey: entityGenerator.String(partitionKey),
             RowKey: entityGenerator.String(rowKey),
-            Data: entityGenerator.String(data),
+            Data: entityGenerator.String((data instanceof String) ? data : JSON.stringify(data)),
             IsCompressed: entityGenerator.Boolean(isCompressed)
         };
  
@@ -112,11 +112,18 @@ export class AzureTableClient implements IStorageClient {
             return null;
         }
         let entity: IBotTableEntity = {
-            data: tableResult.Data['_'] || {},
+            data: {},
             isCompressed: tableResult.IsCompressed['_'] || false,
             rowKey: tableResult.RowKey['_'] || '',
             partitionKey: tableResult.PartitionKey['_'] || ''
         };
+
+        if(tableResult.Data['_'] && entity.isCompressed) {
+            entity.data = tableResult.Data['_'];
+        }
+        else if(tableResult.Data['_'] && !entity.isCompressed) {
+            entity.data = JSON.parse(tableResult.Data['_']);
+        }
 
         return entity;
     }
