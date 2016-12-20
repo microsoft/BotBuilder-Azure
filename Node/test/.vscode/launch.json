@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/TableBotStorageFaultTests.js",
+            "program": "${workspaceRoot}/DocumentDbClientTest.js",
             "cwd": "${workspaceRoot}"
         },
         {
@@ -17,5 +17,9 @@
             "name": "Attach to Process",
             "port": 5858
         }
-    ]
+    ],
+    "env": {
+        "NODE_ENV": "development",
+        "NODE_TLS_REJECT_UNAUTHORIZED": 0
+    }
 }

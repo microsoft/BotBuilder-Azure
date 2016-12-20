@@ -34,7 +34,7 @@
 var azure = require('../');
 var assert = require('assert');
 
-describe('AzureTableClient', function() {
+describe('DocumentDbClient', function() {
     
     it('should write and read a valid entity', function(done) {
         
@@ -42,9 +42,16 @@ describe('AzureTableClient', function() {
         var rowKey = 'rk';
         var data = 'data';
 
-        var client = new azure.AzureTableClient('testTable1');
+        const options = {
+            host: 'https://localhost:8081',
+            masterKey: 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==',
+            database: 'testdb',
+            collection: 'testcollection'
+        };
+        var client = new azure.DocumentDbClient(options);
+
         client.initialize(function(error){
-            console.log(error);
+             console.log(error);
             if(error){
                 done(error);
             }

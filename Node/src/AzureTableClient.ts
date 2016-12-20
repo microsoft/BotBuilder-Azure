@@ -31,19 +31,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import { IStorageError, IStorageClient, IHttpResponse, IBotEntity } from './IStorageClient';
+
 import * as builder from 'botbuilder';
 import * as async from 'async';
 import Consts = require('./Consts');
 
 var azure = require('azure-storage');
 
-export interface IAzureTableClient {
-    initialize(callback: (error: any) => void): void;
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
-    retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: any, response: IHttpResponse) => void): void;
+export interface IBotTableEntity extends IBotEntity {
+    partitionKey: string;
+    rowKey: string;
 }
 
-export class AzureTableClient implements IAzureTableClient {
+export class AzureTableClient implements IStorageClient {
 
     private readonly accountName: string;
     private readonly accountKey: string;
@@ -92,7 +93,7 @@ export class AzureTableClient implements IAzureTableClient {
     }
 
     /** Retrieves an entity from the table */
-    public retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void {
+    public retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void {
         let tableService = this.buildTableService();
 
         tableService.retrieveEntity(this.tableName, partitionKey, rowKey, function(error: IStorageError, result: any, response: IHttpResponse){
@@ -101,9 +102,23 @@ export class AzureTableClient implements IAzureTableClient {
                 callback(null, null, response);
             } 
             else{
-                callback(AzureTableClient.getError(error, response), result, response);
+                callback(AzureTableClient.getError(error, response), AzureTableClient.toBotEntity(result), response);
             }            
         });
+    }
+
+    private static toBotEntity(tableResult: any): IBotTableEntity {
+        if(!tableResult) {
+            return null;
+        }
+        let entity: IBotTableEntity = {
+            data: tableResult.Data['_'] || {},
+            isCompressed: tableResult.IsCompressed['_'] || false,
+            rowKey: tableResult.RowKey['_'] || '',
+            partitionKey: tableResult.PartitionKey['_'] || ''
+        };
+
+        return entity;
     }
 
     private buildTableService(): any {
@@ -113,7 +128,7 @@ export class AzureTableClient implements IAzureTableClient {
         return tableService.withFilter(new azure.ExponentialRetryPolicyFilter());
     }
 
-    public static getError(error: IStorageError, response: IHttpResponse): Error {
+    private static getError(error: IStorageError, response: IHttpResponse): Error {
         if(!error) return null;
 
         let message: string = 'Failed to perform the requested operation on Azure Table. Message: ' + error.message + '. Error code: ' + error.code;
@@ -123,15 +138,4 @@ export class AzureTableClient implements IAzureTableClient {
         }
         return new Error(message);
     }
-}
-
-export interface IHttpResponse {
-    isSuccessful: boolean;
-    statusCode: string;   
-}
-
-export interface IStorageError {
-    code: string;
-    message: string;
-    statusCode: string;
 }

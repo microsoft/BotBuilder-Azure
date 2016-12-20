@@ -37,12 +37,12 @@ import * as Promise from 'promise';
 import Consts = require('./Consts');
 import zlib = require('zlib');
 
-
-import { IAzureTableClient, AzureTableClient, IHttpResponse } from './AzureTableClient';
+import { IStorageClient, IHttpResponse } from './IStorageClient';
+import { AzureTableClient } from './AzureTableClient';
 
 var azure = require('azure-storage');
 
-export interface ITableBotStorageOptions {
+export interface IAzureBotStorageOptions {
     /** If true the data will be gzipped prior to writing to storage. */
     gzipData?: boolean;
     /** Storage account name used to persist bot data. */
@@ -51,23 +51,25 @@ export interface ITableBotStorageOptions {
     accountKey: string;   
 }
 
-export class TableBotStorage implements builder.IBotStorage {
+export interface ITableBotStorageOptions extends IAzureBotStorageOptions { }
+
+export class AzureBotStorage implements builder.IBotStorage {
 
     private initializeTableClientPromise: Promise.IThenable<boolean>;
-    private tableClientInitialized: boolean;
+    private storageClientInitialized: boolean;
 
-    constructor(private options: ITableBotStorageOptions, private azureTableClient?: IAzureTableClient) {
+    constructor(private options: IAzureBotStorageOptions, private storageClient?: IStorageClient) {
 
-        if(!this.azureTableClient){
+        if(!this.storageClient){
             // If no client was injected, use the default implementation
-            this.azureTableClient = new AzureTableClient(Consts.tableName, options.accountName, options.accountKey);
+            this.storageClient = new AzureTableClient(Consts.tableName, options.accountName, options.accountKey);
         }
     }
 
     /** Reads in data from storage. */
     public getData(context: builder.IBotStorageContext, callback: (err: Error, data: builder.IBotStorageData) => void): void {
         // We initialize on every call, but only block on the first call. The reason for this is that we can't run asynchronous initialization in the class ctor
-        this.initializeTableClient().done(() => {
+        this.initializeStorageClient().done(() => {
             // Build list of read commands
             var list: any[] = [];
             if (context.userId) {
@@ -101,11 +103,11 @@ export class TableBotStorage implements builder.IBotStorage {
             var data: builder.IBotStorageData = {};
             async.each(list, (entry, cb) => {
 
-                this.azureTableClient.retrieve(entry.partitionKey, entry.rowKey, function(error: any, entity: any, response: IHttpResponse){
+                this.storageClient.retrieve(entry.partitionKey, entry.rowKey, function(error: any, entity: any, response: IHttpResponse){
                     if (!error) {
-                        if(entity != null) {
-                            let botData = (entity != null && entity.Data['_']) ? entity.Data['_'] : {};
-                            let isCompressed = (entity != null) ? entity.IsCompressed['_'] : false;
+                        if(entity) {
+                            let botData = entity.data || {};
+                            let isCompressed = entity.isCompressed || false;
                                 
                             if (isCompressed) {
                                 // Decompress gzipped data
@@ -154,7 +156,7 @@ export class TableBotStorage implements builder.IBotStorage {
     public saveData(context: builder.IBotStorageContext, data: builder.IBotStorageData, callback?: (err: Error) => void): void {
        
         // We initialize on every call, but only block on the first call. The reason for this is that we can't run asynchronous initialization in the class ctor
-        let promise = this.initializeTableClient();
+        let promise = this.initializeStorageClient();
         promise.done(() => {
 
             var list: any[] = [];
@@ -195,7 +197,7 @@ export class TableBotStorage implements builder.IBotStorage {
                             }
                             if (!err) {
                                 //Insert gzipped entry
-                                this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, result.toString('base64'), true, function(error: any, eTag: any, response: IHttpResponse){
+                                this.storageClient.insertOrReplace(entry.partitionKey, entry.rowKey, result.toString('base64'), true, function(error: any, eTag: any, response: IHttpResponse){
                                     errorCallback(error);
                                 });
                             } else {
@@ -203,7 +205,7 @@ export class TableBotStorage implements builder.IBotStorage {
                             }
                         });
                     } else if (entry.hash.length < Consts.maxDataLength) {
-                        this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.hash, false, function(error: any, eTag: any, response: IHttpResponse){
+                        this.storageClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.hash, false, function(error: any, eTag: any, response: IHttpResponse){
                             errorCallback(error);
                         });
                     } else {
@@ -231,13 +233,13 @@ export class TableBotStorage implements builder.IBotStorage {
         }, (err) => callback(err));
     }
 
-    private initializeTableClient(): Promise.IThenable<boolean>{
+    private initializeStorageClient(): Promise.IThenable<boolean>{
         if(!this.initializeTableClientPromise)
         {
             // The first call will trigger the initialization of the table client, which creates the Azure table if it 
             // does not exist. Subsequent calls will not block.
             this.initializeTableClientPromise = new Promise<boolean>((resolve, reject) => {
-                this.azureTableClient.initialize(function(error: any){
+                this.storageClient.initialize(function(error: any){
                     if(error){
                         reject(new Error('Failed to initialize azure table client. Error: ' + error.toString()))
                     }
@@ -249,4 +251,8 @@ export class TableBotStorage implements builder.IBotStorage {
         }
         return this.initializeTableClientPromise;
     }
+}
+
+export class TableBotStorage extends AzureBotStorage {
+    
 }

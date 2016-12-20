@@ -1,4 +1,4 @@
-﻿// 
+// 
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license.
 // 
@@ -31,14 +31,30 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import { BotServiceConnector } from './BotServiceConnector';
-import { AzureBotStorage } from './AzureBotStorage';
-import { AzureTableClient } from './AzureTableClient';
-import { DocumentDbClient } from './DocumentDbClient';
+import * as builder from 'botbuilder';
 
-declare var exports: any;
+export interface IStorageClient {
+    initialize(callback: (error: any) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
+    retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: IBotEntity, response: IHttpResponse) => void): void;
+}
 
-exports.BotServiceConnector = BotServiceConnector;
-exports.AzureBotStorage = AzureBotStorage;
-exports.AzureTableClient = AzureTableClient;
-exports.DocumentDbClient = DocumentDbClient;
+export interface IBotEntity {
+    data: string;
+    isCompressed: boolean;
+}
+
+export interface IHttpResponse {
+    isSuccessful: boolean;
+    statusCode: string;   
+}
+
+export interface IStorageError {
+    code: string;
+    message: string;
+    statusCode: string;
+}
+
+export interface IAzureTableClient extends IStorageClient{
+
+}
