@@ -45,25 +45,18 @@ var azure = require('azure-storage');
 export interface IAzureBotStorageOptions {
     /** If true the data will be gzipped prior to writing to storage. */
     gzipData?: boolean;
-    /** Storage account name used to persist bot data. */
-    accountName: string;
-    /** Storage account key used to persist bot data. */
-    accountKey: string;   
 }
-
-export interface ITableBotStorageOptions extends IAzureBotStorageOptions { }
 
 export class AzureBotStorage implements builder.IBotStorage {
 
     private initializeTableClientPromise: Promise.IThenable<boolean>;
     private storageClientInitialized: boolean;
 
-    constructor(private options: IAzureBotStorageOptions, private storageClient?: IStorageClient) {
-
-        if(!this.storageClient){
-            // If no client was injected, use the default implementation
-            this.storageClient = new AzureTableClient(Consts.tableName, options.accountName, options.accountKey);
-        }
+    constructor(private options: IAzureBotStorageOptions, private storageClient?: IStorageClient) { }
+    
+    public client(storageClient: IStorageClient) : this {
+        this.storageClient = storageClient;
+        return this;
     }
 
     /** Reads in data from storage. */

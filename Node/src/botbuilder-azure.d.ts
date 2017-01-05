@@ -362,10 +362,13 @@ export class AzureBotStorage implements IBotStorage {
     /** 
      * Creates a new instance of the TableBotStorage.
      * @param options config params that let you specify storage preferences 
-     * @param optional table client to be injected, used for testing and fault injection 
+     * @param optional storage client to be used. If not specified here, the client() method must be called before usage to configure a table client
      */
-    constructor(options: ITableBotStorageOptions, tableClient?: IAzureTableClient);
+    constructor(options: IAzureBotStorageOptions, storageClient?: IStorageClient);
     
+    /** Configures the storage client to use for bot state */
+    client(storageClient: IStorageClient) : this;
+
     /** Reads in data from the table. */
     getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
 
