@@ -1,7 +1,13 @@
 {
   "name": "botbuilder-azure",
-  "version": "0.0.2",
-  "description": "Azure related components for Bot Builder SDK.",
+  "version": "0.0.3",
+  "description": "Bot Builder SDK Azure Extensions",
+  "keywords": [
+    "botbuilder",
+    "bots",
+    "chatbots",
+    "azure"
+  ],
   "author": "Microsoft Corp.",
   "license": "MIT",
   "bugs": {
