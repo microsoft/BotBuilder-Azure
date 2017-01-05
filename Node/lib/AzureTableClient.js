@@ -25,7 +25,7 @@ var AzureTableClient = (function () {
         var entity = {
             PartitionKey: entityGenerator.String(partitionKey),
             RowKey: entityGenerator.String(rowKey),
-            Data: entityGenerator.String(data),
+            Data: entityGenerator.String((data instanceof String) ? data : JSON.stringify(data)),
             IsCompressed: entityGenerator.Boolean(isCompressed)
         };
         tableService.insertOrReplaceEntity(this.tableName, entity, { checkEtag: false }, function (error, result, response) {
@@ -39,9 +39,27 @@ var AzureTableClient = (function () {
                 callback(null, null, response);
             }
             else {
-                callback(AzureTableClient.getError(error, response), result, response);
+                callback(AzureTableClient.getError(error, response), AzureTableClient.toBotEntity(result), response);
             }
         });
+    };
+    AzureTableClient.toBotEntity = function (tableResult) {
+        if (!tableResult) {
+            return null;
+        }
+        var entity = {
+            data: {},
+            isCompressed: tableResult.IsCompressed['_'] || false,
+            rowKey: tableResult.RowKey['_'] || '',
+            partitionKey: tableResult.PartitionKey['_'] || ''
+        };
+        if (tableResult.Data['_'] && entity.isCompressed) {
+            entity.data = tableResult.Data['_'];
+        }
+        else if (tableResult.Data['_'] && !entity.isCompressed) {
+            entity.data = JSON.parse(tableResult.Data['_']);
+        }
+        return entity;
     };
     AzureTableClient.prototype.buildTableService = function () {
         var tableService = this.useDevelopmentStorage

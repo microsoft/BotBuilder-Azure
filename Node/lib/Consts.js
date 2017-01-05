@@ -16,3 +16,5 @@ exports.ErrorCodes = {
     MessageSize: 'EMSGSIZE',
     BadMessage: 'EBADMSG'
 };
+exports.DocDbRootQuery = 'SELECT * FROM root r WHERE r.id = @id';
+exports.DocDbIdParam = '@id';

@@ -8,19 +8,19 @@ var async = require('async');
 var Promise = require('promise');
 var Consts = require('./Consts');
 var zlib = require('zlib');
-var AzureTableClient_1 = require('./AzureTableClient');
 var azure = require('azure-storage');
 var AzureBotStorage = (function () {
-    function AzureBotStorage(options, azureTableClient) {
+    function AzureBotStorage(options, storageClient) {
         this.options = options;
-        this.azureTableClient = azureTableClient;
-        if (!this.azureTableClient) {
-            this.azureTableClient = new AzureTableClient_1.AzureTableClient(Consts.tableName, options.accountName, options.accountKey);
-        }
+        this.storageClient = storageClient;
     }
+    AzureBotStorage.prototype.client = function (storageClient) {
+        this.storageClient = storageClient;
+        return this;
+    };
     AzureBotStorage.prototype.getData = function (context, callback) {
         var _this = this;
-        this.initializeTableClient().done(function () {
+        this.initializeStorageClient().done(function () {
             var list = [];
             if (context.userId) {
                 if (context.persistUserData) {
@@ -47,11 +47,11 @@ var AzureBotStorage = (function () {
             }
             var data = {};
             async.each(list, function (entry, cb) {
-                _this.azureTableClient.retrieve(entry.partitionKey, entry.rowKey, function (error, entity, response) {
+                _this.storageClient.retrieve(entry.partitionKey, entry.rowKey, function (error, entity, response) {
                     if (!error) {
                         if (entity) {
-                            var botData = entity.Data['_'] || {};
-                            var isCompressed = entity.IsCompressed['_'] || false;
+                            var botData = entity.data || {};
+                            var isCompressed = entity.isCompressed || false;
                             if (isCompressed) {
                                 zlib.gunzip(new Buffer(botData, Consts.base64), function (err, result) {
                                     if (!err) {
@@ -69,8 +69,8 @@ var AzureBotStorage = (function () {
                             }
                             else {
                                 try {
-                                    data[entry.field + Consts.hash] = botData;
-                                    data[entry.field] = botData != null ? JSON.parse(botData) : null;
+                                    data[entry.field + Consts.hash] = botData ? JSON.stringify(botData) : null;
+                                    data[entry.field] = botData != null ? botData : null;
                                 }
                                 catch (e) {
                                     error = e;
@@ -101,7 +101,7 @@ var AzureBotStorage = (function () {
     };
     AzureBotStorage.prototype.saveData = function (context, data, callback) {
         var _this = this;
-        var promise = this.initializeTableClient();
+        var promise = this.initializeStorageClient();
         promise.done(function () {
             var list = [];
             function addWrite(field, partitionKey, rowKey, botData) {
@@ -132,7 +132,7 @@ var AzureBotStorage = (function () {
                                 err.code = Consts.ErrorCodes.MessageSize;
                             }
                             if (!err) {
-                                _this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, result.toString('base64'), true, function (error, eTag, response) {
+                                _this.storageClient.insertOrReplace(entry.partitionKey, entry.rowKey, result.toString('base64'), true, function (error, eTag, response) {
                                     errorCallback(error);
                                 });
                             }
@@ -142,7 +142,7 @@ var AzureBotStorage = (function () {
                         });
                     }
                     else if (entry.hash.length < Consts.maxDataLength) {
-                        _this.azureTableClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.hash, false, function (error, eTag, response) {
+                        _this.storageClient.insertOrReplace(entry.partitionKey, entry.rowKey, entry.botData, false, function (error, eTag, response) {
                             errorCallback(error);
                         });
                     }
@@ -172,11 +172,11 @@ var AzureBotStorage = (function () {
             }
         }, function (err) { return callback(err); });
     };
-    AzureBotStorage.prototype.initializeTableClient = function () {
+    AzureBotStorage.prototype.initializeStorageClient = function () {
         var _this = this;
         if (!this.initializeTableClientPromise) {
             this.initializeTableClientPromise = new Promise(function (resolve, reject) {
-                _this.azureTableClient.initialize(function (error) {
+                _this.storageClient.initialize(function (error) {
                     if (error) {
                         reject(new Error('Failed to initialize azure table client. Error: ' + error.toString()));
                     }

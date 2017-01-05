@@ -197,56 +197,33 @@ export interface ITableBotStorageOptions {
     accountKey: string;    
 }
 
-//=============================================================================
-//
-// CLASSES
-//
-//=============================================================================
-
-/** Connects a UniversalBot to multiple channels via the Bot Framework. */
-export class BotServiceConnector implements IBotStorage {
-
-    /** 
-     * Creates a new instnace of the BotServiceConnector.
-     * @param settings (Optional) config params that let you specify the bots App ID & Password you were assigned in the Bot Frameworks developer portal. 
-     */
-    constructor(settings?: IBotServiceConnectorSettings);
-
-    /** Registers an Express or Restify style hook to listen for new messages. */
-    listen(): (req: any, res: any) => void;
-
-    /** Called by the UniversalBot at registration time to register a handler for receiving incoming events from a channel. */
-    onEvent(handler: (events: IEvent[], callback?: (err: Error) => void) => void): void;
-    
-    /** Called by the UniversalBot to deliver outgoing messages to a user. */
-    send(messages: IMessage[], done: (err: Error) => void): void;
-
-    /** Called when a UniversalBot wants to start a new proactive conversation with a user. The connector should return a properly formated __address__ object with a populated __conversation__ field. */
-    startConversation(address: IAddress, done: (err: Error, address?: IAddress) => void): void;
-
-    /** Reads in data from the Bot Frameworks state service. */
-    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
-
-    /** Writes out data to the Bot Frameworks state service. */
-    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+/** Options used to initialize a TableBotStorage instance. */
+export interface IAzureBotStorageOptions {
+    /** If true the data will be gzipped prior to writing to storage. */
+    gzipData?: boolean;   
+    /** Storage account name used to persist bot data. */
+    accountName: string;
+    /** Storage account key used to persist bot data. */
+    accountKey: string;    
 }
 
+export interface IStorageClient {
+    /** Initializes the Azure Table client */
+    initialize(callback: (error: any) => void): void;
 
-/** Azure Table Storage based implementation of IBotStorage. */
-export class TableBotStorage implements IBotStorage {
+    /** Inserts or replaces an entity in the table */
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
 
-    /** 
-     * Creates a new instance of the TableBotStorage.
-     * @param options config params that let you specify storage preferences 
-     * @param optional table client to be injected, used for testing and fault injection 
-     */
-    constructor(options: ITableBotStorageOptions, tableClient?: IAzureTableClient);
-    
-    /** Reads in data from the table. */
-    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
+    /** Retrieves an entity from the table */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: IBotEntity, response: IHttpResponse) => void): void;
+}
 
-    /** Writes out data to the table. */
-    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+/**
+ * Entity that holds bot data
+ */
+export interface IBotEntity {
+    data: string;
+    isCompressed: boolean;
 }
 
 export interface IAzureTableClient {
@@ -255,30 +232,35 @@ export interface IAzureTableClient {
     initialize(callback: (error: Error) => void): void;
 
     /** Inserts or replaces an entity in the table */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the table */
-    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
-export class AzureTableClient implements IAzureTableClient {
+export interface IStorageClient {
+    /** Initializes the storage client */
+    initialize(callback: (error: any) => void): void;
 
-    /** 
-     * Creates a new instance of the TableBotStorage.
-     * @param name of the table to be used in Azure Table 
-     * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started
-     * @param optional Azure storage account key. If not specified, development storage is used and Azure Storage Emulator should be started 
-     */
-    constructor(tableName: string, accountName?: string, accountKey?: string);
+    /** Inserts or replaces an entity in the store */
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: any, etag: any, response: IHttpResponse) => void): void;
 
-    /** Initializes the azure table client */
-    initialize(callback: (error: Error) => void): void;
+    /** Retrieves an entity from the store */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: any, entity: IBotEntity, response: IHttpResponse) => void): void;
+}
 
-    /** Inserts or replaces an entity in the table */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+export interface IDocumentDbOptions {
+    /** DocumentDb host */
+    host: string;
 
-    /** Retrieves an entity from the table */
-    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+    /** DocumentDb masterKey */
+    masterKey: string;
+
+    /** DocumentDb database name */
+    database: string;
+
+    /** DocumentDb collection name */
+    collection: string;
 }
 
 export interface IHttpResponse {
@@ -315,10 +297,10 @@ export class FaultyAzureTableClient implements IAzureTableClient {
     initialize(callback: (error: Error) => void): void;
 
     /** Inserts or replaces an entity in the table */
-    insertOrReplace(partitionKey: string, rowKey: string, data: string, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
 
     /** Retrieves an entity from the table */
-    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: any, response: IHttpResponse) => void): void;
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
 export interface IFaultSettings {
@@ -338,3 +320,110 @@ export interface IFaultSettings {
     /** The Http response that should be reported when failures occur */
     response: IHttpResponse;
 }
+
+//=============================================================================
+//
+// CLASSES
+//
+//=============================================================================
+
+/** Connects a UniversalBot to multiple channels via the Bot Framework. */
+export class BotServiceConnector implements IBotStorage {
+
+    /** 
+     * Creates a new instnace of the BotServiceConnector.
+     * @param settings (Optional) config params that let you specify the bots App ID & Password you were assigned in the Bot Frameworks developer portal. 
+     */
+    constructor(settings?: IBotServiceConnectorSettings);
+
+    /** Registers an Express or Restify style hook to listen for new messages. */
+    listen(): (req: any, res: any) => void;
+
+    /** Called by the UniversalBot at registration time to register a handler for receiving incoming events from a channel. */
+    onEvent(handler: (events: IEvent[], callback?: (err: Error) => void) => void): void;
+    
+    /** Called by the UniversalBot to deliver outgoing messages to a user. */
+    send(messages: IMessage[], done: (err: Error) => void): void;
+
+    /** Called when a UniversalBot wants to start a new proactive conversation with a user. The connector should return a properly formated __address__ object with a populated __conversation__ field. */
+    startConversation(address: IAddress, done: (err: Error, address?: IAddress) => void): void;
+
+    /** Reads in data from the Bot Frameworks state service. */
+    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
+
+    /** Writes out data to the Bot Frameworks state service. */
+    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+}
+
+
+/** Azure Storage based implementation of IBotStorage. */
+export class AzureBotStorage implements IBotStorage {
+
+    /** 
+     * Creates a new instance of the TableBotStorage.
+     * @param options config params that let you specify storage preferences 
+     * @param optional storage client to be used. If not specified here, the client() method must be called before usage to configure a table client
+     */
+    constructor(options: IAzureBotStorageOptions, storageClient?: IStorageClient);
+    
+    /** Configures the storage client to use for bot state */
+    client(storageClient: IStorageClient) : this;
+
+    /** Reads in data from the table. */
+    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
+
+    /** Writes out data to the table. */
+    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+}
+
+/** Azure Table Storage based implementation of IBotStorage. */
+export class TableBotStorage implements IBotStorage {
+
+    /** 
+     * Creates a new instance of the TableBotStorage.
+     * @param options config params that let you specify storage preferences 
+     * @param optional table client to be injected, used for testing and fault injection 
+     */
+    constructor(options: ITableBotStorageOptions, tableClient?: IAzureTableClient);
+    
+    /** Reads in data from the table. */
+    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
+
+    /** Writes out data to the table. */
+    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
+}
+
+export class AzureTableClient implements IAzureTableClient {
+
+    /** 
+     * Creates a new instance of the TableBotStorage.
+     * @param name of the table to be used in Azure Table 
+     * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started
+     * @param optional Azure storage account key. If not specified, development storage is used and Azure Storage Emulator should be started 
+     */
+    constructor(tableName: string, accountName?: string, accountKey?: string);
+
+    /** Initializes the azure table client */
+    initialize(callback: (error: Error) => void): void;
+
+    /** Inserts or replaces an entity in the table */
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+
+    /** Retrieves an entity from the table */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
+}
+
+export class DocumentDbClient implements IStorageClient {
+
+    constructor(options: IDocumentDbOptions);
+
+    /** Initializes the DocumentDb client */
+    initialize(callback: (error: Error) => void): void;
+
+    /** Inserts or replaces an entity in the DocumentDb */
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+
+    /** Retrieves an entity from the DocumentDb */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
+}
+
