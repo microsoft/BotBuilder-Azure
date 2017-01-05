@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure", "Library\Microsoft.Bot.Builder.Azure\Microsoft.Bot.Builder.Azure.csproj", "{77299F9C-8F49-4839-B7EA-55BA726321D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Tests", "Tests\Microsoft.Bot.Builder.Azure.Tests\Microsoft.Bot.Builder.Azure.Tests.csproj", "{C0FC2275-93A1-462C-ACC6-7329AAFDDAB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{CCAA042D-B218-44CE-ACDF-A874DB7C022E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D98B014F-7BD1-46D4-A562-D225F942F97B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{6DB71D45-E3C2-4FD4-A032-61C54FFB5FD4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureTable", "AzureTable", "{154128D9-B44F-4BAC-BC54-951B261145C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Sample.AzureTable", "Samples\AzureTable\Microsoft.Bot.Sample.AzureTable.csproj", "{D414F82F-C102-45B1-979C-D905D278C34E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentDb", "DocumentDb", "{9D81F425-5DA6-4664-9306-618627BFFCF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Sample.DocumentDb", "Samples\DocumentDb\Microsoft.Bot.Sample.DocumentDb.csproj", "{BC81733E-CC04-49A5-ABE8-962E38487CA3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77299F9C-8F49-4839-B7EA-55BA726321D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77299F9C-8F49-4839-B7EA-55BA726321D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77299F9C-8F49-4839-B7EA-55BA726321D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77299F9C-8F49-4839-B7EA-55BA726321D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0FC2275-93A1-462C-ACC6-7329AAFDDAB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0FC2275-93A1-462C-ACC6-7329AAFDDAB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0FC2275-93A1-462C-ACC6-7329AAFDDAB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0FC2275-93A1-462C-ACC6-7329AAFDDAB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D414F82F-C102-45B1-979C-D905D278C34E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D414F82F-C102-45B1-979C-D905D278C34E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D414F82F-C102-45B1-979C-D905D278C34E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D414F82F-C102-45B1-979C-D905D278C34E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC81733E-CC04-49A5-ABE8-962E38487CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC81733E-CC04-49A5-ABE8-962E38487CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC81733E-CC04-49A5-ABE8-962E38487CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC81733E-CC04-49A5-ABE8-962E38487CA3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{77299F9C-8F49-4839-B7EA-55BA726321D5} = {CCAA042D-B218-44CE-ACDF-A874DB7C022E}
+		{C0FC2275-93A1-462C-ACC6-7329AAFDDAB4} = {D98B014F-7BD1-46D4-A562-D225F942F97B}
+		{154128D9-B44F-4BAC-BC54-951B261145C4} = {6DB71D45-E3C2-4FD4-A032-61C54FFB5FD4}
+		{D414F82F-C102-45B1-979C-D905D278C34E} = {154128D9-B44F-4BAC-BC54-951B261145C4}
+		{9D81F425-5DA6-4664-9306-618627BFFCF2} = {6DB71D45-E3C2-4FD4-A032-61C54FFB5FD4}
+		{BC81733E-CC04-49A5-ABE8-962E38487CA3} = {9D81F425-5DA6-4664-9306-618627BFFCF2}
+	EndGlobalSection
+EndGlobal
