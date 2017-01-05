@@ -23,8 +23,6 @@ The Bot Builder SDK Azure Extensions enable bot developers to integrate bots wit
 
 Get started quickly with our samples:
 
-* Samples within the SDK [C#](https://github.com/Microsoft/BotBuilder/tree/master/CSharp/Samples), [Node.js](https://github.com/Microsoft/BotBuilder/tree/master/Node/examples)
-
 * Azure Table [C#](https://github.com/Microsoft/BotBuilder-Azure/tree/master/CSharp/Samples/Feature-AzureTable) [Node.js](https://github.com/Microsoft/BotBuilder-Azure/tree/master/Node/examples/feature-azureTable)
 * DocumentDB [C#](https://github.com/Microsoft/BotBuilder-Azure/tree/master/Node/Samples/Feature-DocumentDb) [Node.js](https://github.com/Microsoft/BotBuilder-Azure/tree/master/Node/examples/feature-documentDb)
 
