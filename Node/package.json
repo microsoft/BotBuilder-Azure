@@ -20,12 +20,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "botbuilder",
-    "bots",
-    "chatbots",
-    "azure"
-  ],
   "main": "./lib/botbuilder-azure.js",
   "typings": "./lib/botbuilder-azure.d.ts",
   "dependencies": {

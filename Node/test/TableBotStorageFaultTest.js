@@ -59,7 +59,7 @@ describe('TableBotStorageFaultTest', function() {
         let realTableClient = new azure.AzureTableClient('testTable1');
         let faultyTableClient = new faults.FaultyAzureTableClient(realTableClient, faultSettings);
 
-        let store = new azure.TableBotStorage(options, faultyTableClient);
+        let store = new azure.AzureBotStorage(options, faultyTableClient);
         
         let botStorageContext = {
             userId: 'userId1',
@@ -110,7 +110,7 @@ describe('TableBotStorageFaultTest', function() {
         let realTableClient = new azure.AzureTableClient('testTable1');
         let faultyTableClient = new faults.FaultyAzureTableClient(realTableClient, faultSettings);
 
-        let store = new azure.TableBotStorage(options, faultyTableClient);
+        let store = new azure.AzureBotStorage(options, faultyTableClient);
         
         let botStorageContext = {
             userId: 'userId1',
@@ -161,7 +161,7 @@ describe('TableBotStorageFaultTest', function() {
         let realTableClient = new azure.AzureTableClient('testTable1');
         let faultyTableClient = new faults.FaultyAzureTableClient(realTableClient, faultSettings);
 
-        let store = new azure.TableBotStorage(options, faultyTableClient);
+        let store = new azure.AzureBotStorage(options, faultyTableClient);
         
         let botStorageContext = {
             userId: 'userId1',
@@ -219,7 +219,7 @@ describe('TableBotStorageFaultTest', function() {
         let realTableClient = new azure.AzureTableClient('testTable1');
         let faultyTableClient = new faults.FaultyAzureTableClient(realTableClient, faultSettings);
 
-        let store = new azure.TableBotStorage(options, faultyTableClient);
+        let store = new azure.AzureBotStorage(options, faultyTableClient);
         
         let botStorageContext = {
             userId: 'userId1',
@@ -270,7 +270,7 @@ describe('TableBotStorageFaultTest', function() {
         let realTableClient = new azure.AzureTableClient('testTable1');
         let faultyTableClient = new faults.FaultyAzureTableClient(realTableClient, faultSettings);
 
-        let store = new azure.TableBotStorage(options, faultyTableClient);
+        let store = new azure.AzureBotStorage(options, faultyTableClient);
         
         let botStorageContext = {
             userId: 'userId1',

@@ -35,13 +35,14 @@ var azure = require('../');
 var assert = require('assert');
 var builder = require('botbuilder');
 
-describe('TableBotStorageTest', function() {
+describe('AzureBotStorageTest', function() {
     it('data should be properly written and read from azure table when requesting gzip, requesting to store user and conversation data, and providing conversation and user ids', function(done) {
         let options = {
             gzipData: true,
         };
 
-        let store = new azure.TableBotStorage(options);
+        let store = new azure.AzureBotStorage(options)
+            .client(new azure.AzureTableClient('testTable1'));
         
         let botStorageContext = {
             userId: 'userId1',
@@ -81,7 +82,8 @@ describe('TableBotStorageTest', function() {
             gzipData: false,
         };
 
-        let store = new azure.TableBotStorage(options);
+        let store = new azure.AzureBotStorage(options)
+            .client(new azure.AzureTableClient('testTable1'));
         
         let botStorageContext = {
             userId: 'userId2',
@@ -121,7 +123,7 @@ describe('TableBotStorageTest', function() {
             gzipData: false,
         };
 
-        let store = new azure.TableBotStorage(options);
+        let store = new azure.AzureBotStorage(options, new azure.AzureTableClient('testTable1'));
         
         let botStorageContext = {
             userId: Math.floor((Math.random() * 100000000) + 1).toString(),
@@ -171,7 +173,7 @@ describe('TableBotStorageTest', function() {
             gzipData: false,
         };
 
-        let store = new azure.TableBotStorage(options);
+        let store = new azure.AzureBotStorage(options, new azure.AzureTableClient('testTable1'));
         
         let botStorageContext = {
             userId: Math.floor((Math.random() * 100000000) + 1).toString(),
