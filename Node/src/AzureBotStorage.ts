@@ -245,7 +245,3 @@ export class AzureBotStorage implements builder.IBotStorage {
         return this.initializeTableClientPromise;
     }
 }
-
-export class TableBotStorage extends AzureBotStorage {
-    
-}

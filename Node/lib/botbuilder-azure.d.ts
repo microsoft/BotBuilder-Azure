@@ -188,23 +188,9 @@ export interface IBotServiceConnectorSettings {
 }
 
 /** Options used to initialize a TableBotStorage instance. */
-export interface ITableBotStorageOptions {
-    /** If true the data will be gzipped prior to writing to storage. */
-    gzipData?: boolean;   
-    /** Storage account name used to persist bot data. */
-    accountName: string;
-    /** Storage account key used to persist bot data. */
-    accountKey: string;    
-}
-
-/** Options used to initialize a TableBotStorage instance. */
 export interface IAzureBotStorageOptions {
     /** If true the data will be gzipped prior to writing to storage. */
     gzipData?: boolean;   
-    /** Storage account name used to persist bot data. */
-    accountName: string;
-    /** Storage account key used to persist bot data. */
-    accountKey: string;    
 }
 
 export interface IStorageClient {
@@ -360,7 +346,7 @@ export class BotServiceConnector implements IBotStorage {
 export class AzureBotStorage implements IBotStorage {
 
     /** 
-     * Creates a new instance of the TableBotStorage.
+     * Creates a new instance of the AzureBotStorage.
      * @param options config params that let you specify storage preferences 
      * @param optional storage client to be used. If not specified here, the client() method must be called before usage to configure a table client
      */
@@ -376,27 +362,10 @@ export class AzureBotStorage implements IBotStorage {
     saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
 }
 
-/** Azure Table Storage based implementation of IBotStorage. */
-export class TableBotStorage implements IBotStorage {
-
-    /** 
-     * Creates a new instance of the TableBotStorage.
-     * @param options config params that let you specify storage preferences 
-     * @param optional table client to be injected, used for testing and fault injection 
-     */
-    constructor(options: ITableBotStorageOptions, tableClient?: IAzureTableClient);
-    
-    /** Reads in data from the table. */
-    getData(context: IBotStorageContext, callback: (err: Error, data: IBotStorageData) => void): void;
-
-    /** Writes out data to the table. */
-    saveData(context: IBotStorageContext, data: IBotStorageData, callback?: (err: Error) => void): void;
-}
-
 export class AzureTableClient implements IAzureTableClient {
 
     /** 
-     * Creates a new instance of the TableBotStorage.
+     * Creates a new instance of the AzureTableClient.
      * @param name of the table to be used in Azure Table 
      * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started
      * @param optional Azure storage account key. If not specified, development storage is used and Azure Storage Emulator should be started 

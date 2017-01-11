@@ -1,9 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var async = require('async');
 var Promise = require('promise');
 var Consts = require('./Consts');
@@ -191,11 +186,3 @@ var AzureBotStorage = (function () {
     return AzureBotStorage;
 }());
 exports.AzureBotStorage = AzureBotStorage;
-var TableBotStorage = (function (_super) {
-    __extends(TableBotStorage, _super);
-    function TableBotStorage() {
-        _super.apply(this, arguments);
-    }
-    return TableBotStorage;
-}(AzureBotStorage));
-exports.TableBotStorage = TableBotStorage;
