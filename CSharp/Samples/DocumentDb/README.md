@@ -2,7 +2,7 @@
 
 This simple echo bots illustrates how to use your own Azure DocumentDB to store the bot state.
 
-To use Azure Table Store, we configure the Autofac Dependency Injection in [Global.asax](Global.asax.cs). Particularly the following is the piece of code that configures injection of Azure Table Storage:
+To use DocumentDB Store, we configure the Autofac Dependency Injection in [Global.asax](Global.asax.cs). Particularly the following is the piece of code that configures injection of DocumentDB:
 
 ```csharp
 var store = new DocumentDbBotDataStore(docDbEmulatorUri, docDbEmulatorKey);
@@ -12,5 +12,5 @@ builder.Register(c => store)
     .SingleInstance();
 ```
 
-Note that instead of passing ```csharp docDbEmulatorUri, docDbEmulatorKey```, real Azure DocumentDB credentials can be passed to configure an Azure DocumentDB account.
+Note that instead of passing ```docDbEmulatorUri, docDbEmulatorKey```, real Azure DocumentDB credentials can be passed to configure an Azure DocumentDB account.
 
