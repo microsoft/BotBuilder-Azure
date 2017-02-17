@@ -41,6 +41,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Autofac;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Scorables.Internals;
 using Microsoft.Bot.Connector;
 using Module = Autofac.Module;
 
@@ -150,7 +151,7 @@ namespace Microsoft.Bot.Builder.Azure
 
             // register binary formatter used for binary serialization operation
             builder
-                .Register((c, p) => new BinaryFormatter(c.Resolve<ISurrogateSelector>(), new StreamingContext(StreamingContextStates.All, c.Resolve<Serialization.StoreInstanceByTypeSurrogate.IResolver>(p)))
+                .Register((c, p) => new BinaryFormatter(c.Resolve<ISurrogateSelector>(), new StreamingContext(StreamingContextStates.All, c.Resolve<IResolver>(p)))
                 {
                     AssemblyFormat = FormatterAssemblyStyle.Simple,
                     Binder = c.Resolve<SerializationBinder>()

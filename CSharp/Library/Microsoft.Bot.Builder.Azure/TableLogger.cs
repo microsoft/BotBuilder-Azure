@@ -367,7 +367,7 @@ namespace Microsoft.Bot.Builder.Azure
     /// <summary>
     /// Module for registering a LoggerTable.
     /// </summary>
-    public class TableLoggerModule : Autofac.Module
+    public class TableLoggerModule : Module
     {
         private CloudStorageAccount _account;
         private string _tableName;
