@@ -133,7 +133,9 @@
     <Compile Include="DialogTestBase.cs" />
     <Compile Include="DocumentDbDataStoreTests.cs" />
     <Compile Include="DocumentDbDeleter.cs" />
+    <Compile Include="LoggerTestBase.cs" />
     <Compile Include="MockConnectorFactory.cs" />
+    <Compile Include="QueueLoggerTests.cs" />
     <Compile Include="TableDataStoreTests.cs" />
     <Compile Include="LoggerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

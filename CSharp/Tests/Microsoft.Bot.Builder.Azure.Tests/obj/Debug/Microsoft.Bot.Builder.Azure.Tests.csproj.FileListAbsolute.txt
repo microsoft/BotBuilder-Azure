@@ -1,0 +1,1 @@
+C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\obj\Debug\Microsoft.Bot.Builder.Azure.Tests.csprojResolveAssemblyReference.cache

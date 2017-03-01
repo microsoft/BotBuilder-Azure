@@ -1,0 +1,1 @@
+C:\repos\botbuilder-Azure-MZ\CSharp\Samples\AzureTable\obj\Debug\Microsoft.Bot.Sample.AzureTable.csprojResolveAssemblyReference.cache

@@ -1,0 +1,1 @@
+C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\obj\Debug\Microsoft.Bot.Sample.DocumentDb.csprojResolveAssemblyReference.cache
