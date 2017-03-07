@@ -64,7 +64,6 @@ namespace Microsoft.Bot.Builder.Azure
                     message.Text.Length > maxMessagelength)
                     return;
 
-
                 //if trim, trim the message
                 if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Trim && message.Text.Length > maxMessagelength)
                 {
@@ -77,16 +76,12 @@ namespace Microsoft.Bot.Builder.Azure
                 if (_queueLoggerSettings.CompressMessage)
                     await _cloudQueue.AddMessageAsync(new CloudQueueMessage(jsonMsg.Compress()));
                 else
-                {
                     await _cloudQueue.AddMessageAsync(new CloudQueueMessage(jsonMsg));
-                }
             }
             catch
             {
                 // lots of reasons this can throw exceptions...but logger should never throw unless asked
             }
-
-
         }
     }
 }

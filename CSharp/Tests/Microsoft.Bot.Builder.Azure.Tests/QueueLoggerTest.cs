@@ -24,12 +24,14 @@ namespace Microsoft.Bot.Builder.Tests
     {
         async Task RunTestCase(bool compressed, LargeMessageMode handlingMode, QueueKind kind)
         {
-            IContainer container = null;
-            IQueueReader reader = null;
-            int batchCount = 0;
-            var queueSettings = new QueueLoggerSettings();
-            queueSettings.CompressMessage = compressed;
-            queueSettings.LargeMessageHandlingPattern = handlingMode;
+            IContainer container;
+            IQueueReader reader;
+            int batchCount;
+            var queueSettings = new QueueLoggerSettings
+            {
+                CompressMessage = compressed,
+                LargeMessageHandlingPattern = handlingMode
+            };
 
             IActivityLogger logger;
             if (kind == QueueKind.ServiceBus)
@@ -53,8 +55,8 @@ namespace Microsoft.Bot.Builder.Tests
         public async Task ServiceBusTestUnCompressed()
         {
             bool exceptionHappened = false;
-            await RunTestCase(false, LargeMessageMode.Trim, QueueKind.ServiceBus);
 
+            await RunTestCase(false, LargeMessageMode.Trim, QueueKind.ServiceBus);
             await RunTestCase(false, LargeMessageMode.Discard, QueueKind.ServiceBus);
 
             //expect an exception
@@ -62,10 +64,9 @@ namespace Microsoft.Bot.Builder.Tests
             {
                 await RunTestCase(false, LargeMessageMode.Error, QueueKind.ServiceBus);
             }
-            catch (Exception e)
+            catch
             {
                 exceptionHappened = true;
-
             }
 
             Assert.IsTrue(exceptionHappened,"Failed to throw exception on large uncompressed message");
@@ -76,8 +77,8 @@ namespace Microsoft.Bot.Builder.Tests
         public async Task ServiceBusTestCompressed()
         {
             bool exceptionHappened = false;
-            await RunTestCase(true, LargeMessageMode.Trim, QueueKind.ServiceBus);
 
+            await RunTestCase(true, LargeMessageMode.Trim, QueueKind.ServiceBus);
             await RunTestCase(true, LargeMessageMode.Discard, QueueKind.ServiceBus);
 
             //expect an exception
@@ -85,10 +86,9 @@ namespace Microsoft.Bot.Builder.Tests
             {
                 await RunTestCase(true, LargeMessageMode.Error, QueueKind.ServiceBus);
             }
-            catch (Exception e)
+            catch 
             {
                 exceptionHappened = true;
-
             }
 
             Assert.IsTrue(exceptionHappened, "Failed to throw exception on large compressed message");
@@ -134,7 +134,6 @@ namespace Microsoft.Bot.Builder.Tests
             else
                 //here we expect that one message will be dropped.
                 Assert.AreEqual(activities.Count, readActivities.Count+1);
-
         }
 
         private static IContainer RegisterAzureQueueContainer(out IActivityLogger logger, QueueLoggerSettings queueSettings)
@@ -144,8 +143,7 @@ namespace Microsoft.Bot.Builder.Tests
 
             //delete as part of the test
             account.CreateCloudQueueClient().GetQueueReference(queueName).DeleteIfExists();
-
-
+            
             var builder = new ContainerBuilder();
 
             builder.RegisterModule(new QueueActivityModule(account, queueName,queueSettings));
@@ -163,10 +161,9 @@ namespace Microsoft.Bot.Builder.Tests
         // The test will automatically start the emulator.
         public async Task AzureStorageUnCompressedTest()
         {
-
             bool exceptionHappened = false;
-            await RunTestCase(false, LargeMessageMode.Trim, QueueKind.AzureQueue);
 
+            await RunTestCase(false, LargeMessageMode.Trim, QueueKind.AzureQueue);
             await RunTestCase(false, LargeMessageMode.Discard, QueueKind.AzureQueue);
 
             //expect an exception
@@ -174,10 +171,9 @@ namespace Microsoft.Bot.Builder.Tests
             {
                 await RunTestCase(false, LargeMessageMode.Error, QueueKind.AzureQueue);
             }
-            catch (Exception e)
+            catch
             {
                 exceptionHappened = true;
-
             }
 
             Assert.IsTrue(exceptionHappened, "Failed to throw exception on large compressed message");
@@ -191,10 +187,9 @@ namespace Microsoft.Bot.Builder.Tests
         // The test will automatically start the emulator.
         public async Task AzureStorageCompressedTest()
         {
-
             bool exceptionHappened = false;
-            await RunTestCase(true, LargeMessageMode.Trim, QueueKind.AzureQueue);
 
+            await RunTestCase(true, LargeMessageMode.Trim, QueueKind.AzureQueue);
             await RunTestCase(true, LargeMessageMode.Discard, QueueKind.AzureQueue);
 
             //expect an exception
@@ -202,14 +197,13 @@ namespace Microsoft.Bot.Builder.Tests
             {
                 await RunTestCase(true, LargeMessageMode.Error, QueueKind.AzureQueue);
             }
-            catch (Exception e)
+            catch
             {
                 exceptionHappened = true;
 
             }
 
             Assert.IsTrue(exceptionHappened, "Failed to throw exception on large compressed message");
-
         }
     }
 }

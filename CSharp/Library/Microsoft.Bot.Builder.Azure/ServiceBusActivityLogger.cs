@@ -81,7 +81,6 @@ namespace Microsoft.Bot.Builder.Azure
             _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
 
             _jsonSerializerSettings = settings;
-
         }
 
         /// <summary>
@@ -108,12 +107,10 @@ namespace Microsoft.Bot.Builder.Azure
                     message.Text.Length > maxMessagelength)
                     return;
 
-
                 //if trim, trim the message
                 if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Trim &&
                     message.Text.Length > maxMessagelength)
                 {
-
                     message.Text = message.Text.Substring(0, maxMessagelength);
                 }
 
@@ -123,9 +120,7 @@ namespace Microsoft.Bot.Builder.Azure
                 if (_queueLoggerSettings.CompressMessage)
                     await _client.SendAsync(new BrokeredMessage(jsonMsg.Compress()));
                 else
-                {
                     await _client.SendAsync(new BrokeredMessage(jsonMsg));
-                }
             }
             catch
             {
