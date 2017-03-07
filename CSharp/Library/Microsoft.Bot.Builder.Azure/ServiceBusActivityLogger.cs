@@ -70,18 +70,15 @@ namespace Microsoft.Bot.Builder.Azure
         /// Constructs an instance of ServiceBusActivityLogger
         /// </summary>
         /// <param name="client">Reference to a QueueClient instance</param>
-        /// <param name="loggerSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
+        /// <param name="queueSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
         /// <param name="settings">JSON serialziation settings used to write the formatted JSON message before adding to the queue</param>
-        public ServiceBusActivityLogger(QueueClient client, QueueLoggerSettings loggerSettings = null,
+        public ServiceBusActivityLogger(QueueClient client, QueueLoggerSettings queueSettings = null,
             JsonSerializerSettings settings = null)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
 
-            //set default settings
-            if (loggerSettings == null)
-                _queueLoggerSettings = new QueueLoggerSettings();
-            else
-                _queueLoggerSettings = loggerSettings;
+            //set the defaults
+            _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
 
             _jsonSerializerSettings = settings;
 

@@ -47,15 +47,13 @@ namespace Microsoft.Bot.Builder.Azure
         /// Creates an instance of queue reader
         /// </summary>
         /// <param name="client">Reference to a CloudClient instance</param>
-        /// <param name="loggerSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
-        public ServiceBusQueueReader(QueueClient client, QueueLoggerSettings loggerSettings = null)
+        /// <param name="queueSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
+        public ServiceBusQueueReader(QueueClient client, QueueLoggerSettings queueSettings = null)
         {
             client = client ?? throw new ArgumentNullException(nameof(client));
 
-            _queueLoggerSettings = loggerSettings;
             //set the defaults
-            if (_queueLoggerSettings == null)
-                _queueLoggerSettings = new QueueLoggerSettings();
+            _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
 
             _queueClient = client;
         }
@@ -90,7 +88,7 @@ namespace Microsoft.Bot.Builder.Azure
 
         private Activity DeserializeItem(BrokeredMessage msg)
         {
-            string jsonActivity = "";
+            string jsonActivity;
             
             //message is compressed
             if (_queueLoggerSettings.CompressMessage)

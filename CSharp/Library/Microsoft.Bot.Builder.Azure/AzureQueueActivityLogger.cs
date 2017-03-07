@@ -28,16 +28,15 @@ namespace Microsoft.Bot.Builder.Azure
         /// Constructs an instance of AzureQueueActivityLogger
         /// </summary>
         /// <param name="cloudQueue">Reference to a CloudQueue instance</param>
-        /// <param name="loggerSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
+        /// <param name="queueSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
         /// <param name="settings">JSON serialziation settings used to write the formatted JSON message before adding to the queue</param>
-        public AzureQueueActivityLogger(CloudQueue cloudQueue, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
+        public AzureQueueActivityLogger(CloudQueue cloudQueue, QueueLoggerSettings queueSettings = null, JsonSerializerSettings settings = null)
         {
             cloudQueue = cloudQueue ?? throw new ArgumentNullException(nameof(cloudQueue));
 
-            _queueLoggerSettings = loggerSettings;
             //set the defaults
-            if (_queueLoggerSettings == null)
-                _queueLoggerSettings = new QueueLoggerSettings();
+            _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
+
             _cloudQueue = cloudQueue;
             _jsonSerializerSettings = settings;
         }

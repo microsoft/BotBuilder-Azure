@@ -27,17 +27,14 @@ namespace Microsoft.Bot.Builder.Azure
         {
             cloudQueue = cloudQueue ?? throw new ArgumentNullException(nameof(cloudQueue));
 
-            _queueLoggerSettings = queueSettings;
-
             //set the defaults
-            if (_queueLoggerSettings == null)
-                _queueLoggerSettings = new QueueLoggerSettings();
+            _queueLoggerSettings = queueSettings ??  new QueueLoggerSettings();
 
             _cloudQueue = cloudQueue;
         }
         private Activity DeserializeItem(CloudQueueMessage msg)
         {
-            string jsonActivity = "";
+            string jsonActivity;
 
             //message is compressed
             if (_queueLoggerSettings.CompressMessage)
