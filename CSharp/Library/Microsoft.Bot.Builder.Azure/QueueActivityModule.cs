@@ -39,7 +39,7 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="settings"></param>
         public QueueActivityModule(CloudStorageAccount account, string queueName, QueueLoggerSettings loggerSettings= null, JsonSerializerSettings settings = null)
         {
-            _cloudStorageAccount = account ?? throw new ArgumentNullException("account");
+            _cloudStorageAccount = account ?? throw new ArgumentNullException(nameof(account));
 
             if (string.IsNullOrEmpty(queueName))
                 throw new ArgumentException("queue name must be provided");
