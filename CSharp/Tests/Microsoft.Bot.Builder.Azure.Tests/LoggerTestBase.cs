@@ -177,14 +177,14 @@ namespace Microsoft.Bot.Builder.Tests
 
             var activities = new List<IActivity>
             {
+                // Bigger than one property
+                ToUser(new string(chars)),
                 ToBot("Hi"),
                 ToUser("Welcome to the bot"),
                 ToBot("Weather"),
                 ToUser("or not"),
                 // Make sure auto-increment works
                 ToUser("right away", increment: 0),
-                // Bigger than one property
-                ToUser(new string(chars)),
                 ToUser("another conversation", conversation: "conversation2"),
                 ToUser("somewhere else", channel: "channel2"),
                 MakeActivity("to someone else", to: "user2"),

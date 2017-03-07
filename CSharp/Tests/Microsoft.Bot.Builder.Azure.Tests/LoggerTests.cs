@@ -48,40 +48,6 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Bot.Builder.Tests
 {
-
-    public sealed class ServiceBusLoggerTest : LoggerTestBase
-    {
-        [TestMethod]
-        [TestCategory("Azure")]
-        public async Task ServiceBusTest()
-        {
-            var queueName = "mytestqueue";
-            var account = CloudStorageAccount.DevelopmentStorageAccount;
-            account.CreateCloudQueueClient().GetQueueReference(queueName).DeleteIfExists();
-            var builder = new ContainerBuilder();
-            builder.RegisterModule(new QueueActivityModule("", queueName,null));
-            var container = builder.Build();
-            var logger = container.Resolve<IActivityLogger>();
-
-            //write all messages
-            var activities = GetTestActivityList();
-
-            for (var i = 0; i < activities.Count; ++i)
-            {
-                await logger.LogAsync(activities[i]);
-            }
-
-            //now read all messages, find reader
-            var reader = container.Resolve<QueueActivityReader>();
-            var readActivities = reader.ReadBatch(10000);
-
-            // do we have all of them, we don't care about order, they can arive in different order...but do we have all of them?
-            AssertEqual(activities.OrderBy(a => a.Timestamp), readActivities.OrderBy(a => a.Timestamp));
-        }
-    }
-
-
-
     public sealed class TableLoggerTests : LoggerTestBase
     {
         public TableLoggerTests() : base()

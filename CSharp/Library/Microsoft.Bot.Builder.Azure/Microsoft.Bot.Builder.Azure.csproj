@@ -132,9 +132,14 @@
     <Compile Include="AzureBot.cs" />
     <Compile Include="BotService.cs" />
     <Compile Include="AzureModule.cs" />
+    <Compile Include="DomainTerminology.cs" />
     <Compile Include="DocumentDbBotDataStore.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="QueueActivityLogger.cs" />
+    <Compile Include="ServiceBusQueueReader.cs" />
+    <Compile Include="AzureStorageQueueActivityLogger.cs" />
+    <Compile Include="QueueActivityModule.cs" />
+    <Compile Include="ServiceBusActivityLogger.cs" />
+    <Compile Include="AzureStorageQueueReader.cs" />
     <Compile Include="TableBotDataStore.cs" />
     <Compile Include="TableLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
