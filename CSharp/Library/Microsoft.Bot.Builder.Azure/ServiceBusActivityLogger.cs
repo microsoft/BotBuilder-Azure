@@ -63,8 +63,8 @@ namespace Microsoft.Bot.Builder.Azure
         private readonly JsonSerializerSettings _jsonSerializerSettings;
         private readonly QueueLoggerSettings _queueLoggerSettings;
 
-        private readonly int _textMaxLength = 1024*60; //60k
-        private readonly int _preCompressedMaxTextLength = 1024*180; //180k - assuming 3x compression
+        private readonly int _textMaxLength = 1024 * 60; //60k
+        private readonly int _preCompressedMaxTextLength = 1024 * 180; //180k - assuming 3x compression
 
         /// <summary>
         /// Constructs an instance of ServiceBusActivityLogger
@@ -72,7 +72,8 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="client">Reference to a QueueClient instance</param>
         /// <param name="loggerSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
         /// <param name="settings">JSON serialziation settings used to write the formatted JSON message before adding to the queue</param>
-        public ServiceBusActivityLogger(QueueClient client, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
+        public ServiceBusActivityLogger(QueueClient client, QueueLoggerSettings loggerSettings = null,
+            JsonSerializerSettings settings = null)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
 
@@ -83,8 +84,9 @@ namespace Microsoft.Bot.Builder.Azure
                 _queueLoggerSettings = loggerSettings;
 
             _jsonSerializerSettings = settings;
-            
+
         }
+
         /// <summary>
         /// Logs a single Activity message
         /// </summary>
@@ -97,32 +99,41 @@ namespace Microsoft.Bot.Builder.Azure
 
             int maxMessagelength = _queueLoggerSettings.CompressMessage ? _preCompressedMaxTextLength : _textMaxLength;
 
-            //handle discard case
-            if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Discard &&
-                message.Text.Length > maxMessagelength)
-                return;
-
             //if error is requested
             if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Error)
-                throw new ArgumentException($"Message length of {message.Text.Length} is larger than {maxMessagelength} allowed.");
+                throw new ArgumentException(
+                    $"Message length of {message.Text.Length} is larger than {maxMessagelength} allowed.");
 
-            //if trim, trim the message
-            if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Trim &&
-                message.Text.Length > maxMessagelength)
+            try
             {
-                
-                message.Text = message.Text.Substring(0, maxMessagelength);
+                //handle discard case
+                if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Discard &&
+                    message.Text.Length > maxMessagelength)
+                    return;
+
+
+                //if trim, trim the message
+                if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Trim &&
+                    message.Text.Length > maxMessagelength)
+                {
+
+                    message.Text = message.Text.Substring(0, maxMessagelength);
+                }
+
+                string jsonMsg = JsonConvert.SerializeObject(activity, _jsonSerializerSettings);
+
+                //send compressed or plain message
+                if (_queueLoggerSettings.CompressMessage)
+                    await _client.SendAsync(new BrokeredMessage(jsonMsg.Compress()));
+                else
+                {
+                    await _client.SendAsync(new BrokeredMessage(jsonMsg));
+                }
             }
-
-            string jsonMsg = JsonConvert.SerializeObject(activity, _jsonSerializerSettings);
-
-            //send compressed or plain message
-            if (_queueLoggerSettings.CompressMessage)
-                await _client.SendAsync(new BrokeredMessage(jsonMsg.Compress()));
-            else
+            catch
             {
-                await _client.SendAsync(new BrokeredMessage(jsonMsg));
-            }            
+                // lots of reasons this can throw exceptions...but logger should never throw unless asked            }
+            }
         }
     }
 }
