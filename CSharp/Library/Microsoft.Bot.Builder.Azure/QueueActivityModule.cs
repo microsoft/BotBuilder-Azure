@@ -24,24 +24,24 @@ namespace Microsoft.Bot.Builder.Azure
     /// </summary>
     public class QueueActivityModule : Module
     {
-        private string _connectionString;
-        private string _queueName;
-        private JsonSerializerSettings _settings;
-        private CloudStorageAccount _cloudStorageAccount;
-        private string _serviceBusConnectionString = null;
-        private QueueLoggerSettings _queueLoggerSettings;
+        private readonly string _queueName;
+        private readonly JsonSerializerSettings _settings;
+        private readonly CloudStorageAccount _cloudStorageAccount;
+        private readonly string _serviceBusConnectionString = null;
+        private readonly QueueLoggerSettings _queueLoggerSettings;
 
         /// <summary>
         /// Create a QueueLogger for a particular storage account and table name.
         /// </summary>
-        /// <param name="connectionString">Azure ServiceBus connection string.</param>
+        /// <param name="account"></param>
         /// <param name="queueName">Where to log activities.</param>
+        /// <param name="loggerSettings"></param>
         /// <param name="settings"></param>
         public QueueActivityModule(CloudStorageAccount account, string queueName, QueueLoggerSettings loggerSettings= null, JsonSerializerSettings settings = null)
         {
-            _cloudStorageAccount = account ?? throw new ArgumentNullException("account must be provided");
+            _cloudStorageAccount = account ?? throw new ArgumentNullException("account");
 
-            if (queueName == null || queueName == "")
+            if (string.IsNullOrEmpty(queueName))
                 throw new ArgumentException("queue name must be provided");
             else
                 _queueName = queueName;
@@ -54,15 +54,16 @@ namespace Microsoft.Bot.Builder.Azure
         /// <summary>
         /// Create a QueueLogger for a particular storage account and table name.
         /// </summary>
-        /// <param name="connectionString">Azure ServiceBus connection string.</param>
+        /// <param name="serviceBusConnectionString"></param>
         /// <param name="queueName">Where to log activities.</param>
+        /// <param name="loggerSettings"></param>
         /// <param name="settings"></param>
         public QueueActivityModule(string serviceBusConnectionString, string queueName, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
         {
-            if (serviceBusConnectionString == null || serviceBusConnectionString == "")
+            if (string.IsNullOrEmpty(serviceBusConnectionString))
                 throw new ArgumentException("serviceBusConnectionString must be provided");
 
-            if (queueName == null || queueName == "")
+            if (string.IsNullOrEmpty(queueName))
                 throw new ArgumentException("queueName must be provided");
 
 

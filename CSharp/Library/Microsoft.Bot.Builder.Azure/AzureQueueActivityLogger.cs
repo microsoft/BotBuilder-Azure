@@ -9,27 +9,30 @@ using Newtonsoft.Json;
 namespace Microsoft.Bot.Builder.Azure
 {
     /// <summary>
-    /// 
+    /// Log activities to Azure Storage Queue. 
     /// </summary>
+    /// <remarks>
+    /// Activities are limited to xx when converted to JSON, xx if compressed.  Disposition of larger messages is controlled by QueueLoggerSettings.
+    /// </remarks>
     public class AzureQueueActivityLogger : IActivityLogger
     {
 
         private readonly JsonSerializerSettings _jsonSerializerSettings;
-        private CloudQueueClient _cloudQueueClient;
-        private CloudQueue _cloudQueue;
-        private QueueLoggerSettings _queueLoggerSettings;
+        private readonly CloudQueue _cloudQueue;
+        private readonly QueueLoggerSettings _queueLoggerSettings;
 
-        private int _textMaxLength = 1024 * 20; //60k
-        private int _preCompressedMaxTextLength = 1024 * 50; //180k - assuming 3x compression
+        private readonly int _textMaxLength = 1024 * 20; //60k
+        private readonly int _preCompressedMaxTextLength = 1024 * 50; //180k - assuming 3x compression
 
         /// <summary>
-        /// 
+        /// Constructs an instance of AzureQueueActivityLogger
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="settings"></param>
+        /// <param name="cloudQueue">Reference to a CloudQueue instance</param>
+        /// <param name="loggerSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
+        /// <param name="settings">JSON serialziation settings used to write the formatted JSON message before adding to the queue</param>
         public AzureQueueActivityLogger(CloudQueue cloudQueue, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
         {
-            cloudQueue = cloudQueue ?? throw new ArgumentNullException("client is required");
+            cloudQueue = cloudQueue ?? throw new ArgumentNullException(nameof(cloudQueue));
 
             _queueLoggerSettings = loggerSettings;
             //set the defaults
@@ -39,6 +42,12 @@ namespace Microsoft.Bot.Builder.Azure
             _jsonSerializerSettings = settings;
         }
 
+        /// <summary>
+        /// Logs a single Activity message
+        /// </summary>
+        /// <param name="activity">An activity to be logged</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">thrown when message exceeds length limit</exception>
         public async Task LogAsync(IActivity activity)
         {
             var message = activity.AsMessageActivity();
@@ -69,13 +78,6 @@ namespace Microsoft.Bot.Builder.Azure
             {
                 await _cloudQueue.AddMessageAsync(new CloudQueueMessage(jsonMsg));
             }
-        }
-
-        byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
         }
     }
 }

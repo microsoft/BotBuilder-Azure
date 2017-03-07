@@ -174,16 +174,18 @@
             <summary>
             Create a QueueLogger for a particular storage account and table name.
             </summary>
-            <param name="connectionString">Azure ServiceBus connection string.</param>
+            <param name="account"></param>
             <param name="queueName">Where to log activities.</param>
+            <param name="loggerSettings"></param>
             <param name="settings"></param>
         </member>
         <member name="M:Microsoft.Bot.Builder.Azure.QueueActivityModule.#ctor(System.String,System.String,Microsoft.Bot.Builder.Azure.QueueLoggerSettings,Newtonsoft.Json.JsonSerializerSettings)">
             <summary>
             Create a QueueLogger for a particular storage account and table name.
             </summary>
-            <param name="connectionString">Azure ServiceBus connection string.</param>
+            <param name="serviceBusConnectionString"></param>
             <param name="queueName">Where to log activities.</param>
+            <param name="loggerSettings"></param>
             <param name="settings"></param>
         </member>
         <member name="M:Microsoft.Bot.Builder.Azure.QueueActivityModule.Load(Autofac.ContainerBuilder)">

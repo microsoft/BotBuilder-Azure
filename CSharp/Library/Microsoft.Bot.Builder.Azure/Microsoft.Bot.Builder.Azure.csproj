@@ -132,7 +132,6 @@
     <Compile Include="AzureBot.cs" />
     <Compile Include="BotService.cs" />
     <Compile Include="AzureModule.cs" />
-    <Compile Include="DomainTerminology.cs" />
     <Compile Include="DocumentDbBotDataStore.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ServiceBusQueueReader.cs" />

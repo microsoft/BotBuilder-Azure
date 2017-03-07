@@ -11,20 +11,21 @@ using Newtonsoft.Json;
 namespace Microsoft.Bot.Builder.Azure
 {
     /// <summary>
-    /// 
+    /// Reads messages from an Azure Storage Queue
     /// </summary>
     public class AzureQueueReader: IQueueReader
     {
         private readonly CloudQueue _cloudQueue;
-        private QueueLoggerSettings _queueLoggerSettings;
+        private readonly QueueLoggerSettings _queueLoggerSettings;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="cloudQueue"></param>
+        /// <param name="cloudQueue">Reference to a CloudQueue instance</param>
+        /// <param name="queueSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
         public AzureQueueReader(CloudQueue cloudQueue, QueueLoggerSettings queueSettings = null)
         {
-            cloudQueue = cloudQueue ?? throw new ArgumentNullException("client is required");
+            cloudQueue = cloudQueue ?? throw new ArgumentNullException(nameof(cloudQueue));
 
             _queueLoggerSettings = queueSettings;
 
@@ -48,7 +49,7 @@ namespace Microsoft.Bot.Builder.Azure
             return data;
         }
         /// <summary>
-        /// 
+        /// Read a single activity message from the queue
         /// </summary>
         /// <returns></returns>
         public IActivity Read()
@@ -57,7 +58,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// 
+        /// Read a single activity message from the queue, asynchronously
         /// </summary>
         /// <returns></returns>
         public async Task<Activity> ReadAsync()
@@ -73,7 +74,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// cloudQueue may contain more than one message, read the {messageCount} of messages from the cloudQueue
+        /// Queue may contain more than one message, read the {messageCount} of messages from the queue
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         /// <returns></returns>
@@ -83,7 +84,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// 
+        /// Reads a batch of messages from the queue not to exceed the message count.
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         /// <returns></returns>

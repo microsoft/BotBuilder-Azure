@@ -10,28 +10,47 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.Azure
 {
+    /// <summary>
+    /// Interface for queue reader
+    /// </summary>
     public interface IQueueReader
     {
+        /// <summary>
+        /// Read a single activity message from the queue
+        /// </summary>
         IActivity Read();
-        List<Activity> ReadBatch(int messageCount);
-        Task<List<Activity>> ReadBatchAsync(int messageCount);
+        /// <summary>
+        /// Read a single activity message from the queue, asynchronously
+        /// </summary>
         Task<Activity> ReadAsync();
+        /// <summary>
+        /// Reads a batch of messages from the queue not to exceed the message count.
+        /// </summary>
+        /// <param name="messageCount">Maximum number of messages to return</param>
+        List<Activity> ReadBatch(int messageCount);
+        /// <summary>
+        /// Reads a batch of messages from the queue not to exceed the message count, asynchronously
+        /// </summary>
+        /// <param name="messageCount">Maximum number of messages to return</param>
+        Task<List<Activity>> ReadBatchAsync(int messageCount);
+
     }
     /// <summary>
-    /// 
+    /// Reads messages from an Azure Service Bus Queue
     /// </summary>
     public class ServiceBusQueueReader : IQueueReader
     {
         private readonly QueueClient _queueClient;
-        private QueueLoggerSettings _queueLoggerSettings;
+        private readonly QueueLoggerSettings _queueLoggerSettings;
 
         /// <summary>
-        /// 
+        /// Creates an instance of queue reader
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="client">Reference to a CloudClient instance</param>
+        /// <param name="loggerSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
         public ServiceBusQueueReader(QueueClient client, QueueLoggerSettings loggerSettings = null)
         {
-            client = client ?? throw new ArgumentNullException("client is required");
+            client = client ?? throw new ArgumentNullException(nameof(client));
 
             _queueLoggerSettings = loggerSettings;
             //set the defaults
@@ -42,7 +61,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// 
+        /// Read a single activity message from the queue
         /// </summary>
         /// <returns></returns>
         public IActivity Read()
@@ -51,7 +70,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// 
+        /// Read a single activity message from the queue, asynchronously
         /// </summary>
         /// <returns></returns>
         public async Task<Activity> ReadAsync()
@@ -84,7 +103,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// queue may contain more than one message, read the {messageCount} of messages from the queue
+        /// Reads a batch of messages from the queue not to exceed the message count.
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         /// <returns></returns>
@@ -94,7 +113,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// 
+        /// Reads a batch of messages from the queue not to exceed the message count.
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         /// <returns></returns>
@@ -104,13 +123,16 @@ namespace Microsoft.Bot.Builder.Azure
 
             var messageBatch = await _queueClient.ReceiveBatchAsync(messageCount);
 
-            foreach (var msg in messageBatch)
+            //avoid multiple enumeration
+            var brokeredMessages = messageBatch as IList<BrokeredMessage> ?? messageBatch.ToList();
+
+            foreach (var msg in brokeredMessages)
             {
                 batch.Add(DeserializeItem(msg));
             }
 
             //mark batch as complete only once if we are returning them from the call
-            messageBatch.ForEach(m => m.Complete());
+            brokeredMessages.ForEach(m => m.Complete());
 
             return batch;
         }
