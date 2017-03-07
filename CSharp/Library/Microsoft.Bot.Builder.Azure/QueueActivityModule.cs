@@ -66,9 +66,8 @@ namespace Microsoft.Bot.Builder.Azure
             if (string.IsNullOrEmpty(queueName))
                 throw new ArgumentException("queueName must be provided");
 
-
             _serviceBusConnectionString = serviceBusConnectionString;
-            _queueLoggerSettings = loggerSettings == null ? new QueueLoggerSettings() : loggerSettings;
+            _queueLoggerSettings = loggerSettings ?? new QueueLoggerSettings();
             _queueName = queueName;
             _settings = settings;
         }
