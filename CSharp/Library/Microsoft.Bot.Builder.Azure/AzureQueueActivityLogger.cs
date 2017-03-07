@@ -11,12 +11,12 @@ namespace Microsoft.Bot.Builder.Azure
     /// <summary>
     /// 
     /// </summary>
-    public class AzureStorageQueueActivityLogger : IActivityLogger
+    public class AzureQueueActivityLogger : IActivityLogger
     {
 
         private readonly JsonSerializerSettings _jsonSerializerSettings;
         private CloudQueueClient _cloudQueueClient;
-        private CloudQueue _queueClient;
+        private CloudQueue _cloudQueue;
         private QueueLoggerSettings _queueLoggerSettings;
 
         private int _textMaxLength = 1024 * 20; //60k
@@ -27,19 +27,20 @@ namespace Microsoft.Bot.Builder.Azure
         /// </summary>
         /// <param name="client"></param>
         /// <param name="settings"></param>
-        public AzureStorageQueueActivityLogger(CloudQueue queueClient, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
+        public AzureQueueActivityLogger(CloudQueue cloudQueue, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
         {
+            cloudQueue = cloudQueue ?? throw new ArgumentNullException("client is required");
+
             _queueLoggerSettings = loggerSettings;
             //set the defaults
             if (_queueLoggerSettings == null)
                 _queueLoggerSettings = new QueueLoggerSettings();
-            _queueClient = queueClient;
+            _cloudQueue = cloudQueue;
             _jsonSerializerSettings = settings;
         }
 
         public async Task LogAsync(IActivity activity)
         {
-
             var message = activity.AsMessageActivity();
 
             int maxMessagelength = _queueLoggerSettings.CompressMessage ? _preCompressedMaxTextLength : _textMaxLength;
@@ -63,10 +64,10 @@ namespace Microsoft.Bot.Builder.Azure
 
             //send compressed or plain message
             if (_queueLoggerSettings.CompressMessage)
-                await _queueClient.AddMessageAsync(new CloudQueueMessage(jsonMsg.Compress()));
+                await _cloudQueue.AddMessageAsync(new CloudQueueMessage(jsonMsg.Compress()));
             else
             {
-                await _queueClient.AddMessageAsync(new CloudQueueMessage(jsonMsg));
+                await _cloudQueue.AddMessageAsync(new CloudQueueMessage(jsonMsg));
             }
         }
 

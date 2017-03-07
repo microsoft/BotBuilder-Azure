@@ -153,12 +153,12 @@
             <param name="messageCount">Maximum number of messages to return</param>
             <returns></returns>
         </member>
-        <member name="T:Microsoft.Bot.Builder.Azure.AzureStorageQueueActivityLogger">
+        <member name="T:Microsoft.Bot.Builder.Azure.AzureQueueActivityLogger">
             <summary>
             
             </summary>
         </member>
-        <member name="M:Microsoft.Bot.Builder.Azure.AzureStorageQueueActivityLogger.#ctor(Microsoft.WindowsAzure.Storage.Queue.CloudQueue,Microsoft.Bot.Builder.Azure.QueueLoggerSettings,Newtonsoft.Json.JsonSerializerSettings)">
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureQueueActivityLogger.#ctor(Microsoft.WindowsAzure.Storage.Queue.CloudQueue,Microsoft.Bot.Builder.Azure.QueueLoggerSettings,Newtonsoft.Json.JsonSerializerSettings)">
             <summary>
             
             </summary>
@@ -211,37 +211,37 @@
             <param name="activity"></param>
             <returns></returns>
         </member>
-        <member name="T:Microsoft.Bot.Builder.Azure.AzureStorageQueueReader">
+        <member name="T:Microsoft.Bot.Builder.Azure.AzureQueueReader">
             <summary>
             
             </summary>
         </member>
-        <member name="M:Microsoft.Bot.Builder.Azure.AzureStorageQueueReader.#ctor(Microsoft.WindowsAzure.Storage.Queue.CloudQueue,Microsoft.Bot.Builder.Azure.QueueLoggerSettings)">
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureQueueReader.#ctor(Microsoft.WindowsAzure.Storage.Queue.CloudQueue,Microsoft.Bot.Builder.Azure.QueueLoggerSettings)">
             <summary>
             
             </summary>
-            <param name="client"></param>
+            <param name="cloudQueue"></param>
         </member>
-        <member name="M:Microsoft.Bot.Builder.Azure.AzureStorageQueueReader.Read">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.Bot.Builder.Azure.AzureStorageQueueReader.ReadAsync">
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureQueueReader.Read">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Microsoft.Bot.Builder.Azure.AzureStorageQueueReader.ReadBatch(System.Int32)">
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureQueueReader.ReadAsync">
             <summary>
-            queue may contain more than one message, read the {messageCount} of messages from the queue
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureQueueReader.ReadBatch(System.Int32)">
+            <summary>
+            cloudQueue may contain more than one message, read the {messageCount} of messages from the cloudQueue
             </summary>
             <param name="messageCount">Maximum number of messages to return</param>
             <returns></returns>
         </member>
-        <member name="M:Microsoft.Bot.Builder.Azure.AzureStorageQueueReader.ReadBatchAsync(System.Int32)">
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureQueueReader.ReadBatchAsync(System.Int32)">
             <summary>
             
             </summary>

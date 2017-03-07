@@ -39,9 +39,15 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="settings"></param>
         public QueueActivityModule(CloudStorageAccount account, string queueName, QueueLoggerSettings loggerSettings= null, JsonSerializerSettings settings = null)
         {
-            _queueLoggerSettings = loggerSettings == null ? new QueueLoggerSettings() : loggerSettings;
-            _cloudStorageAccount = account;
-            _queueName = queueName;
+            _cloudStorageAccount = account ?? throw new ArgumentNullException("account must be provided");
+
+            if (queueName == null || queueName == "")
+                throw new ArgumentException("queue name must be provided");
+            else
+                _queueName = queueName;
+
+            _queueLoggerSettings = loggerSettings ?? new QueueLoggerSettings();
+            
             _settings = settings;
         }
 
@@ -53,6 +59,13 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="settings"></param>
         public QueueActivityModule(string serviceBusConnectionString, string queueName, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
         {
+            if (serviceBusConnectionString == null || serviceBusConnectionString == "")
+                throw new ArgumentException("serviceBusConnectionString must be provided");
+
+            if (queueName == null || queueName == "")
+                throw new ArgumentException("queueName must be provided");
+
+
             _serviceBusConnectionString = serviceBusConnectionString;
             _queueLoggerSettings = loggerSettings == null ? new QueueLoggerSettings() : loggerSettings;
             _queueName = queueName;
@@ -96,7 +109,7 @@ namespace Microsoft.Bot.Builder.Azure
                 .AsSelf()
                 .SingleInstance();
 
-            builder.RegisterType<AzureStorageQueueActivityLogger>().AsImplementedInterfaces();
+            builder.RegisterType<AzureQueueActivityLogger>().AsImplementedInterfaces();
             
         }
 

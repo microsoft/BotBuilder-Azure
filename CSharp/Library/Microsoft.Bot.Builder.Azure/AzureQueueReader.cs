@@ -13,19 +13,26 @@ namespace Microsoft.Bot.Builder.Azure
     /// <summary>
     /// 
     /// </summary>
-    public class AzureStorageQueueReader: IQueueReader
+    public class AzureQueueReader: IQueueReader
     {
-        private readonly CloudQueue _queueClient;
+        private readonly CloudQueue _cloudQueue;
         private QueueLoggerSettings _queueLoggerSettings;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="client"></param>
-        public AzureStorageQueueReader(CloudQueue client, QueueLoggerSettings queueSettings)
+        /// <param name="cloudQueue"></param>
+        public AzureQueueReader(CloudQueue cloudQueue, QueueLoggerSettings queueSettings = null)
         {
+            cloudQueue = cloudQueue ?? throw new ArgumentNullException("client is required");
+
             _queueLoggerSettings = queueSettings;
-            _queueClient = client;
+
+            //set the defaults
+            if (_queueLoggerSettings == null)
+                _queueLoggerSettings = new QueueLoggerSettings();
+
+            _cloudQueue = cloudQueue;
         }
         private Activity DeserializeItem(CloudQueueMessage msg)
         {
@@ -55,7 +62,7 @@ namespace Microsoft.Bot.Builder.Azure
         /// <returns></returns>
         public async Task<Activity> ReadAsync()
         {
-            var msg = await _queueClient.GetMessageAsync();
+            var msg = await _cloudQueue.GetMessageAsync();
 
             if (msg == null)
                 return null;
@@ -66,7 +73,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
         /// <summary>
-        /// queue may contain more than one message, read the {messageCount} of messages from the queue
+        /// cloudQueue may contain more than one message, read the {messageCount} of messages from the cloudQueue
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         /// <returns></returns>
@@ -84,7 +91,7 @@ namespace Microsoft.Bot.Builder.Azure
         {
             List<Activity> batch = new List<Activity>();
 
-            var messageBatch = await _queueClient.GetMessagesAsync(messageCount);
+            var messageBatch = await _cloudQueue.GetMessagesAsync(messageCount);
 
             foreach (var msg in messageBatch)
             {

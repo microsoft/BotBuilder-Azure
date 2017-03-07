@@ -31,6 +31,8 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="client"></param>
         public ServiceBusQueueReader(QueueClient client, QueueLoggerSettings loggerSettings = null)
         {
+            client = client ?? throw new ArgumentNullException("client is required");
+
             _queueLoggerSettings = loggerSettings;
             //set the defaults
             if (_queueLoggerSettings == null)

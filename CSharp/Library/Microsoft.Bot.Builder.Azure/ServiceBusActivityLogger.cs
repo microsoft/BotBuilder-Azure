@@ -45,6 +45,8 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="settings"></param>
         public ServiceBusActivityLogger(QueueClient client, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
         {
+            _client = client ?? throw new ArgumentNullException("client is required");
+
             //set default settings
             if (loggerSettings == null)
                 _queueLoggerSettings = new QueueLoggerSettings();
@@ -52,7 +54,7 @@ namespace Microsoft.Bot.Builder.Azure
                 _queueLoggerSettings = loggerSettings;
 
             _jsonSerializerSettings = settings;
-            _client = client;
+            
         }
         /// <summary>
         /// 

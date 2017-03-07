@@ -41,7 +41,7 @@ namespace Microsoft.Bot.Builder.Tests
             else
             { 
                 container = RegisterAzureQueueContainer(out logger, queueSettings);
-                reader = new AzureStorageQueueReader(container.Resolve<CloudQueue>(), queueSettings);
+                reader = new AzureQueueReader(container.Resolve<CloudQueue>(), queueSettings);
                 batchCount = 30;
             }
             await LogItems(logger, container, queueSettings, reader, batchCount);
