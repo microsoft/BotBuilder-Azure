@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Chronic;
 using Microsoft.Bot.Connector;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
@@ -43,6 +42,7 @@ namespace Microsoft.Bot.Builder.Azure
                 jsonActivity = msg.AsString;
 
             var data = JsonConvert.DeserializeObject<Activity>(jsonActivity);
+
             return data;
         }
         /// <summary>

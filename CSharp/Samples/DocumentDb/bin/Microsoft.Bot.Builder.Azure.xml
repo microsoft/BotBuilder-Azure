@@ -207,30 +207,30 @@
         </member>
         <member name="T:Microsoft.Bot.Builder.Azure.QueueActivityModule">
             <summary>
-            
+            Module responsible for handling queue operations for Activities
             </summary>
         </member>
         <member name="M:Microsoft.Bot.Builder.Azure.QueueActivityModule.#ctor(Microsoft.WindowsAzure.Storage.CloudStorageAccount,System.String,Microsoft.Bot.Builder.Azure.QueueLoggerSettings,Newtonsoft.Json.JsonSerializerSettings)">
             <summary>
-            Create a QueueLogger for a particular storage account and table name.
+            Registers IActivityLogger for Azure Storage Queue.
             </summary>
-            <param name="account"></param>
-            <param name="queueName">Where to log activities.</param>
-            <param name="loggerSettings"></param>
-            <param name="settings"></param>
+            <param name="account">Azure storage account</param>
+            <param name="queueName">Azure storage queue</param>
+            <param name="loggerSettings">Logger settings</param>
+            <param name="settings">JSON serialization settings for message serialization before enqueing</param>
         </member>
         <member name="M:Microsoft.Bot.Builder.Azure.QueueActivityModule.#ctor(System.String,System.String,Microsoft.Bot.Builder.Azure.QueueLoggerSettings,Newtonsoft.Json.JsonSerializerSettings)">
             <summary>
-            Create a QueueLogger for a particular storage account and table name.
+            Registers IActivityLogger for Service Bus Queue.
             </summary>
-            <param name="serviceBusConnectionString"></param>
-            <param name="queueName">Where to log activities.</param>
-            <param name="loggerSettings"></param>
-            <param name="settings"></param>
+            <param name="serviceBusConnectionString">Connection string to the Service Bus resource</param>
+            <param name="queueName">Azure storage queue</param>
+            <param name="loggerSettings">Logger settings</param>
+            <param name="settings">JSON serialization settings for message serialization before enqueing</param>
         </member>
         <member name="M:Microsoft.Bot.Builder.Azure.QueueActivityModule.Load(Autofac.ContainerBuilder)">
             <summary>
-            Update builder with registration for TableLogger.
+            Update builder with registration for IActivityLogger.
             </summary>
             <param name="builder">Builder to use for registration.</param>
         </member>

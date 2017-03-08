@@ -9,49 +9,6 @@ using Newtonsoft.Json;
 namespace Microsoft.Bot.Builder.Azure
 {
     /// <summary>
-    /// Logger setting to control compression and how to handle large messages
-    /// </summary>
-    public class QueueLoggerSettings
-    {
-        /// <summary>
-        /// Creates an instance of QueueLoggerSettings with default settings
-        /// </summary>
-        public QueueLoggerSettings()
-        {
-            CompressMessage = false;
-            LargeMessageHandlingPattern = LargeMessageMode.Discard;
-        }
-        /// <summary>
-        /// Informs logger to compress messages, default is false
-        /// </summary>
-        public bool CompressMessage { get; set; }
-        /// <summary>
-        /// Informs logger what to do with messages that exceed length limit, default is Discard
-        /// </summary>
-        public LargeMessageMode LargeMessageHandlingPattern { get; set; }
-    }
-
-    /// <summary>
-    /// Enumeration for hadling of large messages
-    /// </summary>
-    public enum LargeMessageMode
-    {
-        /// <summary>
-        /// Drop the message if exceeds the length limit
-        /// </summary>
-        Discard,
-        /// <summary>
-        /// Limit the text to be within the allowed limits
-        /// </summary>
-        Trim,
-        /// <summary>
-        /// Throw an exception if message exceeds allowed limit
-        /// </summary>
-        Error
-    }
-
-
-    /// <summary>
     /// Log activities to Service Bus Queue. 
     /// </summary>
     /// <remarks>

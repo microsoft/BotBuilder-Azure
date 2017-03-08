@@ -99,3 +99,6 @@ C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\zh-Hant\System.Spatial.resources.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\obj\Debug\Microsoft.Bot.Builder.Azure.Tests.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\obj\Debug\Microsoft.Bot.Builder.Azure.Tests.pdb
+C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\Microsoft.Bot.Builder.Azure.Logging.dll
+C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\Microsoft.Bot.Builder.Azure.Logging.pdb
+C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\Microsoft.Bot.Builder.Azure.Logging.dll.config

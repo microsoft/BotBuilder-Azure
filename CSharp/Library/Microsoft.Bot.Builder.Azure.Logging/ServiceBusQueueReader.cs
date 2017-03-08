@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Chronic;
 using Microsoft.Bot.Connector;
 using Microsoft.ServiceBus.Messaging;
 using Newtonsoft.Json;
+
 
 namespace Microsoft.Bot.Builder.Azure
 {
@@ -102,10 +102,8 @@ namespace Microsoft.Bot.Builder.Azure
             foreach (var msg in brokeredMessages)
             {
                 batch.Add(DeserializeItem(msg));
+                msg.Complete();
             }
-
-            //mark batch as complete only once if we are returning them from the call
-            brokeredMessages.ForEach(m => m.Complete());
 
             return batch;
         }

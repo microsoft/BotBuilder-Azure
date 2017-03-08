@@ -97,7 +97,7 @@ namespace Microsoft.Bot.Builder.Tests
         private static IContainer RegisterServiceBusContainer(out IActivityLogger logger, QueueLoggerSettings queueSettings)
         {
             var queueName = "mytestqueue";
-            var connectionstring =
+            var connectionstring = 
                 "Endpoint=sb://moduletestsb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=m0nvZq6baRMmPm2T4JFIAOs8G2vpJrnz9QKUp1HIrVs=";
 
             //delete as part of the test
@@ -200,9 +200,7 @@ namespace Microsoft.Bot.Builder.Tests
             catch
             {
                 exceptionHappened = true;
-
             }
-
             Assert.IsTrue(exceptionHappened, "Failed to throw exception on large compressed message");
         }
     }

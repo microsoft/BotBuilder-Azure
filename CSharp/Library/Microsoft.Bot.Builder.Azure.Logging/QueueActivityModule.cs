@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
-using Chronic;
 using Microsoft.Bot.Builder.History;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Connector;
