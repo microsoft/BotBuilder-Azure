@@ -153,6 +153,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\Microsoft.Bot.Builder.Azure.Logging\Microsoft.Bot.Builder.Azure.Logging.csproj">
+      <Project>{F8FDCBFB-3A5D-41E4-8C3D-A158D8783B3E}</Project>
+      <Name>Microsoft.Bot.Builder.Azure.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Microsoft.Bot.Builder.Azure\Microsoft.Bot.Builder.Azure.csproj">
       <Project>{77299f9c-8f49-4839-b7ea-55ba726321d5}</Project>
       <Name>Microsoft.Bot.Builder.Azure</Name>

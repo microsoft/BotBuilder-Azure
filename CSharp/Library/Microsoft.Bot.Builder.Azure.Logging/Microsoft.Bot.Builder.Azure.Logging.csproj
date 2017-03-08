@@ -84,7 +84,6 @@
   <ItemGroup>
     <Compile Include="AzureQueueActivityLogger.cs" />
     <Compile Include="AzureQueueReader.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="IQueueReader.cs" />
     <Compile Include="LargeMessageMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
