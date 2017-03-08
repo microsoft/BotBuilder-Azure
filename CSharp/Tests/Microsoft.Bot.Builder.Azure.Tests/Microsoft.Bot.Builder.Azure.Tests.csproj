@@ -136,7 +136,6 @@
     <Compile Include="DocumentDbDeleter.cs" />
     <Compile Include="LoggerTestBase.cs" />
     <Compile Include="MockConnectorFactory.cs" />
-    <Compile Include="QueueLoggerTests.cs" />
     <Compile Include="QueueLoggerTest.cs" />
     <Compile Include="TableDataStoreTests.cs" />
     <Compile Include="LoggerTests.cs" />

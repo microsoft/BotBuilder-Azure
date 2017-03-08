@@ -16,7 +16,6 @@ using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace Microsoft.Bot.Builder.Tests
 {
-
     enum QueueKind
     {
         ServiceBus,
