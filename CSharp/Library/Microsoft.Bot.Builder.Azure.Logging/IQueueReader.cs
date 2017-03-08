@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 
@@ -22,6 +23,14 @@ namespace Microsoft.Bot.Builder.Azure
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         List<Activity> ReadBatch(int messageCount);
+
+        /// <summary>
+        /// Reads a batch of messages from the queue not to exceed the message count.
+        /// </summary>
+        /// <param name="messageCount">Maximum number of messages to return</param>
+        List<Activity> ReadBatch(int messageCount, TimeSpan serviceTimeout);
+
+
         /// <summary>
         /// Reads a batch of messages from the queue not to exceed the message count, asynchronously
         /// </summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using Microsoft.ServiceBus.Messaging;
@@ -69,7 +70,7 @@ namespace Microsoft.Bot.Builder.Azure
             if (_queueLoggerSettings.CompressMessage)
                 jsonActivity = msg.GetBody<byte[]>().Decompress();
             else
-                jsonActivity = msg.GetBody<string>();
+                jsonActivity = Encoding.UTF8.GetString(msg.GetBody<byte[]>());
 
             var data = JsonConvert.DeserializeObject<Activity>(jsonActivity);
             return data;
@@ -83,6 +84,24 @@ namespace Microsoft.Bot.Builder.Azure
         public List<Activity> ReadBatch(int messageCount)
         {
             return ReadBatchAsync(messageCount).GetAwaiter().GetResult();
+        }
+
+        public async Task<List<Activity>> ReadBatchAsync(int messageCount, TimeSpan serviceTimeout)
+        {
+            List<Activity> batch = new List<Activity>();
+
+            var messageBatch = await _queueClient.ReceiveBatchAsync(messageCount, serviceTimeout);
+
+            //avoid multiple enumeration
+            var brokeredMessages = messageBatch as IList<BrokeredMessage> ?? messageBatch.ToList();
+
+            foreach (var msg in brokeredMessages)
+            {
+                batch.Add(DeserializeItem(msg));
+                msg.Complete();
+            }
+
+            return batch;
         }
 
         /// <summary>
@@ -106,6 +125,11 @@ namespace Microsoft.Bot.Builder.Azure
             }
 
             return batch;
+        }
+
+        public List<Activity> ReadBatch(int messageCount, TimeSpan serviceTimeout)
+        {
+            return ReadBatchAsync(messageCount, serviceTimeout).GetAwaiter().GetResult();
         }
     }
 }

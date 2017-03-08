@@ -80,6 +80,17 @@ namespace Microsoft.Bot.Builder.Azure
             return ReadBatchAsync(messageCount).GetAwaiter().GetResult();
         }
 
+        public List<Activity> ReadBatch(int messageCount, TimeSpan serviceTimeout)
+        {
+            return ReadBatch(messageCount);
+        }
+
+        public async Task<List<Activity>> ReadBatchAsync(int messageCount, TimeSpan serviceTimeout)
+        {
+            return ReadBatchAsync(messageCount).GetAwaiter().GetResult();
+        }
+
+
         /// <summary>
         /// Reads a batch of messages from the queue not to exceed the message count.
         /// </summary>

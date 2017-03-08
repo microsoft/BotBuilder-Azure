@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.History;
+using Microsoft.Bot.Connector;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,6 +26,7 @@ namespace Microsoft.Bot.Builder.Tests
     [TestClass]
     public sealed class QueueLoggerTest : LoggerTestBase
     {
+        #region SupportingCode
         async Task RunTestCase(bool compressed, LargeMessageMode handlingMode, QueueKind kind)
         {
             IContainer container;
@@ -49,56 +54,17 @@ namespace Microsoft.Bot.Builder.Tests
             await LogItems(logger, container, queueSettings, reader, batchCount);
         }
 
-
-        [TestMethod]
-        [TestCategory("Azure")]
-        public async Task ServiceBusTestUnCompressed()
-        {
-            bool exceptionHappened = false;
-
-            await RunTestCase(false, LargeMessageMode.Trim, QueueKind.ServiceBus);
-            await RunTestCase(false, LargeMessageMode.Discard, QueueKind.ServiceBus);
-
-            //expect an exception
-            try
-            {
-                await RunTestCase(false, LargeMessageMode.Error, QueueKind.ServiceBus);
-            }
-            catch
-            {
-                exceptionHappened = true;
-            }
-
-            Assert.IsTrue(exceptionHappened,"Failed to throw exception on large uncompressed message");
-        }
-
-        [TestMethod]
-        [TestCategory("Azure")]
-        public async Task ServiceBusTestCompressed()
-        {
-            bool exceptionHappened = false;
-
-            await RunTestCase(true, LargeMessageMode.Trim, QueueKind.ServiceBus);
-            await RunTestCase(true, LargeMessageMode.Discard, QueueKind.ServiceBus);
-
-            //expect an exception
-            try
-            {
-                await RunTestCase(true, LargeMessageMode.Error, QueueKind.ServiceBus);
-            }
-            catch 
-            {
-                exceptionHappened = true;
-            }
-
-            Assert.IsTrue(exceptionHappened, "Failed to throw exception on large compressed message");
-        }
-
         private static IContainer RegisterServiceBusContainer(out IActivityLogger logger, QueueLoggerSettings queueSettings)
         {
             var queueName = "mytestqueue";
-            var connectionstring = 
-                "Endpoint=sb://moduletestsb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=m0nvZq6baRMmPm2T4JFIAOs8G2vpJrnz9QKUp1HIrVs=";
+            ///
+            ///   Service bus connection string looks like this:
+            ///   Endpoint=sb://myservicebusmodule.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=m0nmPm2T4JFIAOs8G2vpJrnz9QKUp1HvZq6baRMIrVs=
+            /// 
+            var connectionstring = "Endpoint=sb://moduletestsb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=m0nvZq6baRMmPm2T4JFIAOs8G2vpJrnz9QKUp1HIrVs=";
+
+            if (connectionstring == "<enter service bus connection here>")
+                throw new ArgumentException("need to provide a service bus connection string");
 
             //delete as part of the test
             NamespaceManager namespaceManager =
@@ -119,21 +85,66 @@ namespace Microsoft.Bot.Builder.Tests
         {
             //write all messages
             var activities = GetTestActivityList();
+            int countExceptions  = 0 ;
 
             for (var i = 0; i < activities.Count; ++i)
             {
-                await logger.LogAsync(activities[i]);
+                try
+                {
+                    await logger.LogAsync(activities[i]);
+    
+                }
+                catch (Exception e)
+                {
+                    countExceptions++;
+                    //make sure that we not hiding errors...
+                    if (loggerSettings.OverflowHanding != LargeMessageMode.Error)
+                        throw e;
+                }
             }
 
-            //now read all messages, using reader
-            var readActivities = reader.ReadBatch(batchCount);
+            List<Activity> completelist = new List<Activity>();
+            List<Activity> readActivities = new List<Activity>() { new Activity()};
 
-            //make sure we got the same number we sent in.
-            if (loggerSettings.OverflowHanding != LargeMessageMode.Discard)
-                Assert.AreEqual(activities.Count, readActivities.Count);
+            while (readActivities.Count != 0)
+            { 
+                //now read all messages, using reader
+                readActivities = reader.ReadBatch(batchCount, TimeSpan.FromSeconds(1));
+                //give it some time to catch up, if the queue is muti-tennant it will take time for messages to arrive
+                Thread.Sleep(2000);
+                completelist.AddRange(readActivities);
+            }
+
+            //test validation
+            if (logger is AzureQueueActivityLogger)
+            {
+                //make sure we got the same number we sent in.
+                if (loggerSettings.OverflowHanding == LargeMessageMode.Trim)
+                    Assert.AreEqual(activities.Count, completelist.Count);
+                else if (loggerSettings.OverflowHanding == LargeMessageMode.Discard)
+                {
+                    if (loggerSettings.CompressMessage)
+                    { 
+                        //here we expect that one messages will be dropped as after compression it is too large in size.
+                        Assert.AreEqual(activities.Count, completelist.Count + 1);
+                    }
+                    else
+                    {
+                        //here we expect that two messages will be dropped as they are too large in size.
+                        Assert.AreEqual(activities.Count, completelist.Count + 2);
+                    }
+                }
+                else if (loggerSettings.OverflowHanding == LargeMessageMode.Error)
+                {
+                    //here we expect that two messages to generate errors as they are too large in size.
+                    Assert.AreEqual(activities.Count, completelist.Count + countExceptions);
+                }
+            }
             else
-                //here we expect that two messages will be dropped as they are too large in size.
-                Assert.AreEqual(activities.Count, readActivities.Count+2);
+            {
+                // these messages easily pass so count is good.
+                Assert.AreEqual(activities.Count, completelist.Count);
+            }
         }
 
         private static IContainer RegisterAzureQueueContainer(out IActivityLogger logger, QueueLoggerSettings queueSettings)
@@ -154,6 +165,8 @@ namespace Microsoft.Bot.Builder.Tests
             return container;
         }
 
+        #endregion
+
         [TestMethod]
         [TestCategory("Azure")]
         // NOTE: To run this test you must have installed the Azure Storage Emulator. 
@@ -161,24 +174,10 @@ namespace Microsoft.Bot.Builder.Tests
         // The test will automatically start the emulator.
         public async Task AzureStorageUnCompressedTest()
         {
-            bool exceptionHappened = false;
-
             await RunTestCase(false, LargeMessageMode.Trim, QueueKind.AzureQueue);
             await RunTestCase(false, LargeMessageMode.Discard, QueueKind.AzureQueue);
-
-            //expect an exception
-            try
-            {
-                await RunTestCase(false, LargeMessageMode.Error, QueueKind.AzureQueue);
-            }
-            catch
-            {
-                exceptionHappened = true;
-            }
-
-            Assert.IsTrue(exceptionHappened, "Failed to throw exception on large compressed message");
+            await RunTestCase(false, LargeMessageMode.Error, QueueKind.AzureQueue);
         }
-
 
         [TestMethod]
         [TestCategory("Azure")]
@@ -187,21 +186,27 @@ namespace Microsoft.Bot.Builder.Tests
         // The test will automatically start the emulator.
         public async Task AzureStorageCompressedTest()
         {
-            bool exceptionHappened = false;
-
             await RunTestCase(true, LargeMessageMode.Trim, QueueKind.AzureQueue);
             await RunTestCase(true, LargeMessageMode.Discard, QueueKind.AzureQueue);
+            await RunTestCase(true, LargeMessageMode.Error, QueueKind.AzureQueue);
+        }
 
-            //expect an exception
-            try
-            {
-                await RunTestCase(true, LargeMessageMode.Error, QueueKind.AzureQueue);
-            }
-            catch
-            {
-                exceptionHappened = true;
-            }
-            Assert.IsTrue(exceptionHappened, "Failed to throw exception on large compressed message");
+        [TestMethod]
+        [TestCategory("Azure")]
+        public async Task ServiceBusTestUnCompressed()
+        {
+            await RunTestCase(false, LargeMessageMode.Trim, QueueKind.ServiceBus);
+            await RunTestCase(false, LargeMessageMode.Discard, QueueKind.ServiceBus);
+            await RunTestCase(false, LargeMessageMode.Error, QueueKind.ServiceBus);
+        }
+
+        [TestMethod]
+        [TestCategory("Azure")]
+        public async Task ServiceBusTestCompressed()
+        {
+            await RunTestCase(true, LargeMessageMode.Trim, QueueKind.ServiceBus);
+            await RunTestCase(true, LargeMessageMode.Discard, QueueKind.ServiceBus);
+            await RunTestCase(true, LargeMessageMode.Error, QueueKind.ServiceBus);
         }
     }
 }
