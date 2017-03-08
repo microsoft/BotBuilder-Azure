@@ -109,7 +109,7 @@ namespace Microsoft.Bot.Builder.Tests
             while (readActivities.Count != 0)
             { 
                 //now read all messages, using reader
-                readActivities = reader.ReadBatch(batchCount, TimeSpan.FromSeconds(1));
+                readActivities = await reader.ReadBatchAsync(batchCount, TimeSpan.FromSeconds(1));
                 //give it some time to catch up, if the queue is muti-tennant it will take time for messages to arrive
                 Thread.Sleep(2000);
                 completelist.AddRange(readActivities);

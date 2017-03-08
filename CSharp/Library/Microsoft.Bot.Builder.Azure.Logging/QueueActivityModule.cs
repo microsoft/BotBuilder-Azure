@@ -16,8 +16,6 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.Azure
 {
-
-
     /// <summary>
     /// Module responsible for handling queue operations for Activities
     /// </summary>
@@ -46,7 +44,6 @@ namespace Microsoft.Bot.Builder.Azure
                 _queueName = queueName;
 
             _queueLoggerSettings = loggerSettings ?? new QueueLoggerSettings();
-            
             _settings = settings;
         }
 
@@ -129,5 +126,4 @@ namespace Microsoft.Bot.Builder.Azure
             builder.RegisterType<ServiceBusActivityLogger>().AsImplementedInterfaces();
         }
     }
-
 }

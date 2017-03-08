@@ -65,7 +65,7 @@ namespace Microsoft.Bot.Builder.Azure
         private Activity DeserializeItem(BrokeredMessage msg)
         {
             string jsonActivity;
-            
+
             //message is compressed
             if (_queueLoggerSettings.CompressMessage)
                 jsonActivity = msg.GetBody<byte[]>().Decompress();
@@ -86,11 +86,17 @@ namespace Microsoft.Bot.Builder.Azure
             return ReadBatchAsync(messageCount).GetAwaiter().GetResult();
         }
 
-        public async Task<List<Activity>> ReadBatchAsync(int messageCount, TimeSpan serviceTimeout)
+        /// <summary>
+        /// Reads a batch of messages from the queue not to exceed the message count.
+        /// </summary>
+        /// <param name="messageCount">Maximum number of messages to return</param>
+        /// <param name="serviceWaitTime">return after the given TimeSpan</param>
+        /// <returns></returns>
+        public async Task<List<Activity>> ReadBatchAsync(int messageCount, TimeSpan serviceWaitTime)
         {
             List<Activity> batch = new List<Activity>();
 
-            var messageBatch = await _queueClient.ReceiveBatchAsync(messageCount, serviceTimeout);
+            var messageBatch = await _queueClient.ReceiveBatchAsync(messageCount, serviceWaitTime);
 
             //avoid multiple enumeration
             var brokeredMessages = messageBatch as IList<BrokeredMessage> ?? messageBatch.ToList();
@@ -125,11 +131,6 @@ namespace Microsoft.Bot.Builder.Azure
             }
 
             return batch;
-        }
-
-        public List<Activity> ReadBatch(int messageCount, TimeSpan serviceTimeout)
-        {
-            return ReadBatchAsync(messageCount, serviceTimeout).GetAwaiter().GetResult();
         }
     }
 }

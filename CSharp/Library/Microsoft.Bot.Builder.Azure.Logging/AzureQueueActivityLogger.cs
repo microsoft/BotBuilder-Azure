@@ -37,7 +37,6 @@ namespace Microsoft.Bot.Builder.Azure
 
             //set the defaults
             _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
-
             _cloudQueue = cloudQueue;
             _jsonSerializerSettings = settings;
             _cutCoefficient = 1 - _queueLoggerSettings.MessageTrimRate;
@@ -53,12 +52,12 @@ namespace Microsoft.Bot.Builder.Azure
         {
             var message = activity.AsMessageActivity();
 
-            string jsonMsg = JsonConvert.SerializeObject(message, _jsonSerializerSettings);
+            var jsonMsg = JsonConvert.SerializeObject(message, _jsonSerializerSettings);
             var bytes = GetBytes(jsonMsg);
 
             if (_queueLoggerSettings.OverflowHanding == LargeMessageMode.Discard)
             {
-                //if fails do not do anything....
+                //if fails, do not do anything....
                 try
                 {
                     await _cloudQueue.AddMessageAsync(new CloudQueueMessage(bytes));
@@ -89,7 +88,6 @@ namespace Microsoft.Bot.Builder.Azure
                         jsonMsg = JsonConvert.SerializeObject(message, _jsonSerializerSettings);
                         bytes = GetBytes(jsonMsg);
                     }
-
                 } while (true);
             }
         }

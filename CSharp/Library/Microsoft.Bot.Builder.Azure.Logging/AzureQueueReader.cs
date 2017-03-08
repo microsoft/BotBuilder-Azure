@@ -80,16 +80,16 @@ namespace Microsoft.Bot.Builder.Azure
             return ReadBatchAsync(messageCount).GetAwaiter().GetResult();
         }
 
-        public List<Activity> ReadBatch(int messageCount, TimeSpan serviceTimeout)
+        /// <summary>
+        /// Reads a batch of messages from the queue not to exceed the message count.
+        /// </summary>
+        /// <param name="messageCount">Maximum number of messages to return</param>
+        /// <param name="serviceWaitTime">This parameter is ignored</param>
+        /// <returns></returns>
+        public List<Activity> ReadBatch(int messageCount, TimeSpan serviceWaitTime)
         {
             return ReadBatch(messageCount);
         }
-
-        public async Task<List<Activity>> ReadBatchAsync(int messageCount, TimeSpan serviceTimeout)
-        {
-            return ReadBatchAsync(messageCount).GetAwaiter().GetResult();
-        }
-
 
         /// <summary>
         /// Reads a batch of messages from the queue not to exceed the message count.
@@ -99,7 +99,6 @@ namespace Microsoft.Bot.Builder.Azure
         public async Task<List<Activity>> ReadBatchAsync(int messageCount)
         {
             List<Activity> batch = new List<Activity>();
-
             var messageBatch = await _cloudQueue.GetMessagesAsync(messageCount);
 
             foreach (var msg in messageBatch)
@@ -109,6 +108,15 @@ namespace Microsoft.Bot.Builder.Azure
 
             return batch;
         }
-
+        /// <summary>
+        /// Reads a batch of messages from the queue not to exceed the message count.
+        /// </summary>
+        /// <param name="messageCount">Maximum number of messages to return</param>
+        /// <param name="serviceWaitTime">This parameter is ignored</param>
+        /// <returns></returns>
+        public Task<List<Activity>> ReadBatchAsync(int messageCount, TimeSpan serviceWaitTime)
+        {
+            return ReadBatchAsync(messageCount);
+        }
     }
 }

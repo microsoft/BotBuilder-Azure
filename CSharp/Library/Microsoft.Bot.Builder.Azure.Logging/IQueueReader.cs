@@ -23,19 +23,15 @@ namespace Microsoft.Bot.Builder.Azure
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         List<Activity> ReadBatch(int messageCount);
-
         /// <summary>
         /// Reads a batch of messages from the queue not to exceed the message count.
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
-        List<Activity> ReadBatch(int messageCount, TimeSpan serviceTimeout);
-
-
+        Task<List<Activity>> ReadBatchAsync(int messageCount, TimeSpan serviceWaitTime);
         /// <summary>
         /// Reads a batch of messages from the queue not to exceed the message count, asynchronously
         /// </summary>
         /// <param name="messageCount">Maximum number of messages to return</param>
         Task<List<Activity>> ReadBatchAsync(int messageCount);
-
     }
 }
