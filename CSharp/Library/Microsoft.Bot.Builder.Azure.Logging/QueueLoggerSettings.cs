@@ -11,7 +11,8 @@
         public QueueLoggerSettings()
         {
             CompressMessage = false;
-            LargeMessageHandlingPattern = LargeMessageMode.Discard;
+            OverflowHanding = LargeMessageMode.Discard;
+            MessageTrimRate = 0.10f;
         }
         /// <summary>
         /// Informs logger to compress messages, default is false
@@ -20,6 +21,9 @@
         /// <summary>
         /// Informs logger what to do with messages that exceed length limit, default is Discard
         /// </summary>
-        public LargeMessageMode LargeMessageHandlingPattern { get; set; }
+        public LargeMessageMode OverflowHanding { get; set; }
+
+        //if Overflow is set to trim, MessageTrimRate controls how much string to trim at one time, default is 0.10
+        public float MessageTrimRate;
     }
 }

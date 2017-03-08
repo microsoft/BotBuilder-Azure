@@ -50,7 +50,6 @@ C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\System.Net.Http.Formatting.xml
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\System.Spatial.xml
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\System.Web.Http.xml
-C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\Microsoft.ServiceBus.xml
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\ar\Microsoft.Bot.Builder.resources.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\cs\Microsoft.Bot.Builder.resources.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Tests\Microsoft.Bot.Builder.Azure.Tests\bin\Debug\de-dE\Microsoft.Bot.Builder.resources.dll

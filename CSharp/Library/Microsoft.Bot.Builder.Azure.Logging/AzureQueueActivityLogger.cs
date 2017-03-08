@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.History;
 using Microsoft.Bot.Connector;
@@ -12,17 +14,16 @@ namespace Microsoft.Bot.Builder.Azure
     /// Log activities to Azure Storage Queue. 
     /// </summary>
     /// <remarks>
-    /// Activities are limited to xx when converted to JSON, xx if compressed.  Disposition of larger messages is controlled by QueueLoggerSettings.
+    /// Activities are limited to size of Azure Storage queue payload.  Disposition of larger messages is controlled by QueueLoggerSettings.
+    /// for more information on limits see https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-azure-and-service-bus-queues-compared-contrasted
     /// </remarks>
     public class AzureQueueActivityLogger : IActivityLogger
     {
-
         private readonly JsonSerializerSettings _jsonSerializerSettings;
         private readonly CloudQueue _cloudQueue;
         private readonly QueueLoggerSettings _queueLoggerSettings;
 
-        private readonly int _textMaxLength = 1024 * 20; //60k
-        private readonly int _preCompressedMaxTextLength = 1024 * 50; //180k - assuming 3x compression
+        private readonly float _cutCoefficient;
 
         /// <summary>
         /// Constructs an instance of AzureQueueActivityLogger
@@ -39,6 +40,7 @@ namespace Microsoft.Bot.Builder.Azure
 
             _cloudQueue = cloudQueue;
             _jsonSerializerSettings = settings;
+            _cutCoefficient = 1 - _queueLoggerSettings.MessageTrimRate;
         }
 
         /// <summary>
@@ -51,37 +53,50 @@ namespace Microsoft.Bot.Builder.Azure
         {
             var message = activity.AsMessageActivity();
 
-            int maxMessagelength = _queueLoggerSettings.CompressMessage ? _preCompressedMaxTextLength : _textMaxLength;
+            string jsonMsg = JsonConvert.SerializeObject(message, _jsonSerializerSettings);
+            var bytes = GetBytes(jsonMsg);
 
-            //Exception is requested
-            if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Error)
-                throw new ArgumentException($"Message length of {message.Text.Length} is larger than {maxMessagelength} allowed.");
-
-            try
+            if (_queueLoggerSettings.OverflowHanding == LargeMessageMode.Discard)
             {
-                //handle discard case
-                if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Discard &&
-                    message.Text.Length > maxMessagelength)
-                    return;
-
-                //if trim, trim the message
-                if (_queueLoggerSettings.LargeMessageHandlingPattern == LargeMessageMode.Trim && message.Text.Length > maxMessagelength)
+                //if fails do not do anything....
+                try
                 {
-                    message.Text = message.Text.Substring(0, maxMessagelength);
+                    await _cloudQueue.AddMessageAsync(new CloudQueueMessage(bytes));
                 }
-
-                string jsonMsg = JsonConvert.SerializeObject(activity, _jsonSerializerSettings);
-
-                //send compressed or plain message
-                if (_queueLoggerSettings.CompressMessage)
-                    await _cloudQueue.AddMessageAsync(new CloudQueueMessage(jsonMsg.Compress()));
-                else
-                    await _cloudQueue.AddMessageAsync(new CloudQueueMessage(jsonMsg));
+                catch
+                {
+                    // ignored
+                }
             }
-            catch
+            else if (_queueLoggerSettings.OverflowHanding == LargeMessageMode.Error)
             {
-                // lots of reasons this can throw exceptions...but logger should never throw unless asked
+                //let it fail                    
+                await _cloudQueue.AddMessageAsync(new CloudQueueMessage(bytes));
             }
+            else if (_queueLoggerSettings.OverflowHanding == LargeMessageMode.Trim)
+            {
+                do
+                {
+                    try
+                    {
+                        await _cloudQueue.AddMessageAsync(new CloudQueueMessage(bytes));
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        //cut off some of the text to fit
+                        message.Text = message.Text.Substring(0, (int)(message.Text.Length * _cutCoefficient));
+                        jsonMsg = JsonConvert.SerializeObject(message, _jsonSerializerSettings);
+                        bytes = GetBytes(jsonMsg);
+                    }
+
+                } while (true);
+            }
+        }
+
+        byte [] GetBytes(string message)
+        {
+            return _queueLoggerSettings.CompressMessage ? message.Compress() : Encoding.UTF8.GetBytes(message);
         }
     }
 }

@@ -38,7 +38,6 @@ C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Net.Http.Forma
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Spatial.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Web.Http.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Web.Http.WebHost.dll
-C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\Microsoft.ServiceBus.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\Microsoft.Bot.Builder.History.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\Microsoft.Bot.Builder.Azure.pdb
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\Microsoft.Bot.Builder.Azure.xml
@@ -65,7 +64,6 @@ C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Net.Http.Forma
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Spatial.xml
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Web.Http.xml
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\System.Web.Http.WebHost.xml
-C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\Microsoft.ServiceBus.xml
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\Microsoft.Bot.Builder.History.xml
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\ar\Microsoft.Bot.Builder.resources.dll
 C:\repos\botbuilder-Azure-MZ\CSharp\Samples\DocumentDb\bin\cs\Microsoft.Bot.Builder.resources.dll

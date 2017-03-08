@@ -30,7 +30,7 @@ namespace Microsoft.Bot.Builder.Tests
             var queueSettings = new QueueLoggerSettings
             {
                 CompressMessage = compressed,
-                LargeMessageHandlingPattern = handlingMode
+                OverflowHanding = handlingMode
             };
 
             IActivityLogger logger;
@@ -129,11 +129,11 @@ namespace Microsoft.Bot.Builder.Tests
             var readActivities = reader.ReadBatch(batchCount);
 
             //make sure we got the same number we sent in.
-            if (loggerSettings.LargeMessageHandlingPattern != LargeMessageMode.Discard)
+            if (loggerSettings.OverflowHanding != LargeMessageMode.Discard)
                 Assert.AreEqual(activities.Count, readActivities.Count);
             else
-                //here we expect that one message will be dropped.
-                Assert.AreEqual(activities.Count, readActivities.Count+1);
+                //here we expect that two messages will be dropped as they are too large in size.
+                Assert.AreEqual(activities.Count, readActivities.Count+2);
         }
 
         private static IContainer RegisterAzureQueueContainer(out IActivityLogger logger, QueueLoggerSettings queueSettings)
