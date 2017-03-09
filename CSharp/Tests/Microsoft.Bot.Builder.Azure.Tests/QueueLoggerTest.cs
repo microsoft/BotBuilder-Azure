@@ -60,7 +60,7 @@ namespace Microsoft.Bot.Builder.Tests
             ///   Service bus connection string looks like this:
             ///   Endpoint=sb://myservicebusmodule.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=m0nmPm2T4JFIAOs8G2vpJrnz9QKUp1HvZq6baRMIrVs=
             /// 
-            var connectionstring = "Endpoint=sb://moduletestsb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=m0nvZq6baRMmPm2T4JFIAOs8G2vpJrnz9QKUp1HIrVs=";
+            var connectionstring = "<enter service bus connection here>";
 
             if (connectionstring == "<enter service bus connection here>")
                 throw new ArgumentException("need to provide a service bus connection string");
