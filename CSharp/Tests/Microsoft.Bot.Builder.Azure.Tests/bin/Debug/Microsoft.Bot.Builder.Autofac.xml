@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Bot.Builder.Autofac</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.Bot.Builder.Autofac.Base.Extensions.RegisterKeyedType``2(Autofac.ContainerBuilder)">
+            <summary>
+            Register a component to be created through reflection, and
+            provide a key that can be used to retrieve the component.
+            </summary>
+            <remarks>
+            This method leverages Autofac's autowiring of components through reflection,
+            providing a key that directly reflects that component type, so that it might
+            be retrieved by that key and possibly replaced in an adapter chain.
+            </remarks>
+            <typeparam name="TImplementer">The type of the component implementation.</typeparam>
+            <typeparam name="TLimit">The service type provided by the component.</typeparam>
+            <param name="builder">Container builder.</param>
+            <returns>Registration builder allowing the registration to be configured.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Autofac.Base.Extensions.RegisterAdapterChain``1(Autofac.ContainerBuilder,System.Type[])">
+            <summary>
+            Register an adapter chain of components, exposing a shared service interface.
+            </summary>
+            <remarks>
+            This registers a factory method to create a adapter chain of components, based on wrapping each
+            inner component with an adapter outer component.
+            </remarks>
+            <typeparam name="TLimit">The service type provided by the component.</typeparam>
+            <param name="builder">Container builder.</param>
+            <param name="types">The services type keys that can be used to retrieve the components in the chain.</param>
+            <returns>Registration builder allowing the registration to be configured.</returns>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Dialogs.Conversation">
+            <summary>
+            The top level composition root for the SDK.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Dialogs.Conversation.SendAsync(Microsoft.Bot.Connector.IMessageActivity,System.Func{Microsoft.Bot.Builder.Dialogs.IDialog{System.Object}},System.Threading.CancellationToken)">
+            <summary>
+            Process an incoming message within the conversation.
+            </summary>
+            <remarks>
+            This method:
+            1. Instantiates and composes the required components.
+            2. Deserializes the dialog state (the dialog stack and each dialog's state) from the <paramref name="toBot"/> <see cref="T:Microsoft.Bot.Connector.IMessageActivity"/>.
+            3. Resumes the conversation processes where the dialog suspended to wait for a <see cref="T:Microsoft.Bot.Connector.IMessageActivity"/>.
+            4. Queues <see cref="T:Microsoft.Bot.Connector.IMessageActivity"/>s to be sent to the user.
+            5. Serializes the updated dialog state in the messages to be sent to the user.
+            
+            The <paramref name="MakeRoot"/> factory method is invoked for new conversations only,
+            because existing conversations have the dialog stack and state serialized in the <see cref="T:Microsoft.Bot.Connector.IMessageActivity"/> data.
+            </remarks>
+            <param name="toBot">The message sent to the bot.</param>
+            <param name="MakeRoot">The factory method to make the root dialog.</param>
+            <param name="token">The cancellation token.</param>
+            <returns>A task that represents the message to send inline back to the user.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Dialogs.Conversation.ResumeAsync(Microsoft.Bot.Builder.Dialogs.ResumptionCookie,Microsoft.Bot.Connector.IActivity,System.Threading.CancellationToken)">
+            <summary>
+            Resume a conversation and post the data to the dialog waiting.
+            </summary>
+            <param name="resumptionCookie"> The id of the bot.</param>
+            <param name="toBot"> The data sent to bot.</param>
+            <param name="token"> The cancellation token.</param>
+            <returns> A task that represent the message to send back to the user after resumption of the conversation.</returns>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Dialogs.Internals.DialogModule">
+            <summary>
+            Autofac module for Dialog components.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Internals.Fibers.FiberModule">
+            <summary>
+            Autofac module for Fiber components.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Internals.Fibers.FiberModule.DoNotSerialize(Autofac.IComponentContext,System.Collections.Generic.IEnumerable{Autofac.Core.Parameter})">
+            <summary>
+            Eagerly enumerate the services keyed with <see cref="F:Microsoft.Bot.Builder.Internals.Fibers.FiberModule.Key_DoNotSerialize"/> that will not be serialized.
+            </summary>
+            <remarks>
+            Services marked with <see cref="F:Microsoft.Bot.Builder.Internals.Fibers.FiberModule.Key_DoNotSerialize"/> will not serialize their dependencies either.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Internals.Fibers.FiberModule`1">
+            <summary>
+            Autofac module for Fiber components.
+            </summary>
+        </member>
+    </members>
+</doc>

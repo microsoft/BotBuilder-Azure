@@ -409,7 +409,7 @@ namespace Microsoft.Bot.Builder.Azure
         }
     }
 
-    static partial class Extensions
+    public static partial class Extensions
     {
         /// <summary>
         /// Compress a string into a byte array.
