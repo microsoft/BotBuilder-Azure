@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Bot.Builder.History</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Bot.Builder.History.IActivityManager">
+            <summary>
+            Interface for managing activity history.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.History.IActivityManager.DeleteConversationAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete a specific conversation.
+            </summary>
+            <param name="channelId">Channel where conversation took place.</param>
+            <param name="conversationId">Id of conversation to delete.</param>
+            <param name="cancel">Cancellation token.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.History.IActivityManager.DeleteBeforeAsync(System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+            Delete any conversation records older than <paramref name="oldest"/>.
+            </summary>
+            <param name="oldest">Earliest remaining date in log.</param>
+            <param name="cancel">Cancellation token.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.History.IActivityManager.DeleteUserActivitiesAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete all activities involving <paramref name="userId"/>.
+            </summary>
+            <param name="userId">User to delete.</param>
+            <param name="cancel">Cancellation token.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.History.IActivitySource">
+            <summary>
+            Interface for getting activities from some source.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.History.IActivitySource.Activities(System.String,System.String,System.DateTime)">
+            <summary>
+            Produce an enumeration over conversation.
+            </summary>
+            <param name="channelId">Channel where conversation happened.</param>
+            <param name="conversationId">Conversation within the channel.</param>
+            <param name="oldest">Earliest time to include.</param>
+            <returns>Enumeration over the recorded activities.</returns>
+            <remarks>Activities are ordered by channel, then conversation, then time ascending.</remarks>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.History.IActivitySource.WalkActivitiesAsync(System.Func{Microsoft.Bot.Connector.IActivity,System.Threading.Tasks.Task},System.String,System.String,System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+            Walk over recorded activities and call a function on them.
+            </summary>
+            <param name="function">Function to apply to each actitivty.</param>
+            <param name="channelId">ChannelId to filter on or null for no filter.</param>
+            <param name="conversationId">ConversationId to filter on or null for no filter.</param>
+            <param name="oldest">Oldest timestamp to include.</param>
+            <param name="cancel">Cancellation token.</param>
+            <returns></returns>
+            <remarks>Activities are ordered by channel, then conversation, then time ascending.</remarks>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.History.ReplayTranscript">
+            <summary>
+            Class to collect and then replay activities as a transcript.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.History.ReplayTranscript.#ctor(Microsoft.Bot.Builder.Dialogs.Internals.IBotToUser,System.Func{Microsoft.Bot.Connector.IActivity,System.String})">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="botToUser">Where to replay transcript.</param>
+            <param name="header">Function for defining the transcript header on each message.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.History.ReplayTranscript.Replay(Microsoft.Bot.Connector.IActivity)">
+            <summary>
+            Replay activity to IBotToUser.
+            </summary>
+            <param name="activity">Activity.</param>
+            <returns>Task.</returns>
+        </member>
+    </members>
+</doc>

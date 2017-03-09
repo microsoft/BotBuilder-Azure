@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Bot.Builder.Azure</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Bot.Builder.Azure.AzureBot">
+            <summary>
+            The azure bot utilities and helpers.
+            </summary>
+            <remarks>
+            This class is obsolete now. Use <see cref="T:Microsoft.Bot.Builder.Azure.BotService"/> instead.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.Bot.Builder.Azure.AzureBot.Authenticator">
+            <summary>
+            The bot authenticator.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureBot.Initialize">
+            <summary>
+            Update the <see cref="F:Microsoft.Bot.Builder.Dialogs.Conversation.Container"/> for azure bots.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.BotService">
+            <summary>
+            The azure bot service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Bot.Builder.Azure.BotService.Authenticator">
+            <summary>
+            The bot authenticator.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.BotService.Initialize(System.Reflection.Assembly)">
+            <summary>
+            Initialize bot service by updating the <see cref="F:Microsoft.Bot.Builder.Dialogs.Conversation.Container"/> with <see cref="T:Microsoft.Bot.Builder.Azure.AzureModule"/>.
+            </summary>
+            <param name="assembly"> The assembly that should be resolved.</param>
+            <returns> The <see cref="T:Microsoft.Bot.Builder.Azure.BotServiceScope"/> that should be disposed when bot service operation is done for the request.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.BotService.AuthenticateAsync(System.Net.Http.HttpRequestMessage,System.Collections.Generic.IEnumerable{Microsoft.Bot.Connector.Activity},System.Threading.CancellationToken)">
+            <summary>
+            Authenticate the request and add the service url in the activities to <see cref="F:Microsoft.Bot.Connector.MicrosoftAppCredentials.TrustedHostNames"/>.
+            </summary>
+            <param name="request">The incoming request.</param>
+            <param name="activities">The incoming activities.</param>
+            <param name="token">The cancellation token</param>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.BotServiceScope">
+            <summary>
+            The scope for the <see cref="T:Microsoft.Bot.Builder.Azure.BotService"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.BotServiceScope.#ctor(System.IDisposable[])">
+            <summary>
+            Creates an instance of BotServiceScope
+            </summary>
+            <param name="disposables"> The list of items that should be disposed when scope is disposed.</param>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.AzureModule">
+            <summary>
+            Autofac module for azure bot components.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.AzureModule.Key_DataStore">
+            <summary>
+            The key for data store register with the container.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureModule.#ctor(System.Reflection.Assembly)">
+            <summary>
+            Instantiates the azure module. 
+            </summary>
+            <param name="assembly">
+            The assembly used by <see cref="T:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate"/> and
+            <see cref="T:Microsoft.Bot.Builder.Azure.BotServiceSerializationBinder"/>
+            </param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.AzureModule.Load(Autofac.ContainerBuilder)">
+            <summary>
+            Registers dependencies with the <paramref name="builder"/>.
+            </summary>
+            <param name="builder"> The container builder.</param>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.DocumentDbBotDataStore">
+            <summary>
+            <see cref="T:Microsoft.Bot.Builder.Dialogs.Internals.IBotDataStore`1"/> Implementation using Azure DocumentDb
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.DocumentDbBotDataStore.#ctor(Microsoft.Azure.Documents.IDocumentClient,System.String,System.String)">
+            <summary>
+            Creates an instance of the <see cref="T:Microsoft.Bot.Builder.Dialogs.Internals.IBotDataStore`1"/> that uses the Azure DocumentDb.
+            </summary>
+            <param name="documentClient">The DocumentDb client to use.</param>
+            <param name="databaseId">The name of the DocumentDb database to use.</param>
+            <param name="collectionId">The name of the DocumentDb collection to use.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.DocumentDbBotDataStore.#ctor(System.Uri,System.String,System.String,System.String)">
+            <summary>
+            Creates an instance of the <see cref="T:Microsoft.Bot.Builder.Dialogs.Internals.IBotDataStore`1"/> that uses the Azure DocumentDb.
+            </summary>
+            <param name="serviceEndpoint">The service endpoint to use to create the client.</param>
+            <param name="authKey">The authorization key or resource token to use to create the client.</param>
+            <param name="databaseId">The name of the DocumentDb database to use.</param>
+            <param name="collectionId">The name of the DocumentDb collection to use.</param>
+            <remarks>The service endpoint can be obtained from the Azure Management Portal. If you
+            are connecting using one of the Master Keys, these can be obtained along with
+            the endpoint from the Azure Management Portal If however you are connecting as
+            a specific DocumentDB User, the value passed to authKeyOrResourceToken is the
+            ResourceToken obtained from the permission feed for the user.
+            Using Direct connectivity, wherever possible, is recommended.</remarks>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.StringExtensions.SanitizeForAzureKeys(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Replaces the four characters disallowed in Azure keys with something more palatable.  You can provide your own mapping if you don't like the defaults.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.TableBotDataStore">
+            <summary>
+            <see cref="T:Microsoft.Bot.Builder.Dialogs.Internals.IBotDataStore`1"/> Implementation using Azure Storage Table 
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableBotDataStore.#ctor(System.String,System.String)">
+            <summary>
+            Creates an instance of the <see cref="T:Microsoft.Bot.Builder.Dialogs.Internals.IBotDataStore`1"/> that uses the azure table storage.
+            </summary>
+            <param name="connectionString">The storage connection string.</param>
+            <param name="tableName">The name of table.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableBotDataStore.#ctor(Microsoft.WindowsAzure.Storage.CloudStorageAccount,System.String)">
+            <summary>
+            Creates an instance of the <see cref="T:Microsoft.Bot.Builder.Dialogs.Internals.IBotDataStore`1"/> that uses the azure table storage.
+            </summary>
+            <param name="storageAccount">The storage account.</param>
+            <param name="tableName">The name of table.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableBotDataStore.#ctor(Microsoft.WindowsAzure.Storage.Table.CloudTable)">
+            <summary>
+            Creates an instance of the <see cref="T:Microsoft.Bot.Builder.Dialogs.Internals.IBotDataStore`1"/> that uses the azure table storage.
+            </summary>
+            <param name="table">The cloud table.</param>
+        </member>
+        <member name="P:Microsoft.Bot.Builder.Azure.TableBotDataStore.Table">
+            <summary>
+            The <see cref="T:Microsoft.WindowsAzure.Storage.Table.CloudTable"/>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.TableLogger">
+            <summary>
+            Log conversation activities to Azure Table Storage.
+            </summary>
+            <remarks>
+            Activities are limited to ~1mb when converted to JSON and compressed.  If an activity is bigger than that,
+            it will be dropped.  If your activities are larger, you either need to preprocess them first or use another implementation.
+            </remarks>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity">
+            <summary>
+            Activity entity for table storage.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.#ctor">
+            <summary>
+            Empty constructor.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.#ctor(Microsoft.Bot.Connector.IActivity)">
+            <summary>
+            Construct from an IActivity.
+            </summary>
+            <param name="activity"></param>
+        </member>
+        <member name="P:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.Version">
+            <summary>
+            Version number for the underlying activity.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.From">
+            <summary>
+            Channel identifier for sender.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.Recipient">
+            <summary>
+            Channel identifier for receiver.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.Activity">
+            <summary>
+            Logged activity.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.WriteEntity(Microsoft.WindowsAzure.Storage.OperationContext)">
+            <summary>
+            Write out entity with distributed activity.
+            </summary>
+            <param name="operationContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.ReadEntity(System.Collections.Generic.IDictionary{System.String,Microsoft.WindowsAzure.Storage.Table.EntityProperty},Microsoft.WindowsAzure.Storage.OperationContext)">
+            <summary>
+            Read entity with distributed activity.
+            </summary>
+            <param name="properties"></param>
+            <param name="operationContext"></param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.GeneratePartitionKey(System.String,System.String)">
+            <summary>
+            Generate a partition key given <paramref name="channelId"/> and <paramref name="conversationId"/>.
+            </summary>
+            <param name="channelId">Channel where activity happened.</param>
+            <param name="conversationId">Conversation where activity happened.</param>
+            <returns>Partition key.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.ActivityEntity.GenerateRowKey(System.DateTime)">
+            <summary>
+            Generate row key for ascending <paramref name="timestamp"/>.
+            </summary>
+            <param name="timestamp">Timestamp of activity.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.#ctor(Microsoft.WindowsAzure.Storage.Table.CloudTable)">
+            <summary>
+            Create a table storage logger.
+            </summary>
+            <param name="table">Table stroage to use for storing activities.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.Microsoft#Bot#Builder#History#IActivityLogger#LogAsync(Microsoft.Bot.Connector.IActivity)">
+            <summary>
+            Log activity to table storage.
+            </summary>
+            <param name="activity">Activity to log.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.Microsoft#Bot#Builder#History#IActivityManager#DeleteConversationAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete a specific conversation.
+            </summary>
+            <param name="channelId">Channel identifier.</param>
+            <param name="conversationId">Conversation identifier.</param>
+            <param name="cancel">Cancellation token.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLogger.Microsoft#Bot#Builder#History#IActivityManager#DeleteBeforeAsync(System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+            Delete any conversation records older than <paramref name="oldest"/>.
+            </summary>
+            <param name="oldest">Maximum timespan from now to remember.</param>
+            <param name="cancel">Cancellation token.</param>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.TableLoggerModule">
+            <summary>
+            Module for registering a LoggerTable.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLoggerModule.#ctor(Microsoft.WindowsAzure.Storage.CloudStorageAccount,System.String)">
+            <summary>
+            Create a TableLogger for a particular storage account and table name.
+            </summary>
+            <param name="account">Azure storage account to use.</param>
+            <param name="tableName">Where to log activities.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.TableLoggerModule.Load(Autofac.ContainerBuilder)">
+            <summary>
+            Update builder with registration for TableLogger.
+            </summary>
+            <param name="builder">Builder to use for registration.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.Extensions.Compress(System.String)">
+            <summary>
+            Compress a string into a byte array.
+            </summary>
+            <param name="str">String to compress.</param>
+            <returns>Compressed byte array.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.Extensions.Decompress(System.Byte[])">
+            <summary>
+            Decompress a string from a byte array.
+            </summary>
+            <param name="bytes">Compressed string.</param>
+            <returns>Uncompressed string.</returns>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.AppSettingKeys">
+            <summary>
+            The keys for application settings.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.AppSettingKeys.StateEndpoint">
+            <summary>
+            The bot state endpoint key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.AppSettingKeys.OpenIdMetadata">
+            <summary>
+            The open id url key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.AppSettingKeys.AppId">
+            <summary>
+            The Microsoft app Id key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.AppSettingKeys.Password">
+            <summary>
+            The Microsoft app password key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.AppSettingKeys.TableStorageConnectionString">
+            <summary>
+            The key for azure table storage connection string.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.AppSettingKeys.UseTableStorageForConversationState">
+            <summary>
+            Key for the flag indicating if table storage should be used as bot state store.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.Utils">
+            <summary>
+            A utility class for bots running on Azure.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.Utils.GetAppSetting(System.String)">
+            <summary>
+            Get value corresponding to the key from application settings.
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.Utils.GetOpenIdConfigurationUrl(System.String)">
+            <summary>
+            Get the open Id configuration url from application settings.
+            </summary>
+            <param name="key">The key.</param>
+            <returns>The open id configuration.</returns>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.Utils.GetStateApiUrl(System.String)">
+            <summary>
+            Get the state api endpoint. 
+            </summary>
+            <param name="key">The key.</param>
+            <returns>The state api endpoint.</returns>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate">
+            <summary>
+            This surrogate is responsible for serialization of delegates and map them to the matching delegates 
+            in the assembly passed to the constructor during deserialization.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate.NameType">
+            <summary>
+            The key for the type of delegate in the SerializationInfo.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate.NameTarget">
+            <summary>
+            The key for the target of delegate in the SerializationInfo.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate.NameMethod">
+            <summary>
+            The key for the <see cref="T:System.Reflection.MethodInfo"/> of delegate in the SerializationInfo.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate.BindingFlags">
+            <summary>
+            The binding flags used for <see cref="M:System.Type.GetMethod(System.String,System.Reflection.BindingFlags,System.Reflection.Binder,System.Reflection.CallingConventions,System.Type[],System.Reflection.ParameterModifier[])"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate.#ctor(System.Reflection.Assembly)">
+            <summary>
+            Constructs an instance of surrogate provider.
+            </summary>
+            <param name="assembly">The assembly that will use for delegate mapping.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.BotServiceDelegateSurrogate.GetMethodInfoFromCurrentAssembly(System.Reflection.MethodInfo)">
+            <summary>
+            Maps the method info to the new assembly.
+            </summary>
+            <param name="method">The method info.</param>
+            <returns>The method info for the corresponding method in the new assembly.</returns>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.BotServiceSerializationBinder">
+            <summary>
+            <see cref="T:System.Runtime.Serialization.SerializationBinder"/> responsible for mapping the matching types to the types in the assembly passed to the constructor during deserialization.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.BotServiceSerializationBinder.#ctor(System.Reflection.Assembly)">
+            <summary>
+            Constructs an instance of bot service <see cref="T:System.Runtime.Serialization.SerializationBinder"/>.
+            </summary>
+            <param name="assembly">The assembly.</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.BotServiceSerializationBinder.BindToType(System.String,System.String)">
+            <summary>
+            <see cref="M:System.Runtime.Serialization.SerializationBinder.BindToType(System.String,System.String)"/>
+            </summary>
+            <param name="assemblyName"></param>
+            <param name="typeName"></param>
+        </member>
+        <member name="T:Microsoft.Bot.Builder.Azure.ResolveAssembly">
+            <summary>
+            A helper class responsible for resolving the calling assembly
+            </summary>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.ResolveAssembly.Create(System.Reflection.Assembly)">
+            <summary>
+            Creates an instance of ResovelCallingAssembly
+            </summary>
+            <param name="assembly"> The assembly</param>
+        </member>
+        <member name="M:Microsoft.Bot.Builder.Azure.ResolveAssembly.#ctor(System.Reflection.Assembly)">
+            <summary>
+            Creates an instance of ResovelCallingAssembly
+            </summary>
+            <param name="assembly"> The assembly</param>
+        </member>
+    </members>
+</doc>
