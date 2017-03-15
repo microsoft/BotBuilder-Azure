@@ -1,10 +1,9 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.History;
+using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Connector;
 using Microsoft.ServiceBus.Messaging;
-using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.Azure
@@ -34,7 +33,8 @@ namespace Microsoft.Bot.Builder.Azure
         public ServiceBusActivityLogger(QueueClient client, QueueLoggerSettings queueSettings = null,
             JsonSerializerSettings settings = null)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
+
+            SetField.NotNull(out _client, nameof(client), client);
 
             //set the defaults
             _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
@@ -90,7 +90,7 @@ namespace Microsoft.Bot.Builder.Azure
                     catch
                     {
                         //cut off some of the text to fit
-                        message.Text = message.Text.Substring(0, (int) (message.Text.Length * _cutCoefficient));
+                        message.Text = message.Text.Substring(0, (int)(message.Text.Length * _cutCoefficient));
                         jsonMsg = JsonConvert.SerializeObject(message, _jsonSerializerSettings);
                         bytes = GetBytes(jsonMsg);
                     }

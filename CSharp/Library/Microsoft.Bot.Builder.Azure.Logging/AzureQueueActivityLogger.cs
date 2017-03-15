@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.History;
+using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Connector;
-using Microsoft.ServiceBus.Messaging;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 
@@ -33,11 +32,10 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="settings">JSON serialziation settings used to write the formatted JSON message before adding to the queue</param>
         public AzureQueueActivityLogger(CloudQueue cloudQueue, QueueLoggerSettings queueSettings = null, JsonSerializerSettings settings = null)
         {
-            cloudQueue = cloudQueue ?? throw new ArgumentNullException(nameof(cloudQueue));
+            SetField.NotNull(out _cloudQueue, nameof(cloudQueue), cloudQueue);
 
             //set the defaults
             _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
-            _cloudQueue = cloudQueue;
             _jsonSerializerSettings = settings;
             _cutCoefficient = 1 - _queueLoggerSettings.MessageTrimRate;
         }
@@ -81,7 +79,7 @@ namespace Microsoft.Bot.Builder.Azure
                         await _cloudQueue.AddMessageAsync(new CloudQueueMessage(bytes));
                         return;
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         //cut off some of the text to fit
                         message.Text = message.Text.Substring(0, (int)(message.Text.Length * _cutCoefficient));
@@ -92,7 +90,7 @@ namespace Microsoft.Bot.Builder.Azure
             }
         }
 
-        byte [] GetBytes(string message)
+        byte[] GetBytes(string message)
         {
             return _queueLoggerSettings.CompressMessage ? message.Compress() : Encoding.UTF8.GetBytes(message);
         }

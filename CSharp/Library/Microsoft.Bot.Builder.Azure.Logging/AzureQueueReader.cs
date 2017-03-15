@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Connector;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
@@ -12,7 +11,7 @@ namespace Microsoft.Bot.Builder.Azure
     /// <summary>
     /// Reads messages from an Azure Storage Queue
     /// </summary>
-    public class AzureQueueReader: IQueueReader
+    public class AzureQueueReader : IQueueReader
     {
         private readonly CloudQueue _cloudQueue;
         private readonly QueueLoggerSettings _queueLoggerSettings;
@@ -24,12 +23,10 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="queueSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
         public AzureQueueReader(CloudQueue cloudQueue, QueueLoggerSettings queueSettings = null)
         {
-            cloudQueue = cloudQueue ?? throw new ArgumentNullException(nameof(cloudQueue));
+            SetField.NotNull(out _cloudQueue, nameof(cloudQueue), cloudQueue);
 
             //set the defaults
-            _queueLoggerSettings = queueSettings ??  new QueueLoggerSettings();
-
-            _cloudQueue = cloudQueue;
+            _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
         }
         private Activity DeserializeItem(CloudQueueMessage msg)
         {

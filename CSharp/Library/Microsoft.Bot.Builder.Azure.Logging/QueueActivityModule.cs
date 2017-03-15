@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
-using Microsoft.Bot.Builder.History;
-using Microsoft.Bot.Builder.Luis;
-using Microsoft.Bot.Connector;
+using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.Azure
@@ -34,9 +26,10 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="queueName">Azure storage queue</param>
         /// <param name="loggerSettings">Logger settings</param>
         /// <param name="settings">JSON serialization settings for message serialization before enqueing</param>
-        public QueueActivityModule(CloudStorageAccount account, string queueName, QueueLoggerSettings loggerSettings= null, JsonSerializerSettings settings = null)
+        public QueueActivityModule(CloudStorageAccount account, string queueName, QueueLoggerSettings loggerSettings = null, JsonSerializerSettings settings = null)
         {
-            _cloudStorageAccount = account ?? throw new ArgumentNullException(nameof(account));
+
+            SetField.NotNull(out _cloudStorageAccount, nameof(account), account);
 
             if (string.IsNullOrEmpty(queueName))
                 throw new ArgumentException("queue name must be provided");
@@ -106,7 +99,7 @@ namespace Microsoft.Bot.Builder.Azure
                 .SingleInstance();
 
             builder.RegisterType<AzureQueueActivityLogger>().AsImplementedInterfaces();
-            
+
         }
 
         private void RegisterServiceBusQueue(ContainerBuilder builder)

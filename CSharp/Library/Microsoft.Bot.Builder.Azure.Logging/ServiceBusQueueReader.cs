@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Connector;
 using Microsoft.ServiceBus.Messaging;
 using Newtonsoft.Json;
@@ -26,13 +26,13 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="queueSettings">Settings informing the logger how to handle large messages and whether compression is required</param>
         public ServiceBusQueueReader(QueueClient client, QueueLoggerSettings queueSettings = null)
         {
-            client = client ?? throw new ArgumentNullException(nameof(client));
+            SetField.NotNull(out _queueClient, nameof(client), client);
 
             //set the defaults
             _queueLoggerSettings = queueSettings ?? new QueueLoggerSettings();
-
-            _queueClient = client;
         }
+
+
 
         /// <summary>
         /// Read a single activity message from the queue
