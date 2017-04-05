@@ -23,11 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Sample.Docume
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Logging", "Library\Microsoft.Bot.Builder.Azure.Logging\Microsoft.Bot.Builder.Azure.Logging.csproj", "{F8FDCBFB-3A5D-41E4-8C3D-A158D8783B3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Telemetry", "Microsoft.Bot.Builder.Azure.Telemetry\Microsoft.Bot.Builder.Azure.Telemetry.csproj", "{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_should_be_in_main_BotBuilder_repo", "_should_be_in_main_BotBuilder_repo", "{C70DAB17-2168-4936-81BB-FF95DFB2B41A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry", "Microsoft.Bot.Builder.Telemetry\Microsoft.Bot.Builder.Telemetry.csproj", "{B2669900-19B3-43CE-B884-5A455C998F33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Telemetry", "Library\Microsoft.Bot.Builder.Azure.Telemetry\Microsoft.Bot.Builder.Azure.Telemetry.csproj", "{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry", "Library\Microsoft.Bot.Builder.Telemetry\Microsoft.Bot.Builder.Telemetry.csproj", "{B2669900-19B3-43CE-B884-5A455C998F33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
