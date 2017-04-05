@@ -12,13 +12,6 @@ namespace Microsoft.Bot.Builder.Telemetry
             TelemetryWriters = new List<ITelemetryWriter>(processors);
         }
 
-        public TelemetryReporter()
-        {
-            //default configuration
-            Configuration = new TelemetryReporterConfiguration();
-            TelemetryWriters = new List<ITelemetryWriter>();
-        }
-
         public TelemetryReporterConfiguration Configuration { get; }
 
         public List<ITelemetryWriter> TelemetryWriters { get; set; }
