@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ISetTelemetryContext.cs" />
+    <Compile Include="ITelemetryContext.cs" />
+    <Compile Include="ITelemetryContextCorrelationIdGenerator.cs" />
+    <Compile Include="ITelemetryOutputFormatter.cs" />
+    <Compile Include="ITelemetryReporter.cs" />
+    <Compile Include="ITelemetryWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
