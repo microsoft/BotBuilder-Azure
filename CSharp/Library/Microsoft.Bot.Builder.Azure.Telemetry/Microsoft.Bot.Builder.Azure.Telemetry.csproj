@@ -43,5 +43,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Bot.Builder.Telemetry\Microsoft.Bot.Builder.Telemetry.csproj">
+      <Project>{b2669900-19b3-43ce-b884-5a455c998f33}</Project>
+      <Name>Microsoft.Bot.Builder.Telemetry</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
