@@ -6,10 +6,10 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public class TelemetryReporter : ITelemetryReporter
     {
-        public TelemetryReporter(IEnumerable<ITelemetryWriter> processors, TelemetryReporterConfiguration configuration = null)
+        public TelemetryReporter(IEnumerable<ITelemetryWriter> writers, TelemetryReporterConfiguration configuration = null)
         {
             Configuration = configuration ?? new TelemetryReporterConfiguration();
-            TelemetryWriters = new List<ITelemetryWriter>(processors);
+            TelemetryWriters = new List<ITelemetryWriter>(writers);
         }
 
         public TelemetryReporterConfiguration Configuration { get; }
