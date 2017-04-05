@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="AllIdsAndTimestampTelemetryContextCorrelationIdGenerator.cs" />
     <Compile Include="DateTimeProvider.cs" />
+    <Compile Include="Formatters\SingleLinePerRecordOutputFormatter.cs" />
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="ISetTelemetryContext.cs" />
     <Compile Include="ITelemetryContext.cs" />
@@ -91,10 +92,12 @@
     <Compile Include="TelemetryReporter.cs" />
     <Compile Include="TelemetryReporterConfiguration.cs" />
     <Compile Include="TelemetryException.cs" />
+    <Compile Include="Writers\DebugWindowTelemetryWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
