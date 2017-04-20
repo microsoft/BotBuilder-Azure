@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure", "Library\Microsoft.Bot.Builder.Azure\Microsoft.Bot.Builder.Azure.csproj", "{77299F9C-8F49-4839-B7EA-55BA726321D5}"
 EndProject
@@ -28,6 +28,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Telemetry", "Library\Microsoft.Bot.Builder.Azure.Telemetry\Microsoft.Bot.Builder.Azure.Telemetry.csproj", "{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry", "Library\Microsoft.Bot.Builder.Telemetry\Microsoft.Bot.Builder.Telemetry.csproj", "{B2669900-19B3-43CE-B884-5A455C998F33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry.DebugWriter", "Library\Microsoft.Bot.Builder.Telemetry.DebugWriter\Microsoft.Bot.Builder.Telemetry.DebugWriter.csproj", "{041CEA1B-7A07-4BC3-990A-1EB80AA03F70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry.TextFileWriter", "Library\Microsoft.Bot.Builder.Telemetry.TextFileWriter\Microsoft.Bot.Builder.Telemetry.TextFileWriter.csproj", "{574382CA-F3DC-4C88-8E2E-9208EE913AA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +67,14 @@ Global
 		{B2669900-19B3-43CE-B884-5A455C998F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2669900-19B3-43CE-B884-5A455C998F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2669900-19B3-43CE-B884-5A455C998F33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{041CEA1B-7A07-4BC3-990A-1EB80AA03F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{041CEA1B-7A07-4BC3-990A-1EB80AA03F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{041CEA1B-7A07-4BC3-990A-1EB80AA03F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{041CEA1B-7A07-4BC3-990A-1EB80AA03F70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{574382CA-F3DC-4C88-8E2E-9208EE913AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{574382CA-F3DC-4C88-8E2E-9208EE913AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{574382CA-F3DC-4C88-8E2E-9208EE913AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{574382CA-F3DC-4C88-8E2E-9208EE913AA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,5 +89,7 @@ Global
 		{F8FDCBFB-3A5D-41E4-8C3D-A158D8783B3E} = {CCAA042D-B218-44CE-ACDF-A874DB7C022E}
 		{1D26B8EA-B56A-482B-A9DD-BCB918B7604C} = {CCAA042D-B218-44CE-ACDF-A874DB7C022E}
 		{B2669900-19B3-43CE-B884-5A455C998F33} = {C70DAB17-2168-4936-81BB-FF95DFB2B41A}
+		{041CEA1B-7A07-4BC3-990A-1EB80AA03F70} = {C70DAB17-2168-4936-81BB-FF95DFB2B41A}
+		{574382CA-F3DC-4C88-8E2E-9208EE913AA8} = {C70DAB17-2168-4936-81BB-FF95DFB2B41A}
 	EndGlobalSection
 EndGlobal
