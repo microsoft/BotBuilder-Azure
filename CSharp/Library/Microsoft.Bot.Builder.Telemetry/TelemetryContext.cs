@@ -18,7 +18,6 @@ namespace Microsoft.Bot.Builder.Telemetry
         public TelemetryContext(IDateTimeProvider dateTimeProvider, ITelemetryContextCorrelationIdGenerator correlationIdGenerator = null)
         {
             SetField.NotNull(out _dateTimeProvider, nameof(dateTimeProvider), dateTimeProvider);
-            _dateTimeProvider = dateTimeProvider;
 
             //set the Timestamp only once so that it will remain consistent for the life of the object
             Timestamp = dateTimeProvider.GetCurrentTime().ToString("O");

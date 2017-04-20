@@ -79,20 +79,26 @@
   <ItemGroup>
     <Compile Include="AllIdsAndTimestampTelemetryContextCorrelationIdGenerator.cs" />
     <Compile Include="DateTimeProvider.cs" />
-    <Compile Include="Formatters\SingleLinePerRecordOutputFormatter.cs" />
+    <Compile Include="Formatters\MachineOptimizedOutputFormatter.cs" />
+    <Compile Include="Formatters\ReadabilityOptimizedOutputFormatter.cs" />
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="ISetTelemetryContext.cs" />
+    <Compile Include="IShardStrategy.cs" />
     <Compile Include="ITelemetryContext.cs" />
     <Compile Include="ITelemetryContextCorrelationIdGenerator.cs" />
     <Compile Include="ITelemetryOutputFormatter.cs" />
     <Compile Include="ITelemetryReporter.cs" />
     <Compile Include="ITelemetryWriter.cs" />
+    <Compile Include="PerDayShardStrategy.cs" />
+    <Compile Include="PerMinuteShardStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SingleRowTelemetryRecord.cs" />
     <Compile Include="TelemetryContext.cs" />
     <Compile Include="TelemetryReporter.cs" />
     <Compile Include="TelemetryReporterConfiguration.cs" />
     <Compile Include="TelemetryException.cs" />
-    <Compile Include="Writers\DebugWindowTelemetryWriter.cs" />
+    <Compile Include="TelemetryTypes.cs" />
+    <Compile Include="TypeDiscriminatingTelemetryWriterConfigurationBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

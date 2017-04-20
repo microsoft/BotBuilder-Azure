@@ -5,11 +5,11 @@ using Microsoft.Bot.Builder.Internals.Fibers;
 
 namespace Microsoft.Bot.Builder.Telemetry.Formatters
 {
-    public class SingleLinePerRecordOutputFormatter : ITelemetryOutputFormatter
+    public class ReadabilityOptimizedOutputFormatter : ITelemetryOutputFormatter
     {
         private ITelemetryContext _context;
 
-        public SingleLinePerRecordOutputFormatter(ITelemetryContext context)
+        public ReadabilityOptimizedOutputFormatter(ITelemetryContext context)
         {
             SetField.NotNull(out _context, nameof(context), context);
         }
@@ -18,9 +18,9 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
         {
             return DateTimeOffset.Now.ToString("yyyy:MM:dd\thh:mm:ss.fff");
         }
-        public string FormatCounter(string counter)
+        public string FormatCounter(string counter, int count)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tCounter: [{counter}]";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tCounter: [{counter}] - Count: [{count}]";
         }
 
         public string FormatEntity(string kind, string value)
@@ -28,20 +28,20 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEntity: [{kind}]-[{value}]";
         }
 
-        public string FormatException(string component, string context, Exception e)
+        public string FormatException(string component, string context, Exception ex)
         {
             return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tException: [{component} with [{context}]" + "\n" +
-                   $"{GetDateTimeString()}\t{GetBotContextProperties()}\t{e}";
+                   $"{GetDateTimeString()}\t{GetBotContextProperties()}\t{ex}";
         }
 
-        public string FormatLogIntent(string intent, float score)
+        public string FormatIntent(string intent, double score)
         {
             return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tIntent: [{intent}] - {score}";
         }
 
-        public string FormatServiceResult(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true)
+        public string FormatServiceResult(string serviceName, DateTime startTime, DateTime endTime, string result, bool success = true)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tServiceResult: [{serviceName}] - result: {result} - duration(ms): {endDateTime.Subtract(startTime).TotalMilliseconds} - success: {success}";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tServiceResult: [{serviceName}] - result: {result} - duration(ms): {endTime.Subtract(startTime).TotalMilliseconds} - success: {success}";
         }
 
         public void SetContext(ITelemetryContext context)
