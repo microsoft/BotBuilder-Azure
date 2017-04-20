@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.Bot.Builder.Internals.Fibers;
 
 namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
@@ -30,6 +31,12 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
         public bool OverwriteFileIfExists { get; set; }
         public string Filename { get; set; }
 
-        public bool HasRequiredValues => !string.IsNullOrEmpty(Filename);
+        public void ValidateSettings()
+        {
+            if (string.IsNullOrEmpty(Filename))
+            {
+                throw new ArgumentException(nameof(Filename));
+            }
+        }
     }
 }

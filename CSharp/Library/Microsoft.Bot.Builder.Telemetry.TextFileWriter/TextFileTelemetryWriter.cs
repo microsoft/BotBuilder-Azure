@@ -18,11 +18,8 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             SetField.NotNull(out _configuration, nameof(configuration), configuration);
             SetField.NotNull(out _outputFormatter, nameof(formatter), formatter);
 
-            if (!_configuration.HasRequiredValues)
-            {
-                throw new ArgumentException(nameof(configuration));
-            }
-
+            _configuration.ValidateSettings();
+            
             Initialize();
         }
 
