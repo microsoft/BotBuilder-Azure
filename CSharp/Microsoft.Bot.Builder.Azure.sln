@@ -25,13 +25,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_should_be_in_main_BotBuilder_repo", "_should_be_in_main_BotBuilder_repo", "{C70DAB17-2168-4936-81BB-FF95DFB2B41A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Telemetry", "Library\Microsoft.Bot.Builder.Azure.Telemetry\Microsoft.Bot.Builder.Azure.Telemetry.csproj", "{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry", "Library\Microsoft.Bot.Builder.Telemetry\Microsoft.Bot.Builder.Telemetry.csproj", "{B2669900-19B3-43CE-B884-5A455C998F33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry.DebugWriter", "Library\Microsoft.Bot.Builder.Telemetry.DebugWriter\Microsoft.Bot.Builder.Telemetry.DebugWriter.csproj", "{041CEA1B-7A07-4BC3-990A-1EB80AA03F70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Telemetry.TextFileWriter", "Library\Microsoft.Bot.Builder.Telemetry.TextFileWriter\Microsoft.Bot.Builder.Telemetry.TextFileWriter.csproj", "{574382CA-F3DC-4C88-8E2E-9208EE913AA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter", "Library\Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter\Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter.csproj", "{10949757-BF64-4EDE-AD2E-603FDE669274}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter", "Library\Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter\Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter.csproj", "{6E1C8F10-E55D-4400-84D8-36115B1AA436}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +61,6 @@ Global
 		{F8FDCBFB-3A5D-41E4-8C3D-A158D8783B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8FDCBFB-3A5D-41E4-8C3D-A158D8783B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8FDCBFB-3A5D-41E4-8C3D-A158D8783B3E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D26B8EA-B56A-482B-A9DD-BCB918B7604C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B2669900-19B3-43CE-B884-5A455C998F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2669900-19B3-43CE-B884-5A455C998F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2669900-19B3-43CE-B884-5A455C998F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +73,14 @@ Global
 		{574382CA-F3DC-4C88-8E2E-9208EE913AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{574382CA-F3DC-4C88-8E2E-9208EE913AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{574382CA-F3DC-4C88-8E2E-9208EE913AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10949757-BF64-4EDE-AD2E-603FDE669274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10949757-BF64-4EDE-AD2E-603FDE669274}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10949757-BF64-4EDE-AD2E-603FDE669274}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10949757-BF64-4EDE-AD2E-603FDE669274}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E1C8F10-E55D-4400-84D8-36115B1AA436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E1C8F10-E55D-4400-84D8-36115B1AA436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E1C8F10-E55D-4400-84D8-36115B1AA436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E1C8F10-E55D-4400-84D8-36115B1AA436}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,9 +93,10 @@ Global
 		{9D81F425-5DA6-4664-9306-618627BFFCF2} = {6DB71D45-E3C2-4FD4-A032-61C54FFB5FD4}
 		{BC81733E-CC04-49A5-ABE8-962E38487CA3} = {9D81F425-5DA6-4664-9306-618627BFFCF2}
 		{F8FDCBFB-3A5D-41E4-8C3D-A158D8783B3E} = {CCAA042D-B218-44CE-ACDF-A874DB7C022E}
-		{1D26B8EA-B56A-482B-A9DD-BCB918B7604C} = {CCAA042D-B218-44CE-ACDF-A874DB7C022E}
 		{B2669900-19B3-43CE-B884-5A455C998F33} = {C70DAB17-2168-4936-81BB-FF95DFB2B41A}
 		{041CEA1B-7A07-4BC3-990A-1EB80AA03F70} = {C70DAB17-2168-4936-81BB-FF95DFB2B41A}
 		{574382CA-F3DC-4C88-8E2E-9208EE913AA8} = {C70DAB17-2168-4936-81BB-FF95DFB2B41A}
+		{10949757-BF64-4EDE-AD2E-603FDE669274} = {CCAA042D-B218-44CE-ACDF-A874DB7C022E}
+		{6E1C8F10-E55D-4400-84D8-36115B1AA436} = {CCAA042D-B218-44CE-ACDF-A874DB7C022E}
 	EndGlobalSection
 EndGlobal
