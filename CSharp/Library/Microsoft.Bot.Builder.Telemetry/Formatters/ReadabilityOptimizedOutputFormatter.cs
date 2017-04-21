@@ -16,7 +16,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         private string GetDateTimeString()
         {
-            return DateTimeOffset.Now.ToString("yyyy:MM:dd\thh:mm:ss.fff");
+            return DateTimeOffset.Now.ToString("O");
         }
         public string FormatCounter(string counter, int count)
         {
@@ -30,18 +30,17 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatException(string component, string context, Exception ex)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tException: [{component} with [{context}]" + "\n" +
-                   $"{GetDateTimeString()}\t{GetBotContextProperties()}\t{ex}";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tException: [{component} with [{context}]" + Environment.NewLine + $"\t{ex}";
         }
 
         public string FormatIntent(string intent, double score)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tIntent: [{intent}] - {score}";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tIntent: [{intent}] - [{score}]";
         }
 
         public string FormatServiceResult(string serviceName, DateTime startTime, DateTime endTime, string result, bool success = true)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tServiceResult: [{serviceName}] - result: {result} - duration(ms): {endTime.Subtract(startTime).TotalMilliseconds} - success: {success}";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tServiceResult: [{serviceName}] - result: [{result}] - duration(ms): [{endTime.Subtract(startTime).TotalMilliseconds}] - success: [{success}]";
         }
 
         public void SetContext(ITelemetryContext context)
@@ -60,10 +59,10 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
             foreach (var metric in metrics)
             {
-                message.Append($"{{{metric.Key},{metric.Value}}}");
+                message.Append($"[{metric.Key},{metric.Value}]");
             }
 
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEvent: {message}";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEvent: [{message}]";
         }
 
         public string FormatEvent(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
@@ -72,18 +71,18 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
             foreach (var property in properties)
             {
-                message.Append($"{{{property.Key},{property.Value}}}");
+                message.Append($"[{property.Key},{property.Value}]");
             }
 
             if (null != metrics)
             {
                 foreach (var metric in metrics)
                 {
-                    message.Append($"{{{metric.Key},{metric.Value}}}");
+                    message.Append($"[{metric.Key},{metric.Value}]");
                 }
             }
 
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEvent: {message}";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEvent: [{message}]";
         }
     }
 }
