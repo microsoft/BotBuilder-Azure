@@ -44,12 +44,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugWriterTests\DebugAssert.cs" />
+    <Compile Include="DebugWriterTests\DebugTracingTestBase.cs" />
+    <Compile Include="DebugWriterTests\MessageCapturingTraceListener.cs" />
+    <Compile Include="DebugWriterTests\WhenInvokedInParallel.cs" />
+    <Compile Include="DebugWriterTests\WhenInvokedInSequence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TelemetryContextTests.cs" />
     <Compile Include="TelemetryIntegrationTestsBase.cs" />
+    <Compile Include="TextFileWriterTests\TextFileAssert.cs" />
+    <Compile Include="TextFileWriterTests\TextFileTelemetryTestBase.cs" />
+    <Compile Include="TextFileWriterTests\WhenInvokedInParallel.cs" />
+    <Compile Include="TextFileWriterTests\WhenInvokedInSequence.cs" />
     <Compile Include="TypeDiscriminatingTelemetryWriterConfigurationTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\Microsoft.Bot.Builder.Telemetry.DebugWriter\Microsoft.Bot.Builder.Telemetry.DebugWriter.csproj">
+      <Project>{041CEA1B-7A07-4BC3-990A-1EB80AA03F70}</Project>
+      <Name>Microsoft.Bot.Builder.Telemetry.DebugWriter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Microsoft.Bot.Builder.Telemetry.TextFileWriter\Microsoft.Bot.Builder.Telemetry.TextFileWriter.csproj">
+      <Project>{574382CA-F3DC-4C88-8E2E-9208EE913AA8}</Project>
+      <Name>Microsoft.Bot.Builder.Telemetry.TextFileWriter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Microsoft.Bot.Builder.Telemetry\Microsoft.Bot.Builder.Telemetry.csproj">
       <Project>{b2669900-19b3-43ce-b884-5a455c998f33}</Project>
       <Name>Microsoft.Bot.Builder.Telemetry</Name>

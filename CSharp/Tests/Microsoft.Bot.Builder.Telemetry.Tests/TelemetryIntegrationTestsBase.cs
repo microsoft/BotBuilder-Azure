@@ -7,16 +7,6 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
 {
     public abstract class TelemetryIntegrationTestsBase
     {
-        protected TestParameters ParseTestCaseArguments(object[] parameters, string uniqueTestRunId = null)
-        {
-            return new TestParameters()
-            {
-                RowCount = (int)parameters[0],
-                Concurrent = (bool)parameters[1],
-                UniqueTestRunId = uniqueTestRunId
-            };
-        }
-
         public class TestParameters
         {
             private string _uniqueTestRunId;
@@ -25,17 +15,18 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
 
             public string UniqueTestRunId
             {
-                get { return _uniqueTestRunId; }
-                set
+                get
                 {
-                    if (string.IsNullOrEmpty(value))
+                    if (string.IsNullOrEmpty(_uniqueTestRunId))
                     {
                         _uniqueTestRunId = Guid.NewGuid().ToString();
                     }
-                    else
-                    {
-                        _uniqueTestRunId = value;
-                    }
+
+                    return _uniqueTestRunId;
+                }
+                set
+                {
+                    _uniqueTestRunId = value;
                 }
             }
         }
