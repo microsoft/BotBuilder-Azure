@@ -94,6 +94,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleRowTelemetryRecord.cs" />
     <Compile Include="TelemetryContext.cs" />
+    <Compile Include="TelemetryModule.cs" />
     <Compile Include="TelemetryReporter.cs" />
     <Compile Include="TelemetryReporterConfiguration.cs" />
     <Compile Include="TelemetryException.cs" />
