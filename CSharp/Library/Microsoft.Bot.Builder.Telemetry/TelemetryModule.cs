@@ -18,7 +18,6 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         protected override void Load(ContainerBuilder builder)
         {
-
             RegisterDateTimeProvider(builder);
 
             RegisterTelemetryWriterConfigurations(builder);
