@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Autofac;
-using Microsoft.Bot.Builder.Autofac.Base;
 using Microsoft.Bot.Builder.Internals.Fibers;
 
 namespace Microsoft.Bot.Builder.Telemetry
@@ -18,25 +16,38 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterDateTimeProvider(builder);
+            RegisterDefaultDateTimeProvider(builder);
+            RegisterDefaultTelemetryContext(builder);
 
             RegisterTelemetryWriterConfigurations(builder);
             RegisterTelemetryWriterTypes(builder);
             RegisterTelemetryWriterInstances(builder);
 
+            RegisterTelemetryReporter(builder);
+
             base.Load(builder);
         }
 
-        private void RegisterDateTimeProvider(ContainerBuilder builder)
+        private void RegisterTelemetryReporter(ContainerBuilder builder)
         {
-            builder.RegisterType<DateTimeProvider>().SingleInstance();
+            builder.RegisterType<TelemetryReporter>().AsImplementedInterfaces().SingleInstance();
+        }
+
+        private void RegisterDefaultTelemetryContext(ContainerBuilder builder)
+        {
+            builder.RegisterType<TelemetryContext>().AsImplementedInterfaces();
+        }
+
+        private void RegisterDefaultDateTimeProvider(ContainerBuilder builder)
+        {
+            builder.RegisterType<DateTimeProvider>().AsImplementedInterfaces().SingleInstance();
         }
 
         private void RegisterTelemetryWriterInstances(ContainerBuilder builder)
         {
             foreach (var instance in _configuration.TelemetryWriterInstances)
             {
-                builder.RegisterInstance(instance).As<ITelemetryWriter>().SingleInstance();
+                builder.RegisterInstance(instance).AsImplementedInterfaces().SingleInstance();
             }
         }
 
