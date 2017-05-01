@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Autofac;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Telemetry.Formatters;
 
 namespace Microsoft.Bot.Builder.Telemetry
 {
@@ -16,16 +17,31 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterDefaultDateTimeProvider(builder);
-            RegisterDefaultTelemetryContext(builder);
-
-            RegisterTelemetryWriterConfigurations(builder);
-            RegisterTelemetryWriterTypes(builder);
-            RegisterTelemetryWriterInstances(builder);
+            RegisterAllRequiredDefaultTypes(builder);
+            RegisterAllTelemetryWriters(builder);
 
             RegisterTelemetryReporter(builder);
 
             base.Load(builder);
+        }
+
+        private void RegisterAllTelemetryWriters(ContainerBuilder builder)
+        {
+            RegisterTelemetryWriterConfigurations(builder);
+            RegisterTelemetryWriterTypes(builder);
+            RegisterTelemetryWriterInstances(builder);
+        }
+
+        private void RegisterAllRequiredDefaultTypes(ContainerBuilder builder)
+        {
+            RegisterDefaultDateTimeProvider(builder);
+            RegisterDefaultTelemetryContext(builder);
+            RegisterDefaultOutputFormatter(builder);
+        }
+
+        private void RegisterDefaultOutputFormatter(ContainerBuilder builder)
+        {
+            builder.RegisterType<MachineOptimizedOutputFormatter>().As<ITelemetryOutputFormatter>();
         }
 
         private void RegisterTelemetryReporter(ContainerBuilder builder)

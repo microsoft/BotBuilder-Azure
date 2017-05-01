@@ -27,13 +27,9 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             var config = new TelemetryModuleConfiguration();
             config.TelemetryWriterTypes.Add(typeof(TextFileTelemetryWriter));
 
-            //***unrelated to test, but have register the entire chain of ctor dependencies as well here
+            //register necessary dependencies
             _containerBuilder.RegisterType<TextFileTelemetryWriterConfiguration>();
             _containerBuilder.RegisterType<PerDayShardStrategy>().As<IShardStrategy>();
-            _containerBuilder.RegisterType<MachineOptimizedOutputFormatter>().As<ITelemetryOutputFormatter>();
-            _containerBuilder.RegisterType<TelemetryContext>().As<ITelemetryContext>();
-            _containerBuilder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>();
-            //***
 
             _containerBuilder.RegisterModule(new TelemetryModule(config));
             var container = _containerBuilder.Build();
@@ -48,14 +44,11 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             config.TelemetryWriterTypes.Add(typeof(TextFileTelemetryWriter));
             config.TelemetryWriterTypes.Add(typeof(DebugWindowTelemetryWriter));
 
-            //***unrelated to test, but have register the entire chain of ctor dependencies as well here
+            //register necessary dependencies
             _containerBuilder.RegisterType<TextFileTelemetryWriterConfiguration>();
             _containerBuilder.RegisterType<DebugWindowTelemetryWriterConfiguration>();
             _containerBuilder.RegisterType<PerDayShardStrategy>().As<IShardStrategy>();
-            _containerBuilder.RegisterType<MachineOptimizedOutputFormatter>().As<ITelemetryOutputFormatter>();
-            _containerBuilder.RegisterType<TelemetryContext>().As<ITelemetryContext>();
-            _containerBuilder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>();
-            //***
+            
 
 
             _containerBuilder.RegisterModule(new TelemetryModule(config));

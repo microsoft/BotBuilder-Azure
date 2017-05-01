@@ -51,7 +51,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             _containerBuilder.RegisterModule(new TelemetryModule(config));
 
             //should be valid to call .Build without _any_ Writer Configurations provided
-            _containerBuilder.Build();
+            AssertEx.DoesNotThrow(() => _containerBuilder.Build());
         }
     }
 }

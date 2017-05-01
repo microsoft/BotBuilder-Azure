@@ -20,7 +20,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             _containerBuilder.RegisterModule(new TelemetryModule(new TelemetryModuleConfiguration()));
             var container = _containerBuilder.Build();
 
-            Assert.IsTrue(container.IsRegistered<ITelemetryContext>());
+            AssertEx.DoesNotThrow(() => container.Resolve<ITelemetryContext>());
         }
     }
 }
