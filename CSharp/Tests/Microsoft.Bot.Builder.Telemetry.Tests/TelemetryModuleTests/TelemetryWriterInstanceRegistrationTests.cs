@@ -52,6 +52,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
                 new DebugWindowTelemetryWriterConfiguration(),
                 new ReadabilityOptimizedOutputFormatter(new TelemetryContext(new DateTimeProvider())));
             config.TelemetryWriterInstances.Add(debugWriter);
+            config.TelemetryWriterInstances.Add(textWriter);
 
             _containerBuilder.RegisterModule(new TelemetryModule(config));
             var container = _containerBuilder.Build();
