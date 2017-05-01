@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
 {
     [TestClass]
-    public class ValidateConfigurationBehavior
+    public class TelemetryWriterConfigurationRegistrationTests
     {
         private ContainerBuilder _containerBuilder;
 
@@ -18,7 +18,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
 
 
         [TestMethod]
-        public void CanRegisterSingleProvidedWriterConfiguration()
+        public void CanRegisterSingleTelemetryWriterConfiguration()
         {
             var config = new TelemetryModuleConfiguration();
             config.TelemetryWriterConfigurations.Add(new TextFileTelemetryWriterConfiguration(new PerDayShardStrategy()));
@@ -30,7 +30,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
         }
 
         [TestMethod]
-        public void CanRegisterMultipleProvidedWriterConfigurations()
+        public void CanRegisterMultipleWriterConfigurations()
         {
             var config = new TelemetryModuleConfiguration();
             config.TelemetryWriterConfigurations.Add(new TextFileTelemetryWriterConfiguration(new PerDayShardStrategy()));
@@ -41,6 +41,17 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
 
             Assert.IsTrue(container.IsRegistered<TextFileTelemetryWriterConfiguration>());
             Assert.IsTrue(container.IsRegistered<DebugWindowTelemetryWriterConfiguration>());
+        }
+
+        [TestMethod]
+        public void CanHandleNoWriterConfigurations()
+        {
+            var config = new TelemetryModuleConfiguration();
+
+            _containerBuilder.RegisterModule(new TelemetryModule(config));
+
+            //should be valid to call .Build without _any_ Writer Configurations provided
+            _containerBuilder.Build();
         }
     }
 }

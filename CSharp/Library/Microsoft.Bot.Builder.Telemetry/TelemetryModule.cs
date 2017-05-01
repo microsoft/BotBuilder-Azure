@@ -19,35 +19,68 @@ namespace Microsoft.Bot.Builder.Telemetry
         protected override void Load(ContainerBuilder builder)
         {
 
-            //ensure all provided Configuration instances are registered
-            foreach (var configuration in _configuration.TelemetryWriterConfigurations)
-            {
-                builder.RegisterInstance(configuration).AsSelf().SingleInstance();
-            }
+            RegisterDateTimeProvider(builder);
+
+            RegisterTelemetryWriterConfigurations(builder);
+            RegisterTelemetryWriterTypes(builder);
+            RegisterTelemetryWriterInstances(builder);
 
             base.Load(builder);
         }
 
+        private void RegisterDateTimeProvider(ContainerBuilder builder)
+        {
+            builder.RegisterType<DateTimeProvider>().SingleInstance();
+        }
+
+        private void RegisterTelemetryWriterInstances(ContainerBuilder builder)
+        {
+            foreach (var instance in _configuration.TelemetryWriterInstances)
+            {
+                builder.RegisterInstance(instance).As<ITelemetryWriter>().SingleInstance();
+            }
+        }
+
+        private void RegisterTelemetryWriterTypes(ContainerBuilder builder)
+        {
+            foreach (var type in _configuration.TelemetryWriterTypes)
+            {
+                builder.RegisterType(type).AsImplementedInterfaces().SingleInstance();
+            }
+        }
+
+        private void RegisterTelemetryWriterConfigurations(ContainerBuilder builder)
+        {
+            foreach (var configuration in _configuration.TelemetryWriterConfigurations)
+            {
+                builder.RegisterInstance(configuration).AsSelf().SingleInstance();
+            }
+        }
     }
 
     public class TelemetryModuleConfiguration
     {
         public TelemetryWriterDiscoveryStrategy WriterDiscoveryStrategy { get; set; }
         public IList<object> TelemetryWriterConfigurations { get; set; }
+        public IList<Type> TelemetryWriterTypes { get; set; }
+        public IList<ITelemetryWriter> TelemetryWriterInstances { get; set; }
 
 
         public TelemetryModuleConfiguration()
         {
             TelemetryWriterConfigurations = new List<object>();
+            TelemetryWriterTypes = new List<Type>();
+            TelemetryWriterInstances = new List<ITelemetryWriter>();
         }
     }
 
     [Flags]
     public enum TelemetryWriterDiscoveryStrategy
     {
-        ExplicitFileSystemLocation = 1,
-        AssemblyFileSystemLocation = 2,
-        ExplicitlyDeclared = 4,
-        PreregisteredWithContainer = 8,
+        None = 0,
+        ScanExplicitFileSystemLocation = 1,
+        ScanAssemblyFileSystemLocation = 2,
+        UseExplicitlyDeclaredTypes = 4,
+        UseExplicitlyDeclaredInstances = 8,
     }
 }

@@ -55,7 +55,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TelemetryContextTests.cs" />
     <Compile Include="TelemetryIntegrationTestsBase.cs" />
-    <Compile Include="TelemetryModuleTests\ValidateConfigurationBehavior.cs" />
+    <Compile Include="TelemetryModuleTests\TelemetryWriterTypeRegistrationTests.cs" />
+    <Compile Include="TelemetryModuleTests\TelemetryWriterInstanceRegistrationTests.cs" />
+    <Compile Include="TelemetryModuleTests\TelemetryWriterConfigurationRegistrationTests.cs" />
     <Compile Include="TextFileWriterTests\TextFileAssert.cs" />
     <Compile Include="TextFileWriterTests\TextFileTelemetryTestBase.cs" />
     <Compile Include="TextFileWriterTests\WhenInvokedInParallel.cs" />
