@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Bot.Connector;
 
 namespace Microsoft.Bot.Builder.Telemetry
 {
@@ -145,6 +146,22 @@ namespace Microsoft.Bot.Builder.Telemetry
                 //We will write this into a debug window as the logging into Telemetry Writers may fail also.
                 throw new TelemetryException("Failed to write to TelemetryWriters.", e);
             }
+        }
+
+        public async Task SetContextFrom(IActivity activity, ITelemetryContext context = null)
+        {
+            if (null == context)
+            {
+                context = new TelemetryContext(new DateTimeProvider());
+            }
+
+            context.ActivityId = activity.Id;
+            context.ChannelId = activity.ChannelId;
+            context.ConversationId = activity.Conversation.Id;
+            context.UserId = activity.Conversation.Name;
+
+            //flow the context through to all the children objects which depend upon it
+            SetContext(context);
         }
     }
 }
