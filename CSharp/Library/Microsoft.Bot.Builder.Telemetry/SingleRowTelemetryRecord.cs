@@ -13,9 +13,15 @@ namespace Microsoft.Bot.Builder.Telemetry
         public string ActivityId { get; set; }
         public string UserId { get; set; }
         public string IntentName { get; set; }
+        public string IntentText { get; set; }
         public string IntentScore { get; set; }
         public string EntityType { get; set; }
         public string EntityValue { get; set; }
+        public string ResponseText { get; set; }
+        public string ResponseImage { get; set; }
+        public string ResponseJson { get; set; }
+        public string ResponseResult { get; set; }
+        public string ResponseCacheHit { get; set; }
         public string CounterName { get; set; }
         public string CounterValue { get; set; }
         public string ServiceResultName { get; set; }
@@ -35,24 +41,39 @@ namespace Microsoft.Bot.Builder.Telemetry
             var sb = new StringBuilder();
 
             sb.Append($"{RecordType}");
+
             sb.Append($"\t{context.Timestamp}");
             sb.Append($"\t{context.CorrelationId}");
             sb.Append($"\t{context.ChannelId}");
             sb.Append($"\t{context.ConversationId}");
             sb.Append($"\t{context.ActivityId}");
             sb.Append($"\t{context.UserId}");
+
             sb.Append($"\t{IntentName}");
+            sb.Append($"\t{IntentText}");
             sb.Append($"\t{IntentScore}");
+
             sb.Append($"\t{EntityType}");
             sb.Append($"\t{EntityValue}");
+
+            sb.Append($"\t{ResponseText}");
+            sb.Append($"\t{ResponseImage}");
+            sb.Append($"\t{ResponseJson}");
+            sb.Append($"\t{ResponseResult}");
+            sb.Append($"\t{ResponseCacheHit}");
+
+
             sb.Append($"\t{CounterName}");
             sb.Append($"\t{CounterValue}");
+
             sb.Append($"\t{ServiceResultName}");
             sb.Append($"\t{ServiceResultMillisecondsDuration}");
             sb.Append($"\t{ServiceResultSuccess}");
             sb.Append($"\t{ServiceResultResponse}");
+
             sb.Append($"\t{TraceName}");
             sb.Append($"\t{TraceValue}");
+
             sb.Append($"\t{ExceptionComponent}");
             sb.Append($"\t{ExceptionContext}");
             sb.Append($"\t{ExceptionType}");

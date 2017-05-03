@@ -7,7 +7,8 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public interface ITelemetryReporter : ISetTelemetryContext
     {
-        Task AddLuisEventDetailsAsync(string intent, float confidence, Dictionary<string, string> entities);
+        Task AddLuisEventDetailsAsync(string intent, string text, double confidence, Dictionary<string, string> entities);
+        Task AddResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false);
         Task AddDialogImpressionAsync(string dialog);
         Task AddServiceResultAsync(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true);
         Task AddEventAsync(string key, string value);

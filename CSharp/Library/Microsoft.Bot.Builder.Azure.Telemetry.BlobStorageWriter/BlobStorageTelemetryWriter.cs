@@ -61,7 +61,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             //no-op; left to ease future use if needed
         }
 
-        public async Task WriteIntentAsync(string intent, float score, Dictionary<string, string> entities = null)
+        public async Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
@@ -77,7 +77,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
                     }
 
                     //now process the intent
-                    await AppendToBlob(_formatter.FormatIntent(intent, score));
+                    await AppendToBlob(_formatter.FormatIntent(intent, text, score));
 
                     DoPostLogActions();
                 });
@@ -105,14 +105,15 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             }
         }
 
-        public async Task WriteCounterAsync(string counter, int count = 1)
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
         {
-            if (_configuration.Handles(TelemetryTypes.Counters))
+            if (_configuration.Handles(TelemetryTypes.Responses))
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatCounter(counter, count));
+                    await AppendToBlob(_formatter.FormatResponse(text, imageUrl, json, result, isCacheHit));
                     DoPostLogActions();
+
                 });
             }
         }
@@ -128,6 +129,18 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
                 });
             }
 
+        }
+
+        public async Task WriteCounterAsync(string counter, int count = 1)
+        {
+            if (_configuration.Handles(TelemetryTypes.Counters))
+            {
+                await Task.Run(async () =>
+                {
+                    await AppendToBlob(_formatter.FormatCounter(counter, count));
+                    DoPostLogActions();
+                });
+            }
         }
 
         public async Task WriteExceptionAsync(string component, string context, Exception e)

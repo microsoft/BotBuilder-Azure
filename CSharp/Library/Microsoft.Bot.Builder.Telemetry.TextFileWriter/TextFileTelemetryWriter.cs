@@ -46,13 +46,13 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteIntentAsync(string intent, float score, Dictionary<string, string> entities = null)
+        public async Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
                 await Task.Run(async () =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatIntent(intent, score));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatIntent(intent, text, score));
 
                     if (null != entities)
                     {
@@ -75,6 +75,18 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
                 await Task.Run(() =>
                 {
                     ThreadsafeWriteToFile(_outputFormatter.FormatEntity(kind, value));
+                    DoPostLogActions();
+                });
+            }
+        }
+
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        {
+            if (_configuration.Handles(TelemetryTypes.Responses))
+            {
+                await Task.Run(() =>
+                {
+                    ThreadsafeWriteToFile(_outputFormatter.FormatResponse(text, imageUrl, json, result, isCacheHit));
                     DoPostLogActions();
                 });
             }

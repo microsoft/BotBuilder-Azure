@@ -28,14 +28,19 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEntity: [{kind}]-[{value}]";
         }
 
+        public string FormatResponse(string text, string imageUrl, string json, string result, bool isCacheHit)
+        {
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tResponse: [{text} / {imageUrl} / {json} / {isCacheHit}] - [{result}] ";
+        }
+
         public string FormatException(string component, string context, Exception ex)
         {
             return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tException: [{component} with [{context}]" + Environment.NewLine + $"\t{ex}";
         }
 
-        public string FormatIntent(string intent, double score)
+        public string FormatIntent(string intent, string text, double score)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tIntent: [{intent}] - [{score}]";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tIntent: [{intent} ({score})] - [{text}]";
         }
 
         public string FormatServiceResult(string serviceName, DateTime startTime, DateTime endTime, string result, bool success = true)

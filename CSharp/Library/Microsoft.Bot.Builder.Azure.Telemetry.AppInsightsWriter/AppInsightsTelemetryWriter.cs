@@ -49,7 +49,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             if (_configuration.FlushEveryWrite) _telemetry.Flush();
         }
 
-        public async Task WriteIntentAsync(string intent, float score, Dictionary<string, string> entities = null)
+        public async Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
@@ -82,6 +82,27 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("value", value);
 
                     _telemetry.TrackEvent("Entity", properties);
+                    DoPostLogActions();
+
+                });
+            }
+        }
+
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        {
+            if (_configuration.Handles(TelemetryTypes.Responses))
+            {
+                await Task.Run(() =>
+                {
+                    var properties = GetBotContextProperties();
+
+                    properties.Add("text", text);
+                    properties.Add("image", imageUrl);
+                    properties.Add("json", json);
+                    properties.Add("result", result);
+                    properties.Add("cacheHit", $"{isCacheHit}");
+
+                    _telemetry.TrackEvent("Response", properties);
                     DoPostLogActions();
 
                 });

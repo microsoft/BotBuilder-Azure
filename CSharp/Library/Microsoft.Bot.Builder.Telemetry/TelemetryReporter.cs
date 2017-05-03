@@ -17,13 +17,13 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         public List<ITelemetryWriter> TelemetryWriters { get; set; }
 
-        public async Task AddLuisEventDetailsAsync(string intent, float confidence, Dictionary<string, string> entities)
+        public async Task AddLuisEventDetailsAsync(string intent, string text, double confidence, Dictionary<string, string> entities)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue intent
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(intent, confidence)); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(intent, text, confidence)); });
                 //enqueue every entity
                 TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(entities)); });
 
@@ -35,6 +35,39 @@ namespace Microsoft.Bot.Builder.Telemetry
                 //We will write this into a debug window as the logging into Telemetry Writers may fail also.
                 throw new TelemetryException("Failed to write to TelemetryWriters.", e);
             }
+        }
+
+        public async Task AddResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        {
+            try
+            {
+                var tasks = new List<Task>();
+                //enqueue all tasks
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(text, imageUrl, json, result, isCacheHit)); });
+                //await all in parallel.
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception e)
+            {
+                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
+                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+            }
+        }
+
+        public async Task SetContextFrom(IActivity activity, ITelemetryContext context = null)
+        {
+            if (null == context)
+            {
+                context = new TelemetryContext(new DateTimeProvider());
+            }
+
+            context.ActivityId = activity.Id;
+            context.ChannelId = activity.ChannelId;
+            context.ConversationId = activity.Conversation.Id;
+            context.UserId = activity.Conversation.Name;
+
+            //flow the context through to all the children objects which depend upon it
+            SetContext(context);
         }
 
         private List<Task> ProcessEntities(Dictionary<string, string> entities)
@@ -146,22 +179,6 @@ namespace Microsoft.Bot.Builder.Telemetry
                 //We will write this into a debug window as the logging into Telemetry Writers may fail also.
                 throw new TelemetryException("Failed to write to TelemetryWriters.", e);
             }
-        }
-
-        public async Task SetContextFrom(IActivity activity, ITelemetryContext context = null)
-        {
-            if (null == context)
-            {
-                context = new TelemetryContext(new DateTimeProvider());
-            }
-
-            context.ActivityId = activity.Id;
-            context.ChannelId = activity.ChannelId;
-            context.ConversationId = activity.Conversation.Id;
-            context.UserId = activity.Conversation.Name;
-
-            //flow the context through to all the children objects which depend upon it
-            SetContext(context);
         }
     }
 }

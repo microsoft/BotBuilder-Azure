@@ -6,9 +6,10 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public interface ITelemetryWriter : ISetTelemetryContext
     {
-        Task WriteIntentAsync(string intent, float score, Dictionary<string, string> entities = null);
+        Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null);
         Task WriteEntityAsync(string kind, string value);
         Task WriteCounterAsync(string counter, int count = 1);
+        Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false);
         Task WriteServiceResultAsync(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true);
         Task WriteExceptionAsync(string component, string context, Exception e);
         Task WriteEventAsync(string key, string value);

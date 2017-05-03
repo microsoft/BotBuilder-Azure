@@ -8,10 +8,11 @@ namespace Microsoft.Bot.Builder.Telemetry
         None = 0,
         Intents = 1,
         Entities = 2,
-        Counters = 4,
-        ServiceResults = 8,
-        Exceptions = 16,
-        CustomEvents = 32,
+        Responses = 4,
+        Counters = 8,
+        ServiceResults = 16,
+        Exceptions = 32,
+        CustomEvents = 64,
         All = ~0
     }
 }

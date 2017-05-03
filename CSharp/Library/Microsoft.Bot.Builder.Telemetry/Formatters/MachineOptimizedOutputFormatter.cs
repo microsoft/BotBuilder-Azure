@@ -37,9 +37,9 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return record.AsStringWith(_context);
         }
 
-        public string FormatIntent(string intent, double score)
+        public string FormatIntent(string intent, string text, double score)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intent, IntentScore = $"{score}" };
+            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intent, IntentText  = text, IntentScore = $"{score}" };
             return record.AsStringWith(_context);
         }
 
@@ -47,7 +47,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
         {
             var record = new SingleRowTelemetryRecord { RecordType = "entity", EntityType = kind, EntityValue = value };
             return record.AsStringWith(_context);
+        }
 
+        public string FormatResponse(string text, string imageUrl, string json, string result, bool isCacheHit)
+        {
+            var record = new SingleRowTelemetryRecord { RecordType = "response", ResponseText = text, ResponseImage = imageUrl, ResponseJson = json, ResponseResult = result, ResponseCacheHit = $"{isCacheHit}"};
+            return record.AsStringWith(_context);
         }
 
         public string FormatCounter(string counter, int count)

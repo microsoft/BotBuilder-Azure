@@ -50,11 +50,11 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             }
         }
 
-        public async Task WriteIntentAsync(string intent, float score, Dictionary<string, string> entities = null)
+        public async Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
-                Debug.WriteLine(_outputFormatter.FormatIntent(intent, score));
+                Debug.WriteLine(_outputFormatter.FormatIntent(intent, text, score));
 
                 if (null != entities)
                 {
@@ -63,6 +63,14 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
                         await WriteEntityAsync(entity.Key, entity.Value);
                     }
                 }
+            }
+        }
+
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        {
+            if (_configuration.Handles(TelemetryTypes.Responses))
+            {
+                Debug.WriteLine(_outputFormatter.FormatResponse(text, imageUrl, json, result, isCacheHit));
             }
         }
 
