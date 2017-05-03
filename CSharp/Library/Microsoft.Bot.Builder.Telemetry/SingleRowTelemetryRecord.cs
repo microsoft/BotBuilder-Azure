@@ -18,7 +18,7 @@ namespace Microsoft.Bot.Builder.Telemetry
         public string EntityType { get; set; }
         public string EntityValue { get; set; }
         public string ResponseText { get; set; }
-        public string ResponseImage { get; set; }
+        public string ResponseImageUrl { get; set; }
         public string ResponseJson { get; set; }
         public string ResponseResult { get; set; }
         public string ResponseDuration { get; set; }
@@ -58,7 +58,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             sb.Append($"\t{EntityValue}");
 
             sb.Append($"\t{ResponseText}");
-            sb.Append($"\t{ResponseImage}");
+            sb.Append($"\t{ResponseImageUrl}");
             sb.Append($"\t{ResponseJson}");
             sb.Append($"\t{ResponseResult}");
             sb.Append($"\t{ResponseDuration}");

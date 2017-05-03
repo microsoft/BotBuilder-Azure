@@ -57,7 +57,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             {
                 RecordType = "response",
                 ResponseText = text,
-                ResponseImage = imageUrl,
+                ResponseImageUrl = imageUrl,
                 ResponseJson = json,
                 ResponseResult = result,
                 ResponseDuration = $"{duration}",
