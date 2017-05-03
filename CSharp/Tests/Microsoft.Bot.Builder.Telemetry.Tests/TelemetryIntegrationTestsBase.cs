@@ -83,7 +83,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
             await processor.WriteServiceResultAsync($"serviceNameValue ({uniqueTestRunId})", DateTime.Now, DateTime.Now.AddSeconds(10), "HTTP:200", true);
             await processor.WriteEntityAsync($"kindNameValue ({uniqueTestRunId})", "value");
             await processor.WriteIntentAsync($"IntentNameValue ({uniqueTestRunId})", "intent text", 0.5f);
-            await processor.WriteResponseAsync($"ResponseText ({uniqueTestRunId})", "imageUrl", "{someProperty: \"some json value\"}", "this is a result", false);
+            await processor.WriteResponseAsync($"ResponseText ({uniqueTestRunId})", "imageUrl", "{someProperty: \"some json value\"}", "this is a result", DateTime.Now, DateTime.Now.Add(TimeSpan.FromMilliseconds(100)), false);
         }
     }
 }

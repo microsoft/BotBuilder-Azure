@@ -37,13 +37,13 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public async Task AddResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        public async Task AddResponseAsync(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(text, imageUrl, json, result, isCacheHit)); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(text, imageUrl, json, result, startTime, endDateTime, isCacheHit)); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }

@@ -88,10 +88,12 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             }
         }
 
-        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, DateTime startDateTime, DateTime endDateTime, bool isCacheHit = false)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
+                var duration = startDateTime.Subtract(endDateTime).TotalMilliseconds;
+
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
@@ -100,6 +102,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("image", imageUrl);
                     properties.Add("json", json);
                     properties.Add("result", result);
+                    properties.Add("duration", $"{duration}");
                     properties.Add("cacheHit", $"{isCacheHit}");
 
                     _telemetry.TrackEvent("Response", properties);

@@ -105,13 +105,13 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             }
         }
 
-        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, DateTime startDateTime, DateTime endDateTime, bool isCacheHit = false)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatResponse(text, imageUrl, json, result, isCacheHit));
+                    await AppendToBlob(_formatter.FormatResponse(text, imageUrl, json, result, startDateTime, endDateTime, isCacheHit));
                     DoPostLogActions();
 
                 });

@@ -28,9 +28,10 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEntity: [{kind}]-[{value}]";
         }
 
-        public string FormatResponse(string text, string imageUrl, string json, string result, bool isCacheHit)
+        public string FormatResponse(string text, string imageUrl, string json, string result, DateTime startDateTime, DateTime endDataTime, bool isCacheHit)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tResponse: [{text} / {imageUrl} / {json} / {isCacheHit}] - [{result}] ";
+            var duration = startDateTime.Subtract(endDataTime).TotalMilliseconds;
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tResponse: [{result} / {imageUrl} / {json} / {duration} / {isCacheHit}] - [{text}] ";
         }
 
         public string FormatException(string component, string context, Exception ex)

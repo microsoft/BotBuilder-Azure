@@ -66,11 +66,11 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             }
         }
 
-        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
-                Debug.WriteLine(_outputFormatter.FormatResponse(text, imageUrl, json, result, isCacheHit));
+                Debug.WriteLine(_outputFormatter.FormatResponse(text, imageUrl, json, result, startTime, endDateTime, isCacheHit));
             }
         }
 

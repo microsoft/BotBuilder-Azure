@@ -80,13 +80,13 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, bool isCacheHit = false)
+        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, DateTime startDateTime, DateTime endDateTime, bool isCacheHit = false)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
                 await Task.Run(() =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatResponse(text, imageUrl, json, result, isCacheHit));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatResponse(text, imageUrl, json, result, startDateTime, endDateTime, isCacheHit));
                     DoPostLogActions();
                 });
             }

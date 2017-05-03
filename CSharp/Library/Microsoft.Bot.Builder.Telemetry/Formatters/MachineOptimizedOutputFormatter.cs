@@ -31,7 +31,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
                 ServiceResultName = serviceName,
                 ServiceResultResponse = result,
                 ServiceResultSuccess = $"{success}",
-                ServiceResultMillisecondsDuration = $"{endTime.Subtract(startTime).TotalMilliseconds}"
+                ServiceResultMilliseconds = $"{endTime.Subtract(startTime).TotalMilliseconds}"
             };
 
             return record.AsStringWith(_context);
@@ -39,7 +39,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatIntent(string intent, string text, double score)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intent, IntentText  = text, IntentScore = $"{score}" };
+            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intent, IntentText = text, IntentScore = $"{score}" };
             return record.AsStringWith(_context);
         }
 
@@ -49,9 +49,21 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return record.AsStringWith(_context);
         }
 
-        public string FormatResponse(string text, string imageUrl, string json, string result, bool isCacheHit)
+        public string FormatResponse(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "response", ResponseText = text, ResponseImage = imageUrl, ResponseJson = json, ResponseResult = result, ResponseCacheHit = $"{isCacheHit}"};
+
+            var duration = startTime.Subtract(endDateTime).TotalMilliseconds;
+            var record = new SingleRowTelemetryRecord
+            {
+                RecordType = "response",
+                ResponseText = text,
+                ResponseImage = imageUrl,
+                ResponseJson = json,
+                ResponseResult = result,
+                ResponseDuration = $"{duration}",
+                ResponseCacheHit = $"{isCacheHit}"
+            };
+
             return record.AsStringWith(_context);
         }
 
@@ -78,7 +90,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatEvent(Dictionary<string, double> metrics)
         {
-            return FormatEvent(new Dictionary<string, string>(), metrics );
+            return FormatEvent(new Dictionary<string, string>(), metrics);
         }
 
         public string FormatEvent(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)

@@ -12,6 +12,6 @@ namespace Microsoft.Bot.Builder.Telemetry
         string FormatException(string component, string context, Exception ex);
         string FormatEvent(Dictionary<string, double> metrics);
         string FormatEvent(Dictionary<string, string> properties, Dictionary<string, double> metrics = null);
-        string FormatResponse(string text, string imageUrl, string json, string result, bool isCacheHit);
+        string FormatResponse(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit);
     }
 }

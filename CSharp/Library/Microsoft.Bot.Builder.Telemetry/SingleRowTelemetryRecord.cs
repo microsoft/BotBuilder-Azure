@@ -21,11 +21,12 @@ namespace Microsoft.Bot.Builder.Telemetry
         public string ResponseImage { get; set; }
         public string ResponseJson { get; set; }
         public string ResponseResult { get; set; }
+        public string ResponseDuration { get; set; }
         public string ResponseCacheHit { get; set; }
         public string CounterName { get; set; }
         public string CounterValue { get; set; }
         public string ServiceResultName { get; set; }
-        public string ServiceResultMillisecondsDuration { get; set; }
+        public string ServiceResultMilliseconds { get; set; }
         public string ServiceResultSuccess { get; set; }
         public string ServiceResultResponse { get; set; }
         public string TraceName { get; set; }
@@ -60,6 +61,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             sb.Append($"\t{ResponseImage}");
             sb.Append($"\t{ResponseJson}");
             sb.Append($"\t{ResponseResult}");
+            sb.Append($"\t{ResponseDuration}");
             sb.Append($"\t{ResponseCacheHit}");
 
 
@@ -67,7 +69,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             sb.Append($"\t{CounterValue}");
 
             sb.Append($"\t{ServiceResultName}");
-            sb.Append($"\t{ServiceResultMillisecondsDuration}");
+            sb.Append($"\t{ServiceResultMilliseconds}");
             sb.Append($"\t{ServiceResultSuccess}");
             sb.Append($"\t{ServiceResultResponse}");
 
