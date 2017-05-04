@@ -4,7 +4,15 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Bot.Builder.Telemetry
 {
-    public class IntentTelemetry
+    public interface IIntentTelemetry
+    {
+        string Intent { get; set; }
+        string Text { get; set; }
+        double Score { get; set; }
+        Dictionary<string, string> Entities { get; set; }
+    }
+
+    public class IntentTelemetry : IIntentTelemetry
     {
         public IntentTelemetry(string intent, string text, double score, Dictionary<string, string> entities = null)
         {
@@ -20,7 +28,13 @@ namespace Microsoft.Bot.Builder.Telemetry
         public Dictionary<string, string> Entities { get; set; }
     }
 
-    public class EntityTelemetry
+    public interface IEntityTelemetry
+    {
+        string Kind { get; set; }
+        string Value { get; set; }
+    }
+
+    public class EntityTelemetry : IEntityTelemetry
     {
         public EntityTelemetry(string kind, string value)
         {
@@ -32,7 +46,13 @@ namespace Microsoft.Bot.Builder.Telemetry
         public string Value { get; set; }
     }
 
-    public class CounterTelemetry
+    public interface ICounterTelemetry
+    {
+        string Counter { get; set; }
+        int Count { get; set; }
+    }
+
+    public class CounterTelemetry : ICounterTelemetry
     {
         public CounterTelemetry(string counter, int count = 1)
         {
@@ -44,7 +64,18 @@ namespace Microsoft.Bot.Builder.Telemetry
         public int Count { get; set; }
     }
 
-    public class ResponseTelemetry
+    public interface IResponseTelemetry
+    {
+        string Text { get; set; }
+        string ImageUrl { get; set; }
+        string Json { get; set; }
+        string Result { get; set; }
+        DateTime StartTime { get; set; }
+        DateTime EndDateTime { get; set; }
+        bool IsCacheHit { get; set; }
+    }
+
+    public class ResponseTelemetry : IResponseTelemetry
     {
         public ResponseTelemetry(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false)
         {
@@ -66,7 +97,16 @@ namespace Microsoft.Bot.Builder.Telemetry
         public bool IsCacheHit { get; set; }
     }
 
-    public class ServiceResultTelemetry
+    public interface IServiceResultTelemetry
+    {
+        string ServiceName { get; set; }
+        DateTime StartDateTime { get; set; }
+        DateTime EndDateTime { get; set; }
+        string Result { get; set; }
+        bool Success { get; set; }
+    }
+
+    public class ServiceResultTelemetry : IServiceResultTelemetry
     {
         public ServiceResultTelemetry(string serviceName, DateTime startDateTime, DateTime endDateTime, string result, bool success = true)
         {
@@ -84,7 +124,14 @@ namespace Microsoft.Bot.Builder.Telemetry
         public bool Success { get; set; }
     }
 
-    public class ExceptionTelemetry
+    public interface IExceptionTelemetry
+    {
+        string Component { get; set; }
+        string Context { get; set; }
+        Exception Ex { get; set; }
+    }
+
+    public class ExceptionTelemetry : IExceptionTelemetry
     {
         public ExceptionTelemetry(string component, string context, Exception ex)
         {
