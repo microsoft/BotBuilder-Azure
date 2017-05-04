@@ -73,7 +73,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
                     {
                         foreach (var entity in intentTelemetryData.IntentEntities)
                         {
-                            await WriteEntityAsync(new TelemetryData { EntityType = entity.Key, EntityValue = entity.Value });
+                            await WriteEntityAsync(entity);
                         }
                     }
 

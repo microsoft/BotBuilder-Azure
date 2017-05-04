@@ -71,23 +71,13 @@ namespace Microsoft.Bot.Builder.Telemetry
             SetContext(context);
         }
 
-        private List<Task> ProcessEntities(Dictionary<string, string> entities)
+        private List<Task> ProcessEntities(IEnumerable<IEntityTelemetryData> entities)
         {
-            List<Task> tasks = new List<Task>();
+            var tasks = new List<Task>();
             foreach (var entity in entities)
             {
-                TelemetryWriters.ForEach(
-                    tw =>
-                    {
-                        tasks.Add(
-                            tw.WriteEntityAsync(new TelemetryData
-                            {
-                                EntityType = entity.Key,
-                                EntityValue = entity.Value
-                            }));
-                    });
+                TelemetryWriters.ForEach(tw => tasks.Add(tw.WriteEntityAsync(entity)));
             }
-
             return tasks;
         }
 

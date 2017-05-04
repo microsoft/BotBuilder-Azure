@@ -61,7 +61,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
                 {
                     foreach (var entity in intentTelemetryData.IntentEntities)
                     {
-                        await WriteEntityAsync(new TelemetryData { EntityType = entity.Key, EntityValue = entity.Value });
+                        await WriteEntityAsync(entity);
                     }
                 }
             }

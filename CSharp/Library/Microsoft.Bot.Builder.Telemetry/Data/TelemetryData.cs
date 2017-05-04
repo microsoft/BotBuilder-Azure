@@ -13,6 +13,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         IExceptionTelemetryData,
         ITraceTelemetryData
     {
+
+        public TelemetryData()
+        {
+            IntentEntities = new List<IEntityTelemetryData>();
+        }
+
         //ICommonTelemetryData
         public string RecordType { get; set; }
         public DateTime Timestamp { get; set; }
@@ -26,7 +32,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string IntentName { get; set; }
         public string IntentText { get; set; }
         public double IntentScore { get; set; }
-        public Dictionary<string, string> IntentEntities { get; set; }
+        public IList<IEntityTelemetryData> IntentEntities { get; }
 
         //IEntityTelemetryData
         public string EntityType { get; set; }
