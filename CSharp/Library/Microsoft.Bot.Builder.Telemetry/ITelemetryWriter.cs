@@ -4,6 +4,18 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Bot.Builder.Telemetry
 {
+
+    public interface ICommonTelemetry
+    {
+        string RecordType { get; set; }
+        DateTime Timestamp { get; set; }
+        string CorrelationId { get; set; }
+        string ChannelId { get; set; }
+        string ConversationId { get; set; }
+        string ActivityId { get; set; }
+        string UserId { get; set; }
+    }
+
     public interface IIntentTelemetry
     {
         string Intent { get; set; }
