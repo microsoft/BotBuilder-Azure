@@ -25,7 +25,7 @@ namespace Microsoft.Bot.Builder.Telemetry
                 //enqueue intent
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(intentTelemetry)); });
                 //enqueue every entity
-                TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(intentTelemetry.Entities)); });
+                TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(intentTelemetry.IntentEntities)); });
 
                 //await all in parallel.
                 await Task.WhenAll(tasks);

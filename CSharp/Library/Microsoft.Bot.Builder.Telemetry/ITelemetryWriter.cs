@@ -18,142 +18,155 @@ namespace Microsoft.Bot.Builder.Telemetry
 
     public interface IIntentTelemetry
     {
-        string Intent { get; set; }
-        string Text { get; set; }
-        double Score { get; set; }
-        Dictionary<string, string> Entities { get; set; }
+        string IntentName { get; set; }
+        string IntentText { get; set; }
+        double IntentScore { get; set; }
+        Dictionary<string, string> IntentEntities { get; set; }
     }
 
     public class IntentTelemetry : IIntentTelemetry
     {
         public IntentTelemetry(string intent, string text, double score, Dictionary<string, string> entities = null)
         {
-            Intent = intent;
-            Text = text;
-            Score = score;
-            Entities = entities;
+            IntentName = intent;
+            IntentText = text;
+            IntentScore = score;
+            IntentEntities = entities;
         }
 
-        public string Intent { get; set; }
-        public string Text { get; set; }
-        public double Score { get; set; }
-        public Dictionary<string, string> Entities { get; set; }
+        public string IntentName { get; set; }
+        public string IntentText { get; set; }
+        public double IntentScore { get; set; }
+        public Dictionary<string, string> IntentEntities { get; set; }
     }
 
     public interface IEntityTelemetry
     {
-        string Kind { get; set; }
-        string Value { get; set; }
+        string EntityType { get; set; }
+        string EntityValue { get; set; }
     }
 
     public class EntityTelemetry : IEntityTelemetry
     {
-        public EntityTelemetry(string kind, string value)
+        public EntityTelemetry(string type, string value)
         {
-            Kind = kind;
-            Value = value;
+            EntityType = type;
+            EntityValue = value;
         }
 
-        public string Kind { get; set; }
-        public string Value { get; set; }
+        public string EntityType { get; set; }
+        public string EntityValue { get; set; }
     }
 
     public interface ICounterTelemetry
     {
-        string Counter { get; set; }
-        int Count { get; set; }
+        string CounterName { get; set; }
+        int CounterValue { get; set; }
     }
 
     public class CounterTelemetry : ICounterTelemetry
     {
         public CounterTelemetry(string counter, int count = 1)
         {
-            Counter = counter;
-            Count = count;
+            CounterName = counter;
+            CounterValue = count;
         }
 
-        public string Counter { get; set; }
-        public int Count { get; set; }
+        public string CounterName { get; set; }
+        public int CounterValue { get; set; }
     }
 
     public interface IResponseTelemetry
     {
-        string Text { get; set; }
-        string ImageUrl { get; set; }
-        string Json { get; set; }
-        string Result { get; set; }
-        DateTime StartTime { get; set; }
-        DateTime EndDateTime { get; set; }
-        bool IsCacheHit { get; set; }
+        string ResponseText { get; set; }
+        string ResponseImageUrl { get; set; }
+        string ResponseJson { get; set; }
+        string ResponseResult { get; set; }
+        DateTime ResponseStartTime { get; set; }
+        DateTime ResponseEndDateTime { get; set; }
+        double ResponseMillisecondsDuration { get; set; }
+        bool ResponseIsCacheHit { get; set; }
     }
 
     public class ResponseTelemetry : IResponseTelemetry
     {
         public ResponseTelemetry(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false)
         {
-            Text = text;
-            ImageUrl = imageUrl;
-            Json = json;
-            Result = result;
-            StartTime = startTime;
-            EndDateTime = endDateTime;
-            IsCacheHit = isCacheHit;
+            ResponseText = text;
+            ResponseImageUrl = imageUrl;
+            ResponseJson = json;
+            ResponseResult = result;
+            ResponseStartTime = startTime;
+            ResponseEndDateTime = endDateTime;
+            ResponseIsCacheHit = isCacheHit;
         }
 
-        public string Text { get; set; }
-        public string ImageUrl { get; set; }
-        public string Json { get; set; }
-        public string Result { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndDateTime { get; set; }
-        public bool IsCacheHit { get; set; }
+        public string ResponseText { get; set; }
+        public string ResponseImageUrl { get; set; }
+        public string ResponseJson { get; set; }
+        public string ResponseResult { get; set; }
+        public DateTime ResponseStartTime { get; set; }
+        public DateTime ResponseEndDateTime { get; set; }
+        public double ResponseMillisecondsDuration { get; set; }
+        public bool ResponseIsCacheHit { get; set; }
     }
 
     public interface IServiceResultTelemetry
     {
-        string ServiceName { get; set; }
-        DateTime StartDateTime { get; set; }
-        DateTime EndDateTime { get; set; }
-        string Result { get; set; }
-        bool Success { get; set; }
+        string ServiceResultName { get; set; }
+        DateTime ServiceResultStartDateTime { get; set; }
+        DateTime ServiceResultEndDateTime { get; set; }
+        double ServiceResultMillisecondsDuration { get; set; }
+        string ServiceResultResponse { get; set; }
+        bool ServiceResultSuccess { get; set; }
     }
 
     public class ServiceResultTelemetry : IServiceResultTelemetry
     {
         public ServiceResultTelemetry(string serviceName, DateTime startDateTime, DateTime endDateTime, string result, bool success = true)
         {
-            ServiceName = serviceName;
-            StartDateTime = startDateTime;
-            EndDateTime = endDateTime;
-            Result = result;
-            Success = success;
+            ServiceResultName = serviceName;
+            ServiceResultStartDateTime = startDateTime;
+            ServiceResultEndDateTime = endDateTime;
+            ServiceResultResponse = result;
+            ServiceResultSuccess = success;
         }
 
-        public string ServiceName { get; set; }
-        public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
-        public string Result { get; set; }
-        public bool Success { get; set; }
+        public string ServiceResultName { get; set; }
+        public DateTime ServiceResultStartDateTime { get; set; }
+        public DateTime ServiceResultEndDateTime { get; set; }
+        public double ServiceResultMillisecondsDuration { get; set; }
+        public string ServiceResultResponse { get; set; }
+        public bool ServiceResultSuccess { get; set; }
     }
 
     public interface IExceptionTelemetry
     {
-        string Component { get; set; }
-        string Context { get; set; }
+        string ExceptionComponent { get; set; }
+        string ExceptionContext { get; set; }
         Exception Ex { get; set; }
+    }
+
+    interface ITraceTelemetry
+    {
+        string TraceName { get; set; }
+        string TraceJson { get; set; }
     }
 
     public class ExceptionTelemetry : IExceptionTelemetry
     {
-        public ExceptionTelemetry(string component, string context, Exception ex)
+        public ExceptionTelemetry(string exceptionComponent, string exceptionContext, Exception ex)
         {
-            Component = component;
-            Context = context;
+            ExceptionComponent = exceptionComponent;
+            ExceptionContext = exceptionContext;
             Ex = ex;
         }
 
-        public string Component { get; set; }
-        public string Context { get; set; }
+        public string ExceptionComponent { get; set; }
+        public string ExceptionContext { get; set; }
+        public string ExceptionType { get; set; }
+        public string ExceptionMessage { get; set; }
+        public string ExceptionDetail { get; set; }
         public Exception Ex { get; set; }
     }
 

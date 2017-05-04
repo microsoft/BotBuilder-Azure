@@ -54,9 +54,9 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
                 {
                     ThreadsafeWriteToFile(_outputFormatter.FormatIntent(intentTelemetry));
 
-                    if (null != intentTelemetry.Entities)
+                    if (null != intentTelemetry.IntentEntities)
                     {
-                        foreach (var entity in intentTelemetry.Entities)
+                        foreach (var entity in intentTelemetry.IntentEntities)
                         {
                             await WriteEntityAsync(new EntityTelemetry(entity.Key, entity.Value));
                         }

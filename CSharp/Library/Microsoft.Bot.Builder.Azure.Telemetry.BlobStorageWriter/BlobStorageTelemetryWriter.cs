@@ -68,9 +68,9 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
                 await Task.Run(async () =>
                 {
                     //process each entity if we have any
-                    if (null != intentTelemetry.Entities)
+                    if (null != intentTelemetry.IntentEntities)
                     {
-                        foreach (var entity in intentTelemetry.Entities)
+                        foreach (var entity in intentTelemetry.IntentEntities)
                         {
                             await WriteEntityAsync(new EntityTelemetry(entity.Key, entity.Value));
                         }

@@ -27,10 +27,10 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             var record = new SingleRowTelemetryRecord
             {
                 RecordType = "serviceResult",
-                ServiceResultName = serviceResultTelemetry.ServiceName,
-                ServiceResultResponse = serviceResultTelemetry.Result,
-                ServiceResultSuccess = $"{serviceResultTelemetry.Success}",
-                ServiceResultMilliseconds = $"{serviceResultTelemetry.EndDateTime.Subtract(serviceResultTelemetry.StartDateTime).TotalMilliseconds}"
+                ServiceResultName = serviceResultTelemetry.ServiceResultName,
+                ServiceResultResponse = serviceResultTelemetry.ServiceResultResponse,
+                ServiceResultSuccess = serviceResultTelemetry.ServiceResultSuccess,
+                ServiceResultMillisecondsDuration = serviceResultTelemetry.ServiceResultEndDateTime.Subtract(serviceResultTelemetry.ServiceResultStartDateTime).TotalMilliseconds
             };
 
             return record.AsStringWith(_context);
@@ -38,29 +38,29 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatIntent(IIntentTelemetry intentTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intentTelemetry.Intent, IntentText = intentTelemetry.Text, IntentScore = $"{intentTelemetry.Score}" };
+            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intentTelemetry.IntentName, IntentText = intentTelemetry.IntentText, IntentScore = intentTelemetry.IntentScore };
             return record.AsStringWith(_context);
         }
 
         public string FormatEntity(IEntityTelemetry entityTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "entity", EntityType = entityTelemetry.Kind, EntityValue = entityTelemetry.Value };
+            var record = new SingleRowTelemetryRecord { RecordType = "entity", EntityType = entityTelemetry.EntityType, EntityValue = entityTelemetry.EntityValue };
             return record.AsStringWith(_context);
         }
 
         public string FormatResponse(IResponseTelemetry responseTelemetry)
         {
 
-            var duration = responseTelemetry.StartTime.Subtract(responseTelemetry.EndDateTime).TotalMilliseconds;
+            var duration = responseTelemetry.ResponseStartTime.Subtract(responseTelemetry.ResponseEndDateTime).TotalMilliseconds;
             var record = new SingleRowTelemetryRecord
             {
                 RecordType = "response",
-                ResponseText = responseTelemetry.Text,
-                ResponseImageUrl = responseTelemetry.ImageUrl,
-                ResponseJson = responseTelemetry.Json,
-                ResponseResult = responseTelemetry.Result,
-                ResponseDuration = $"{duration}",
-                ResponseCacheHit = $"{responseTelemetry.IsCacheHit}"
+                ResponseText = responseTelemetry.ResponseText,
+                ResponseImageUrl = responseTelemetry.ResponseImageUrl,
+                ResponseJson = responseTelemetry.ResponseJson,
+                ResponseResult = responseTelemetry.ResponseResult,
+                ResponseMillisecondsDuration = duration,
+                ResponseIsCacheHit = responseTelemetry.ResponseIsCacheHit
             };
 
             return record.AsStringWith(_context);
@@ -68,7 +68,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatCounter(ICounterTelemetry counterTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "counter", CounterName = counterTelemetry.Counter, CounterValue = $"{counterTelemetry.Count}" };
+            var record = new SingleRowTelemetryRecord { RecordType = "counter", CounterName = counterTelemetry.CounterName, CounterValue = counterTelemetry.CounterValue };
             return record.AsStringWith(_context);
         }
 
@@ -77,8 +77,8 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             var record = new SingleRowTelemetryRecord
             {
                 RecordType = "exception",
-                ExceptionContext = exceptionTelemetry.Context,
-                ExceptionComponent = exceptionTelemetry.Component,
+                ExceptionContext = exceptionTelemetry.ExceptionContext,
+                ExceptionComponent = exceptionTelemetry.ExceptionComponent,
                 ExceptionMessage = exceptionTelemetry.Ex.Message,
                 ExceptionDetail = exceptionTelemetry.Ex.ToString(),
                 ExceptionType = exceptionTelemetry.Ex.GetType().ToString()
@@ -118,7 +118,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
             );
 
-            var record = new SingleRowTelemetryRecord { RecordType = "trace", TraceName = "trace", TraceValue = $"{jsonObject.ToString(Formatting.None)}" };
+            var record = new SingleRowTelemetryRecord { RecordType = "trace", TraceName = "trace", TraceJson = $"{jsonObject.ToString(Formatting.None)}" };
             return record.AsStringWith(_context);
         }
     }

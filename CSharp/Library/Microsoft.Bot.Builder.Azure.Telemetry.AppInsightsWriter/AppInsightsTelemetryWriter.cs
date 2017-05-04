@@ -56,11 +56,11 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
-                    properties.Add("intent", intentTelemetry.Intent);
+                    properties.Add("intent", intentTelemetry.IntentName);
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"score", intentTelemetry.Score }
+                        {"score", intentTelemetry.IntentScore }
                     };
 
                     _telemetry.TrackEvent("Intent", properties, metrics);
@@ -78,8 +78,8 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("entity", entityTelemetry.Kind);
-                    properties.Add("value", entityTelemetry.Value);
+                    properties.Add("entity", entityTelemetry.EntityType);
+                    properties.Add("value", entityTelemetry.EntityValue);
 
                     _telemetry.TrackEvent("Entity", properties);
                     DoPostLogActions();
@@ -92,18 +92,18 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
-                var duration = responseTelemetry.StartTime.Subtract(responseTelemetry.EndDateTime).TotalMilliseconds;
+                var duration = responseTelemetry.ResponseStartTime.Subtract(responseTelemetry.ResponseEndDateTime).TotalMilliseconds;
 
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("text", responseTelemetry.Text);
-                    properties.Add("image", responseTelemetry.ImageUrl);
-                    properties.Add("json", responseTelemetry.Json);
-                    properties.Add("result", responseTelemetry.Result);
+                    properties.Add("text", responseTelemetry.ResponseText);
+                    properties.Add("image", responseTelemetry.ResponseImageUrl);
+                    properties.Add("json", responseTelemetry.ResponseJson);
+                    properties.Add("result", responseTelemetry.ResponseResult);
                     properties.Add("duration", $"{duration}");
-                    properties.Add("cacheHit", $"{responseTelemetry.IsCacheHit}");
+                    properties.Add("cacheHit", $"{responseTelemetry.ResponseIsCacheHit}");
 
                     _telemetry.TrackEvent("Response", properties);
                     DoPostLogActions();
@@ -119,9 +119,9 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
-                    properties.Add("name", counterTelemetry.Counter);
+                    properties.Add("name", counterTelemetry.CounterName);
 
-                    var metrics = new Dictionary<string, double> { { "count", counterTelemetry.Count } };
+                    var metrics = new Dictionary<string, double> { { "count", counterTelemetry.CounterValue } };
 
                     _telemetry.TrackEvent("Counter", properties, metrics);
                     DoPostLogActions();
@@ -137,13 +137,13 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("serviceName", serviceResultTelemetry.ServiceName);
-                    properties.Add("result", serviceResultTelemetry.Result);
-                    properties.Add("success", serviceResultTelemetry.Success.ToString());
+                    properties.Add("serviceName", serviceResultTelemetry.ServiceResultName);
+                    properties.Add("result", serviceResultTelemetry.ServiceResultResponse);
+                    properties.Add("success", serviceResultTelemetry.ServiceResultSuccess.ToString());
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"millisecondsDuration", serviceResultTelemetry.EndDateTime.Subtract(serviceResultTelemetry.StartDateTime).TotalMilliseconds }
+                        {"millisecondsDuration", serviceResultTelemetry.ServiceResultEndDateTime.Subtract(serviceResultTelemetry.ServiceResultStartDateTime).TotalMilliseconds }
                     };
 
                     _telemetry.TrackEvent("ServiceResult", properties, metrics);
@@ -161,8 +161,8 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("component", exceptionTelemetry.Component);
-                    properties.Add("context", exceptionTelemetry.Context);
+                    properties.Add("component", exceptionTelemetry.ExceptionComponent);
+                    properties.Add("context", exceptionTelemetry.ExceptionContext);
 
                     _telemetry.TrackException(exceptionTelemetry.Ex, properties);
                     DoPostLogActions();
