@@ -100,7 +100,7 @@
     <Compile Include="PerDayShardStrategy.cs" />
     <Compile Include="PerMinuteShardStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Data\SingleRowTelemetryRecord.cs" />
+    <Compile Include="Data\AggregatedTelemetryRecord.cs" />
     <Compile Include="TelemetryContext.cs" />
     <Compile Include="TelemetryModule.cs" />
     <Compile Include="TelemetryReporter.cs" />

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public interface IIntentTelemetry
+    public interface IIntentTelemetry : ICommonTelemetry
     {
         string IntentName { get; set; }
         string IntentText { get; set; }

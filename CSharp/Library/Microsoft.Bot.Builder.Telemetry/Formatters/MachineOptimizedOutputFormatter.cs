@@ -25,7 +25,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatServiceResult(IServiceResultTelemetry serviceResultTelemetry)
         {
-            var record = new SingleRowTelemetryRecord
+            var record = new AggregatedTelemetryRecord
             {
                 RecordType = "serviceResult",
                 ServiceResultName = serviceResultTelemetry.ServiceResultName,
@@ -39,13 +39,13 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatIntent(IIntentTelemetry intentTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intentTelemetry.IntentName, IntentText = intentTelemetry.IntentText, IntentScore = intentTelemetry.IntentScore };
+            var record = new AggregatedTelemetryRecord { RecordType = "intent", IntentName = intentTelemetry.IntentName, IntentText = intentTelemetry.IntentText, IntentScore = intentTelemetry.IntentScore };
             return record.AsStringWith(_context);
         }
 
         public string FormatEntity(IEntityTelemetry entityTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "entity", EntityType = entityTelemetry.EntityType, EntityValue = entityTelemetry.EntityValue };
+            var record = new AggregatedTelemetryRecord { RecordType = "entity", EntityType = entityTelemetry.EntityType, EntityValue = entityTelemetry.EntityValue };
             return record.AsStringWith(_context);
         }
 
@@ -53,7 +53,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
         {
 
             var duration = responseTelemetry.ResponseStartTime.Subtract(responseTelemetry.ResponseEndDateTime).TotalMilliseconds;
-            var record = new SingleRowTelemetryRecord
+            var record = new AggregatedTelemetryRecord
             {
                 RecordType = "response",
                 ResponseText = responseTelemetry.ResponseText,
@@ -69,13 +69,13 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatCounter(ICounterTelemetry counterTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "counter", CounterName = counterTelemetry.CounterName, CounterValue = counterTelemetry.CounterValue };
+            var record = new AggregatedTelemetryRecord { RecordType = "counter", CounterName = counterTelemetry.CounterName, CounterValue = counterTelemetry.CounterValue };
             return record.AsStringWith(_context);
         }
 
         public string FormatException(IExceptionTelemetry exceptionTelemetry)
         {
-            var record = new SingleRowTelemetryRecord
+            var record = new AggregatedTelemetryRecord
             {
                 RecordType = "exception",
                 ExceptionContext = exceptionTelemetry.ExceptionContext,
@@ -119,7 +119,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
             );
 
-            var record = new SingleRowTelemetryRecord { RecordType = "trace", TraceName = "trace", TraceJson = $"{jsonObject.ToString(Formatting.None)}" };
+            var record = new AggregatedTelemetryRecord { RecordType = "trace", TraceName = "trace", TraceJson = $"{jsonObject.ToString(Formatting.None)}" };
             return record.AsStringWith(_context);
         }
     }

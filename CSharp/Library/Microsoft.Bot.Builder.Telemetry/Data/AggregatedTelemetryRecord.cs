@@ -4,8 +4,7 @@ using System.Text;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public class SingleRowTelemetryRecord
-        : ICommonTelemetry,
+    public class AggregatedTelemetryRecord :
         IIntentTelemetry,
         IEntityTelemetry,
         IResponseTelemetry,

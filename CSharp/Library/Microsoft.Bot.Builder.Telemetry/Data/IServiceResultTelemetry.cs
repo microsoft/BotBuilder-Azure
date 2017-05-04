@@ -2,7 +2,7 @@ using System;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public interface IServiceResultTelemetry
+    public interface IServiceResultTelemetry : ICommonTelemetry
     {
         string ServiceResultName { get; set; }
         DateTime ServiceResultStartDateTime { get; set; }

@@ -80,7 +80,7 @@ namespace Microsoft.Bot.Builder.Telemetry
                     tw =>
                     {
                         tasks.Add(
-                            tw.WriteEntityAsync(new SingleRowTelemetryRecord
+                            tw.WriteEntityAsync(new AggregatedTelemetryRecord
                             {
                                 EntityType = entity.Key,
                                 EntityValue = entity.Value
@@ -129,7 +129,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteCounterAsync(new SingleRowTelemetryRecord { CounterName = dialog, CounterValue = 1 })); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteCounterAsync(new AggregatedTelemetryRecord { CounterName = dialog, CounterValue = 1 })); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }
