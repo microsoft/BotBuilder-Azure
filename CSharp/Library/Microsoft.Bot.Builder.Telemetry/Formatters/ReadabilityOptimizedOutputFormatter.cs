@@ -21,33 +21,32 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
         }
         public string FormatCounter(ICounterTelemetryData counterTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tCounter: [{counterTelemetryData.CounterName}] - Count: [{counterTelemetryData.CounterValue}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tCounter: [{counterTelemetryData.CounterName}] - Count: [{counterTelemetryData.CounterValue}]";
         }
 
         public string FormatEntity(IEntityTelemetryData entityTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEntity: [{entityTelemetryData.EntityType}]-[{entityTelemetryData.EntityValue}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tEntity: [{entityTelemetryData.EntityType} ({entityTelemetryData.EntityConfidenceScore})]-[{entityTelemetryData.EntityValue}]";
         }
 
         public string FormatResponse(IResponseTelemetryData responseTelemetryData)
         {
-            var duration = responseTelemetryData.ResponseStartDateTime.Subtract(responseTelemetryData.ResponseEndDateTime).TotalMilliseconds;
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tResponse: [{responseTelemetryData.ResponseResult} / {responseTelemetryData.ResponseImageUrl} / {responseTelemetryData.ResponseJson} / {duration} / {responseTelemetryData.ResponseIsCacheHit}] - [{responseTelemetryData.ResponseText}] ";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tResponse: [ result: {responseTelemetryData.ResponseResult} / image URL: {responseTelemetryData.ResponseImageUrl} / JSON: {responseTelemetryData.ResponseJson} / duration (ms): {responseTelemetryData.ResponseMilliseconds} / cache hit?: {responseTelemetryData.ResponseIsCacheHit}] - [{responseTelemetryData.ResponseText}] ";
         }
 
         public string FormatException(IExceptionTelemetryData exceptionTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tException: [{exceptionTelemetryData.ExceptionComponent} with [{exceptionTelemetryData.ExceptionContext}]" + Environment.NewLine + $"\t{exceptionTelemetryData.Ex}";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tException: [{exceptionTelemetryData.ExceptionComponent} with [{exceptionTelemetryData.ExceptionContext}]" + Environment.NewLine + $"\t{exceptionTelemetryData.Ex}";
         }
 
         public string FormatIntent(IIntentTelemetryData intentTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentScore})] - [{intentTelemetryData.IntentText}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentScore})] - [{intentTelemetryData.IntentText}]";
         }
 
         public string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tServiceResult: [{serviceResultTelemetryData.ServiceResultName}] - result: [{serviceResultTelemetryData.ServiceResultResponse}] - duration(ms): [{serviceResultTelemetryData.ServiceResultEndDateTime.Subtract(serviceResultTelemetryData.ServiceResultStartDateTime).TotalMilliseconds}] - success: [{serviceResultTelemetryData.ServiceResultSuccess}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tServiceResult: [{serviceResultTelemetryData.ServiceResultName}] - result: [{serviceResultTelemetryData.ServiceResultResponse}] - duration(ms): [{serviceResultTelemetryData.ServiceResultEndDateTime.Subtract(serviceResultTelemetryData.ServiceResultStartDateTime).TotalMilliseconds}] - success: [{serviceResultTelemetryData.ServiceResultSuccess}]";
         }
 
         public void SetContext(ITelemetryContext context)
@@ -55,7 +54,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             _context = context;
         }
 
-        private string GetBotContextProperties()
+        private string GetTelemetryContextProperties()
         {
             return $"correlationId: {_context.CorrelationId}\tchannelId: {_context.ChannelId}\tconversationId: {_context.ConversationId}\tactivityId: {_context.ActivityId}\tuserId: {_context.UserId}\ttimestamp: {_context.Timestamp}";
         }
@@ -69,7 +68,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
                 message.Append($"[{metric.Key},{metric.Value}]");
             }
 
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEvent: [{message}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tEvent: [{message}]";
         }
 
         public string FormatEvent(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
@@ -89,7 +88,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
                 }
             }
 
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tEvent: [{message}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tEvent: [{message}]";
         }
     }
 }
