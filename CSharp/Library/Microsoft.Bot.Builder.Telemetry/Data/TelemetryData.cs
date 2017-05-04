@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public class AggregatedTelemetryRecord :
-        IIntentTelemetry,
-        IEntityTelemetry,
-        IResponseTelemetry,
-        ICounterTelemetry,
-        IServiceResultTelemetry,
-        IExceptionTelemetry,
-        ITraceTelemetry
+    public class TelemetryData :
+        IIntentTelemetryData,
+        IEntityTelemetryData,
+        IResponseTelemetryData,
+        ICounterTelemetryData,
+        IServiceResultTelemetryData,
+        IExceptionTelemetryData,
+        ITraceTelemetryData
     {
         //ICommonTelemetry
         public string RecordType { get; set; }
@@ -22,48 +22,50 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string ActivityId { get; set; }
         public string UserId { get; set; }
 
-        //IIntentTelemetry
+        //IIntentTelemetryData
         public string IntentName { get; set; }
         public string IntentText { get; set; }
         public double IntentScore { get; set; }
         public Dictionary<string, string> IntentEntities { get; set; }
 
-        //IEntityTelemetry
+        //IEntityTelemetryData
         public string EntityType { get; set; }
         public string EntityValue { get; set; }
+        public double EntityConfidenceScore { get; set; }
 
-        //IResponseTelemetry
+        //IResponseTelemetryData
         public string ResponseText { get; set; }
         public string ResponseImageUrl { get; set; }
         public string ResponseJson { get; set; }
         public string ResponseResult { get; set; }
-        public DateTime ResponseStartTime { get; set; }
+        public string ResponseType { get; set; }
+        public DateTime ResponseStartDateTime { get; set; }
         public DateTime ResponseEndDateTime { get; set; }
-        public double ResponseMillisecondsDuration { get; set; }
         public bool ResponseIsCacheHit { get; set; }
+        public double ResponseMilliseconds => ResponseStartDateTime.Subtract(ResponseEndDateTime).TotalMilliseconds;
 
-        //ICounterTelemetry
+        //ICounterTelemetryData
         public string CounterName { get; set; }
         public int CounterValue { get; set; }
 
-        //IServiceResultTelemetry
+        //IServiceResultTelemetryData
         public string ServiceResultName { get; set; }
+        public double ServiceResultMilliseconds => ServiceResultStartDateTime.Subtract(ServiceResultEndDateTime).TotalMilliseconds;
         public bool ServiceResultSuccess { get; set; }
         public string ServiceResultResponse { get; set; }
         public DateTime ServiceResultStartDateTime { get; set; }
         public DateTime ServiceResultEndDateTime { get; set; }
-        public double ServiceResultMillisecondsDuration { get; set; }
 
-        //ITraceTelemetry
+        //ITraceTelemetryData
         public string TraceName { get; set; }
         public string TraceJson { get; set; }
 
-        //IExceptionTelemetry
+        //IExceptionTelemetryData
         public string ExceptionComponent { get; set; }
         public string ExceptionContext { get; set; }
-        public string ExceptionType { get; set; }
-        public string ExceptionMessage { get; set; }
-        public string ExceptionDetail { get; set; }
+        public Type ExceptionType => Ex?.GetType() ?? typeof(object);
+        public string ExceptionMessage => Ex?.Message ?? string.Empty;
+        public string ExceptionDetail => Ex?.ToString() ?? string.Empty;
         public Exception Ex { get; set; }
 
 
@@ -72,7 +74,6 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             var sb = new StringBuilder();
 
             sb.Append($"{RecordType}");
-
             sb.Append($"\t{context.Timestamp}");
             sb.Append($"\t{context.CorrelationId}");
             sb.Append($"\t{context.ChannelId}");
@@ -86,20 +87,21 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
 
             sb.Append($"\t{EntityType}");
             sb.Append($"\t{EntityValue}");
+            sb.Append($"\t{EntityConfidenceScore}");
 
             sb.Append($"\t{ResponseText}");
             sb.Append($"\t{ResponseImageUrl}");
             sb.Append($"\t{ResponseJson}");
             sb.Append($"\t{ResponseResult}");
-            sb.Append($"\t{ResponseMillisecondsDuration}");
+            sb.Append($"\t{ResponseType}");
             sb.Append($"\t{ResponseIsCacheHit}");
-
+            sb.Append($"\t{ResponseMilliseconds}");
 
             sb.Append($"\t{CounterName}");
             sb.Append($"\t{CounterValue}");
 
             sb.Append($"\t{ServiceResultName}");
-            sb.Append($"\t{ServiceResultMillisecondsDuration}");
+            sb.Append($"\t{ServiceResultMilliseconds}");
             sb.Append($"\t{ServiceResultSuccess}");
             sb.Append($"\t{ServiceResultResponse}");
 
@@ -117,11 +119,13 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             return sb.ToString();
         }
 
-
-
-
-
-
-
+        public static IIntentTelemetryData NewIntentData() { return new TelemetryData(); }
+        public static IEntityTelemetryData NewEntityData() { return new TelemetryData(); }
+        public static IResponseTelemetryData NewResponseData() { return new TelemetryData(); }
+        public static ICounterTelemetryData NewCounterData() { return new TelemetryData(); }
+        public static IServiceResultTelemetryData NewServiceResultData() { return new TelemetryData(); }
+        public static IExceptionTelemetryData NewExceptionData() { return new TelemetryData(); }
+        public static ITraceTelemetryData NewTraceData() { return new TelemetryData(); }
+        
     }
 }

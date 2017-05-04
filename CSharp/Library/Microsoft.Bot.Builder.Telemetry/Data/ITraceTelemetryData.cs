@@ -1,6 +1,6 @@
-namespace Microsoft.Bot.Builder.Telemetry
+namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    interface ITraceTelemetry
+    public interface ITraceTelemetryData
     {
         string TraceName { get; set; }
         string TraceJson { get; set; }

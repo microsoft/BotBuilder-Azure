@@ -50,18 +50,18 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             if (_configuration.FlushEveryWrite) _telemetry.Flush();
         }
 
-        public async Task WriteIntentAsync(IIntentTelemetry intentTelemetry)
+        public async Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
-                    properties.Add("intent", intentTelemetry.IntentName);
+                    properties.Add("intent", intentTelemetryData.IntentName);
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"score", intentTelemetry.IntentScore }
+                        {"score", intentTelemetryData.IntentScore }
                     };
 
                     _telemetry.TrackEvent("Intent", properties, metrics);
@@ -71,7 +71,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             }
         }
 
-        public async Task WriteEntityAsync(IEntityTelemetry entityTelemetry)
+        public async Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
             {
@@ -79,8 +79,8 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("entity", entityTelemetry.EntityType);
-                    properties.Add("value", entityTelemetry.EntityValue);
+                    properties.Add("entity", entityTelemetryData.EntityType);
+                    properties.Add("value", entityTelemetryData.EntityValue);
 
                     _telemetry.TrackEvent("Entity", properties);
                     DoPostLogActions();
@@ -89,22 +89,22 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             }
         }
 
-        public async Task WriteResponseAsync(IResponseTelemetry responseTelemetry)
+        public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
-                var duration = responseTelemetry.ResponseStartTime.Subtract(responseTelemetry.ResponseEndDateTime).TotalMilliseconds;
+                var duration = responseTelemetryData.ResponseStartDateTime.Subtract(responseTelemetryData.ResponseEndDateTime).TotalMilliseconds;
 
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("text", responseTelemetry.ResponseText);
-                    properties.Add("image", responseTelemetry.ResponseImageUrl);
-                    properties.Add("json", responseTelemetry.ResponseJson);
-                    properties.Add("result", responseTelemetry.ResponseResult);
+                    properties.Add("text", responseTelemetryData.ResponseText);
+                    properties.Add("image", responseTelemetryData.ResponseImageUrl);
+                    properties.Add("json", responseTelemetryData.ResponseJson);
+                    properties.Add("result", responseTelemetryData.ResponseResult);
                     properties.Add("duration", $"{duration}");
-                    properties.Add("cacheHit", $"{responseTelemetry.ResponseIsCacheHit}");
+                    properties.Add("cacheHit", $"{responseTelemetryData.ResponseIsCacheHit}");
 
                     _telemetry.TrackEvent("Response", properties);
                     DoPostLogActions();
@@ -113,16 +113,16 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             }
         }
 
-        public async Task WriteCounterAsync(ICounterTelemetry counterTelemetry)
+        public async Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
-                    properties.Add("name", counterTelemetry.CounterName);
+                    properties.Add("name", counterTelemetryData.CounterName);
 
-                    var metrics = new Dictionary<string, double> { { "count", counterTelemetry.CounterValue } };
+                    var metrics = new Dictionary<string, double> { { "count", counterTelemetryData.CounterValue } };
 
                     _telemetry.TrackEvent("Counter", properties, metrics);
                     DoPostLogActions();
@@ -130,7 +130,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             }
         }
 
-        public async Task WriteServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry)
+        public async Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
@@ -138,13 +138,13 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("serviceName", serviceResultTelemetry.ServiceResultName);
-                    properties.Add("result", serviceResultTelemetry.ServiceResultResponse);
-                    properties.Add("success", serviceResultTelemetry.ServiceResultSuccess.ToString());
+                    properties.Add("serviceName", serviceResultTelemetryData.ServiceResultName);
+                    properties.Add("result", serviceResultTelemetryData.ServiceResultResponse);
+                    properties.Add("success", serviceResultTelemetryData.ServiceResultSuccess.ToString());
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"millisecondsDuration", serviceResultTelemetry.ServiceResultEndDateTime.Subtract(serviceResultTelemetry.ServiceResultStartDateTime).TotalMilliseconds }
+                        {"millisecondsDuration", serviceResultTelemetryData.ServiceResultEndDateTime.Subtract(serviceResultTelemetryData.ServiceResultStartDateTime).TotalMilliseconds }
                     };
 
                     _telemetry.TrackEvent("ServiceResult", properties, metrics);
@@ -154,7 +154,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
 
         }
 
-        public async Task WriteExceptionAsync(IExceptionTelemetry exceptionTelemetry)
+        public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {
@@ -162,10 +162,10 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("component", exceptionTelemetry.ExceptionComponent);
-                    properties.Add("context", exceptionTelemetry.ExceptionContext);
+                    properties.Add("component", exceptionTelemetryData.ExceptionComponent);
+                    properties.Add("context", exceptionTelemetryData.ExceptionContext);
 
-                    _telemetry.TrackException(exceptionTelemetry.Ex, properties);
+                    _telemetry.TrackException(exceptionTelemetryData.Ex, properties);
                     DoPostLogActions();
                 });
             }

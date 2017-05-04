@@ -18,60 +18,60 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             SetField.NotNull(out _outputFormatter, nameof(formatter), formatter);
         }
 
-        public async Task WriteCounterAsync(ICounterTelemetry counterTelemetry)
+        public async Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
-                Debug.WriteLine(_outputFormatter.FormatCounter(counterTelemetry));
+                Debug.WriteLine(_outputFormatter.FormatCounter(counterTelemetryData));
             }
         }
 
-        public async Task WriteExceptionAsync(IExceptionTelemetry exceptionTelemetry)
+        public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {
-                Debug.WriteLine(_outputFormatter.FormatException(exceptionTelemetry));
+                Debug.WriteLine(_outputFormatter.FormatException(exceptionTelemetryData));
             }
         }
 
-        public async Task WriteServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry)
+        public async Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
-                Debug.WriteLine(_outputFormatter.FormatServiceResult(serviceResultTelemetry));
+                Debug.WriteLine(_outputFormatter.FormatServiceResult(serviceResultTelemetryData));
 
             }
         }
 
-        public async Task WriteEntityAsync(IEntityTelemetry entityTelemetry)
+        public async Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
             {
-                Debug.WriteLine(_outputFormatter.FormatEntity(entityTelemetry));
+                Debug.WriteLine(_outputFormatter.FormatEntity(entityTelemetryData));
             }
         }
 
-        public async Task WriteIntentAsync(IIntentTelemetry intentTelemetry)
+        public async Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
-                Debug.WriteLine(_outputFormatter.FormatIntent(intentTelemetry));
+                Debug.WriteLine(_outputFormatter.FormatIntent(intentTelemetryData));
 
-                if (null != intentTelemetry.IntentEntities)
+                if (null != intentTelemetryData.IntentEntities)
                 {
-                    foreach (var entity in intentTelemetry.IntentEntities)
+                    foreach (var entity in intentTelemetryData.IntentEntities)
                     {
-                        await WriteEntityAsync(new AggregatedTelemetryRecord { EntityType = entity.Key, EntityValue = entity.Value });
+                        await WriteEntityAsync(new TelemetryData { EntityType = entity.Key, EntityValue = entity.Value });
                     }
                 }
             }
         }
 
-        public async Task WriteResponseAsync(IResponseTelemetry responseTelemetry)
+        public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
-                Debug.WriteLine(_outputFormatter.FormatResponse(responseTelemetry));
+                Debug.WriteLine(_outputFormatter.FormatResponse(responseTelemetryData));
             }
         }
 

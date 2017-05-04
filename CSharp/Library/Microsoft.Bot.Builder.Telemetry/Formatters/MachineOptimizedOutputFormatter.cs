@@ -23,66 +23,82 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             _context = context;
         }
 
-        public string FormatServiceResult(IServiceResultTelemetry serviceResultTelemetry)
+        public string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData)
         {
-            var record = new AggregatedTelemetryRecord
+            var record = new TelemetryData
             {
                 RecordType = "serviceResult",
-                ServiceResultName = serviceResultTelemetry.ServiceResultName,
-                ServiceResultResponse = serviceResultTelemetry.ServiceResultResponse,
-                ServiceResultSuccess = serviceResultTelemetry.ServiceResultSuccess,
-                ServiceResultMillisecondsDuration = serviceResultTelemetry.ServiceResultEndDateTime.Subtract(serviceResultTelemetry.ServiceResultStartDateTime).TotalMilliseconds
+                ServiceResultName = serviceResultTelemetryData.ServiceResultName,
+                ServiceResultResponse = serviceResultTelemetryData.ServiceResultResponse,
+                ServiceResultSuccess = serviceResultTelemetryData.ServiceResultSuccess,
+                ServiceResultStartDateTime = serviceResultTelemetryData.ServiceResultStartDateTime,
+                ServiceResultEndDateTime = serviceResultTelemetryData.ServiceResultEndDateTime,
             };
 
             return record.AsStringWith(_context);
         }
 
-        public string FormatIntent(IIntentTelemetry intentTelemetry)
+        public string FormatIntent(IIntentTelemetryData intentTelemetryData)
         {
-            var record = new AggregatedTelemetryRecord { RecordType = "intent", IntentName = intentTelemetry.IntentName, IntentText = intentTelemetry.IntentText, IntentScore = intentTelemetry.IntentScore };
+            var record = new TelemetryData
+            {
+                RecordType = "intent",
+                IntentName = intentTelemetryData.IntentName,
+                IntentText = intentTelemetryData.IntentText,
+                IntentScore = intentTelemetryData.IntentScore
+            };
             return record.AsStringWith(_context);
         }
 
-        public string FormatEntity(IEntityTelemetry entityTelemetry)
+        public string FormatEntity(IEntityTelemetryData entityTelemetryData)
         {
-            var record = new AggregatedTelemetryRecord { RecordType = "entity", EntityType = entityTelemetry.EntityType, EntityValue = entityTelemetry.EntityValue };
+            var record = new TelemetryData
+            {
+                RecordType = "entity",
+                EntityType = entityTelemetryData.EntityType,
+                EntityValue = entityTelemetryData.EntityValue,
+                EntityConfidenceScore = entityTelemetryData.EntityConfidenceScore
+            };
             return record.AsStringWith(_context);
         }
 
-        public string FormatResponse(IResponseTelemetry responseTelemetry)
+        public string FormatResponse(IResponseTelemetryData responseTelemetryData)
         {
-
-            var duration = responseTelemetry.ResponseStartTime.Subtract(responseTelemetry.ResponseEndDateTime).TotalMilliseconds;
-            var record = new AggregatedTelemetryRecord
+            var record = new TelemetryData
             {
                 RecordType = "response",
-                ResponseText = responseTelemetry.ResponseText,
-                ResponseImageUrl = responseTelemetry.ResponseImageUrl,
-                ResponseJson = responseTelemetry.ResponseJson,
-                ResponseResult = responseTelemetry.ResponseResult,
-                ResponseMillisecondsDuration = duration,
-                ResponseIsCacheHit = responseTelemetry.ResponseIsCacheHit
+                ResponseText = responseTelemetryData.ResponseText,
+                ResponseImageUrl = responseTelemetryData.ResponseImageUrl,
+                ResponseJson = responseTelemetryData.ResponseJson,
+                ResponseResult = responseTelemetryData.ResponseResult,
+                ResponseType = responseTelemetryData.ResponseType,
+                ResponseStartDateTime = responseTelemetryData.ResponseStartDateTime,
+                ResponseEndDateTime = responseTelemetryData.ResponseEndDateTime,
+                ResponseIsCacheHit = responseTelemetryData.ResponseIsCacheHit
             };
 
             return record.AsStringWith(_context);
         }
 
-        public string FormatCounter(ICounterTelemetry counterTelemetry)
+        public string FormatCounter(ICounterTelemetryData counterTelemetryData)
         {
-            var record = new AggregatedTelemetryRecord { RecordType = "counter", CounterName = counterTelemetry.CounterName, CounterValue = counterTelemetry.CounterValue };
+            var record = new TelemetryData
+            {
+                RecordType = "counter",
+                CounterName = counterTelemetryData.CounterName,
+                CounterValue = counterTelemetryData.CounterValue
+            };
             return record.AsStringWith(_context);
         }
 
-        public string FormatException(IExceptionTelemetry exceptionTelemetry)
+        public string FormatException(IExceptionTelemetryData exceptionTelemetryData)
         {
-            var record = new AggregatedTelemetryRecord
+            var record = new TelemetryData
             {
                 RecordType = "exception",
-                ExceptionContext = exceptionTelemetry.ExceptionContext,
-                ExceptionComponent = exceptionTelemetry.ExceptionComponent,
-                ExceptionMessage = exceptionTelemetry.Ex.Message,
-                ExceptionDetail = exceptionTelemetry.Ex.ToString(),
-                ExceptionType = exceptionTelemetry.Ex.GetType().ToString()
+                ExceptionContext = exceptionTelemetryData.ExceptionContext,
+                ExceptionComponent = exceptionTelemetryData.ExceptionComponent,
+                Ex = exceptionTelemetryData.Ex,
             };
 
             return record.AsStringWith(_context);
@@ -119,7 +135,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
             );
 
-            var record = new AggregatedTelemetryRecord { RecordType = "trace", TraceName = "trace", TraceJson = $"{jsonObject.ToString(Formatting.None)}" };
+            var record = new TelemetryData { RecordType = "trace", TraceName = "trace", TraceJson = $"{jsonObject.ToString(Formatting.None)}" };
             return record.AsStringWith(_context);
         }
     }

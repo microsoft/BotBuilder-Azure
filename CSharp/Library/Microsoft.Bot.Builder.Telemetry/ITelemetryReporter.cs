@@ -8,10 +8,10 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public interface ITelemetryReporter : ISetTelemetryContext
     {
-        Task ReportIntentAsync(IIntentTelemetry intentTelemetry);
-        Task ReportResponseAsync(IResponseTelemetry responseTelemetry);
+        Task ReportIntentAsync(IIntentTelemetryData intentTelemetryData);
+        Task ReportResponseAsync(IResponseTelemetryData responseTelemetryData);
         Task ReportDialogImpressionAsync(string dialog);
-        Task ReportServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry);
+        Task ReportServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData);
         Task ReportEventAsync(string key, string value);
         Task ReportEventAsync(string key, double value);
         Task ReportEventAsync(Dictionary<string, double> metrics);

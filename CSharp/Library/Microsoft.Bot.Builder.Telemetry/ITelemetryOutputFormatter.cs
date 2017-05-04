@@ -6,13 +6,13 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public interface ITelemetryOutputFormatter : ISetTelemetryContext
     {
-        string FormatServiceResult(IServiceResultTelemetry serviceResultTelemetry);
-        string FormatIntent(IIntentTelemetry intentTelemetry);
-        string FormatEntity(IEntityTelemetry entityTelemetry);
-        string FormatCounter(ICounterTelemetry counterTelemetry);
-        string FormatException(IExceptionTelemetry exceptionTelemetry);
+        string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData);
+        string FormatIntent(IIntentTelemetryData intentTelemetryData);
+        string FormatEntity(IEntityTelemetryData entityTelemetryData);
+        string FormatCounter(ICounterTelemetryData counterTelemetryData);
+        string FormatException(IExceptionTelemetryData exceptionTelemetryData);
         string FormatEvent(Dictionary<string, double> metrics);
         string FormatEvent(Dictionary<string, string> properties, Dictionary<string, double> metrics = null);
-        string FormatResponse(IResponseTelemetry responseTelemetry);
+        string FormatResponse(IResponseTelemetryData responseTelemetryData);
     }
 }

@@ -18,15 +18,15 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         public List<ITelemetryWriter> TelemetryWriters { get; set; }
 
-        public async Task ReportIntentAsync(IIntentTelemetry intentTelemetry)
+        public async Task ReportIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue intent
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(intentTelemetry)); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(intentTelemetryData)); });
                 //enqueue every entity
-                TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(intentTelemetry.IntentEntities)); });
+                TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(intentTelemetryData.IntentEntities)); });
 
                 //await all in parallel.
                 await Task.WhenAll(tasks);
@@ -38,13 +38,13 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public async Task ReportResponseAsync(IResponseTelemetry responseTelemetry)
+        public async Task ReportResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(responseTelemetry)); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(responseTelemetryData)); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }
@@ -80,7 +80,7 @@ namespace Microsoft.Bot.Builder.Telemetry
                     tw =>
                     {
                         tasks.Add(
-                            tw.WriteEntityAsync(new AggregatedTelemetryRecord
+                            tw.WriteEntityAsync(new TelemetryData
                             {
                                 EntityType = entity.Key,
                                 EntityValue = entity.Value
@@ -91,13 +91,13 @@ namespace Microsoft.Bot.Builder.Telemetry
             return tasks;
         }
 
-        public async Task ReportServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry)
+        public async Task ReportServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteServiceResultAsync(serviceResultTelemetry)); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteServiceResultAsync(serviceResultTelemetryData)); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }
@@ -129,7 +129,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteCounterAsync(new AggregatedTelemetryRecord { CounterName = dialog, CounterValue = 1 })); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteCounterAsync(new TelemetryData { CounterName = dialog, CounterValue = 1 })); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }
