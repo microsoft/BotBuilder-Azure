@@ -1,6 +1,6 @@
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public interface IEntityTelemetryData : ICommonTelemetry
+    public interface IEntityTelemetryData : ICommonTelemetryData
     {
         string EntityType { get; set; }
         string EntityValue { get; set; }

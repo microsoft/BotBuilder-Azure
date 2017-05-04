@@ -2,7 +2,7 @@ using System;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public interface IServiceResultTelemetryData : ICommonTelemetry
+    public interface IServiceResultTelemetryData : ICommonTelemetryData
     {
         string ServiceResultName { get; set; }
         double ServiceResultMilliseconds { get; }

@@ -13,7 +13,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         IExceptionTelemetryData,
         ITraceTelemetryData
     {
-        //ICommonTelemetry
+        //ICommonTelemetryData
         public string RecordType { get; set; }
         public DateTime Timestamp { get; set; }
         public string CorrelationId { get; set; }

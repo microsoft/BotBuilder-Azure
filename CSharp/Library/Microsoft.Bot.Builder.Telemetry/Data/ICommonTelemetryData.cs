@@ -2,7 +2,7 @@ using System;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public interface ICommonTelemetry
+    public interface ICommonTelemetryData
     {
         string RecordType { get; set; }
         DateTime Timestamp { get; set; }

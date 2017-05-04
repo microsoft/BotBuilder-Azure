@@ -81,7 +81,7 @@
     <Compile Include="DateTimeProvider.cs" />
     <Compile Include="Formatters\MachineOptimizedOutputFormatter.cs" />
     <Compile Include="Formatters\ReadabilityOptimizedOutputFormatter.cs" />
-    <Compile Include="Data\ICommonTelemetry.cs" />
+    <Compile Include="Data\ICommonTelemetryData.cs" />
     <Compile Include="Data\ICounterTelemetryData.cs" />
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="Data\IEntityTelemetryData.cs" />

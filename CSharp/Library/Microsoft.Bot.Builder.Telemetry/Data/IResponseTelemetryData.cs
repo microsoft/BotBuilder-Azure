@@ -2,7 +2,7 @@ using System;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public interface IResponseTelemetryData : ICommonTelemetry
+    public interface IResponseTelemetryData : ICommonTelemetryData
     {
         string ResponseText { get; set; }
         string ResponseImageUrl { get; set; }

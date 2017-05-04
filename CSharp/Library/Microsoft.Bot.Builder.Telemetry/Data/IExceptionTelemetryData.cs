@@ -2,7 +2,7 @@ using System;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
-    public interface IExceptionTelemetryData : ICommonTelemetry
+    public interface IExceptionTelemetryData : ICommonTelemetryData
     {
         string ExceptionComponent { get; set; }
         string ExceptionContext { get; set; }
