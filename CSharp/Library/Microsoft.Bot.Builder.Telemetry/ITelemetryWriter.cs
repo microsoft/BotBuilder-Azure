@@ -14,10 +14,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             Entities = entities;
         }
 
-        public string Intent { get; private set; }
-        public string Text { get; private set; }
-        public double Score { get; private set; }
-        public Dictionary<string, string> Entities { get; private set; }
+        public string Intent { get; set; }
+        public string Text { get; set; }
+        public double Score { get; set; }
+        public Dictionary<string, string> Entities { get; set; }
     }
 
     public class EntityTelemetry
@@ -28,8 +28,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             Value = value;
         }
 
-        public string Kind { get; private set; }
-        public string Value { get; private set; }
+        public string Kind { get; set; }
+        public string Value { get; set; }
     }
 
     public class CounterTelemetry
@@ -40,8 +40,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             Count = count;
         }
 
-        public string Counter { get; private set; }
-        public int Count { get; private set; }
+        public string Counter { get; set; }
+        public int Count { get; set; }
     }
 
     public class ResponseTelemetry
@@ -57,13 +57,13 @@ namespace Microsoft.Bot.Builder.Telemetry
             IsCacheHit = isCacheHit;
         }
 
-        public string Text { get; private set; }
-        public string ImageUrl { get; private set; }
-        public string Json { get; private set; }
-        public string Result { get; private set; }
-        public DateTime StartTime { get; private set; }
-        public DateTime EndDateTime { get; private set; }
-        public bool IsCacheHit { get; private set; }
+        public string Text { get; set; }
+        public string ImageUrl { get; set; }
+        public string Json { get; set; }
+        public string Result { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndDateTime { get; set; }
+        public bool IsCacheHit { get; set; }
     }
 
     public class ServiceResultTelemetry
@@ -77,11 +77,11 @@ namespace Microsoft.Bot.Builder.Telemetry
             Success = success;
         }
 
-        public string ServiceName { get; private set; }
-        public DateTime StartDateTime { get; private set; }
-        public DateTime EndDateTime { get; private set; }
-        public string Result { get; private set; }
-        public bool Success { get; private set; }
+        public string ServiceName { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
+        public string Result { get; set; }
+        public bool Success { get; set; }
     }
 
     public class ExceptionTelemetry
@@ -93,9 +93,9 @@ namespace Microsoft.Bot.Builder.Telemetry
             Ex = ex;
         }
 
-        public string Component { get; private set; }
-        public string Context { get; private set; }
-        public Exception Ex { get; private set; }
+        public string Component { get; set; }
+        public string Context { get; set; }
+        public Exception Ex { get; set; }
     }
 
     public interface ITelemetryWriter : ISetTelemetryContext
