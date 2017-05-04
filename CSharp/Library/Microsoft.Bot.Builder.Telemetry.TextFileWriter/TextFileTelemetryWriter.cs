@@ -34,13 +34,13 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             //method left in place to make it easy to add behavior here later if/as needed
         }
 
-        public async Task WriteServiceResultAsync(ResultTelemetry resultTelemetry)
+        public async Task WriteServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
                 await Task.Run(() =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatServiceResult(resultTelemetry.ServiceName, resultTelemetry.StartTime, resultTelemetry.EndDateTime, resultTelemetry.Result, resultTelemetry.Success));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatServiceResult(new ServiceResultTelemetry(new ServiceResultTelemetry(serviceResultTelemetry.ServiceName, serviceResultTelemetry.StartTime, serviceResultTelemetry.EndDateTime, serviceResultTelemetry.Result, serviceResultTelemetry.Success))));
                     DoPostLogActions();
                 });
             }
@@ -52,7 +52,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             {
                 await Task.Run(async () =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatIntent(intentTelemetry.Intent, intentTelemetry.Text, intentTelemetry.Score));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatIntent(new IntentTelemetry(intentTelemetry.Intent, intentTelemetry.Text, intentTelemetry.Score)));
 
                     if (null != intentTelemetry.Entities)
                     {
@@ -74,7 +74,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             {
                 await Task.Run(() =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatEntity(entityTelemetry.Kind, entityTelemetry.Value));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatEntity(new EntityTelemetry(entityTelemetry.Kind, entityTelemetry.Value)));
                     DoPostLogActions();
                 });
             }
@@ -86,7 +86,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             {
                 await Task.Run(() =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatResponse(responseTelemetry.Text, responseTelemetry.ImageUrl, responseTelemetry.Json, responseTelemetry.Result, responseTelemetry.StartTime, responseTelemetry.EndDateTime, responseTelemetry.IsCacheHit));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatResponse(new ResponseTelemetry(responseTelemetry.Text, responseTelemetry.ImageUrl, responseTelemetry.Json, responseTelemetry.Result, responseTelemetry.StartTime, responseTelemetry.EndDateTime, responseTelemetry.IsCacheHit)));
                     DoPostLogActions();
                 });
             }
@@ -98,7 +98,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             {
                 await Task.Run(() =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatCounter(counterTelemetry.Counter, counterTelemetry.Count));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatCounter(new CounterTelemetry(counterTelemetry.Counter, counterTelemetry.Count)));
                     DoPostLogActions();
                 });
             }
@@ -110,7 +110,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             {
                 await Task.Run(() =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatException(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E));
+                    ThreadsafeWriteToFile(_outputFormatter.FormatException(new ExceptionTelemetry(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E)));
                     DoPostLogActions();
                 });
             }

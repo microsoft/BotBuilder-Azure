@@ -129,7 +129,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             }
         }
 
-        public async Task WriteServiceResultAsync(ResultTelemetry resultTelemetry)
+        public async Task WriteServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
@@ -137,13 +137,13 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("serviceName", resultTelemetry.ServiceName);
-                    properties.Add("result", resultTelemetry.Result);
-                    properties.Add("success", resultTelemetry.Success.ToString());
+                    properties.Add("serviceName", serviceResultTelemetry.ServiceName);
+                    properties.Add("result", serviceResultTelemetry.Result);
+                    properties.Add("success", serviceResultTelemetry.Success.ToString());
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"millisecondsDuration", resultTelemetry.EndDateTime.Subtract(resultTelemetry.StartTime).TotalMilliseconds }
+                        {"millisecondsDuration", serviceResultTelemetry.EndDateTime.Subtract(serviceResultTelemetry.StartTime).TotalMilliseconds }
                     };
 
                     _telemetry.TrackEvent("ServiceResult", properties, metrics);

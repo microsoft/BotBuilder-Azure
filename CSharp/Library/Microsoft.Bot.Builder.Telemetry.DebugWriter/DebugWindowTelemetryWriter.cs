@@ -21,7 +21,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
-                Debug.WriteLine(_outputFormatter.FormatCounter(counterTelemetry.Counter, counterTelemetry.Count));
+                Debug.WriteLine(_outputFormatter.FormatCounter(new CounterTelemetry(counterTelemetry.Counter, counterTelemetry.Count)));
             }
         }
 
@@ -29,15 +29,15 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {
-                Debug.WriteLine(_outputFormatter.FormatException(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E));
+                Debug.WriteLine(_outputFormatter.FormatException(new ExceptionTelemetry(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E)));
             }
         }
 
-        public async Task WriteServiceResultAsync(ResultTelemetry resultTelemetry)
+        public async Task WriteServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
-                Debug.WriteLine(_outputFormatter.FormatServiceResult(resultTelemetry.ServiceName, resultTelemetry.StartTime, resultTelemetry.EndDateTime, resultTelemetry.Result, resultTelemetry.Success));
+                Debug.WriteLine(_outputFormatter.FormatServiceResult(new ServiceResultTelemetry(serviceResultTelemetry.ServiceName, serviceResultTelemetry.StartTime, serviceResultTelemetry.EndDateTime, serviceResultTelemetry.Result, serviceResultTelemetry.Success)));
 
             }
         }
@@ -46,7 +46,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
             {
-                Debug.WriteLine(_outputFormatter.FormatEntity(entityTelemetry.Kind, entityTelemetry.Value));
+                Debug.WriteLine(_outputFormatter.FormatEntity(new EntityTelemetry(entityTelemetry.Kind, entityTelemetry.Value)));
             }
         }
 
@@ -54,7 +54,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
-                Debug.WriteLine(_outputFormatter.FormatIntent(intentTelemetry.Intent, intentTelemetry.Text, intentTelemetry.Score));
+                Debug.WriteLine(_outputFormatter.FormatIntent(new IntentTelemetry(intentTelemetry.Intent, intentTelemetry.Text, intentTelemetry.Score)));
 
                 if (null != intentTelemetry.Entities)
                 {
@@ -70,7 +70,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
-                Debug.WriteLine(_outputFormatter.FormatResponse(responseTelemetry.Text, responseTelemetry.ImageUrl, responseTelemetry.Json, responseTelemetry.Result, responseTelemetry.StartTime, responseTelemetry.EndDateTime, responseTelemetry.IsCacheHit));
+                Debug.WriteLine(_outputFormatter.FormatResponse(new ResponseTelemetry(responseTelemetry.Text, responseTelemetry.ImageUrl, responseTelemetry.Json, responseTelemetry.Result, responseTelemetry.StartTime, responseTelemetry.EndDateTime, responseTelemetry.IsCacheHit)));
             }
         }
 

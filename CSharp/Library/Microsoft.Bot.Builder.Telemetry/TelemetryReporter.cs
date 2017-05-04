@@ -87,7 +87,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteServiceResultAsync(new ResultTelemetry(serviceName, startTime, endTime, result, success))); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteServiceResultAsync(new ServiceResultTelemetry(serviceName, startTime, endTime, result, success))); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }

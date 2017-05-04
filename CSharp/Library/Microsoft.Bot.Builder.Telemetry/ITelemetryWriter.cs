@@ -66,9 +66,9 @@ namespace Microsoft.Bot.Builder.Telemetry
         public bool IsCacheHit { get; private set; }
     }
 
-    public class ResultTelemetry
+    public class ServiceResultTelemetry
     {
-        public ResultTelemetry(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true)
+        public ServiceResultTelemetry(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true)
         {
             ServiceName = serviceName;
             StartTime = startTime;
@@ -104,7 +104,7 @@ namespace Microsoft.Bot.Builder.Telemetry
         Task WriteEntityAsync(EntityTelemetry entityTelemetry);
         Task WriteCounterAsync(CounterTelemetry counterTelemetry);
         Task WriteResponseAsync(ResponseTelemetry responseTelemetry);
-        Task WriteServiceResultAsync(ResultTelemetry resultTelemetry);
+        Task WriteServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry);
         Task WriteExceptionAsync(ExceptionTelemetry exceptionTelemetry);
         Task WriteEventAsync(string key, string value);
         Task WriteEventAsync(string key, double value);

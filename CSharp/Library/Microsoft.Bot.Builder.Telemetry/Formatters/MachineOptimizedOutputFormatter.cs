@@ -22,67 +22,66 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             _context = context;
         }
 
-        public string FormatServiceResult(string serviceName, DateTime startTime, DateTime endTime, string result,
-            bool success = true)
+        public string FormatServiceResult(ServiceResultTelemetry serviceResultTelemetry)
         {
             var record = new SingleRowTelemetryRecord
             {
                 RecordType = "serviceResult",
-                ServiceResultName = serviceName,
-                ServiceResultResponse = result,
-                ServiceResultSuccess = $"{success}",
-                ServiceResultMilliseconds = $"{endTime.Subtract(startTime).TotalMilliseconds}"
+                ServiceResultName = serviceResultTelemetry.ServiceName,
+                ServiceResultResponse = serviceResultTelemetry.Result,
+                ServiceResultSuccess = $"{serviceResultTelemetry.Success}",
+                ServiceResultMilliseconds = $"{serviceResultTelemetry.EndTime.Subtract(serviceResultTelemetry.StartTime).TotalMilliseconds}"
             };
 
             return record.AsStringWith(_context);
         }
 
-        public string FormatIntent(string intent, string text, double score)
+        public string FormatIntent(IntentTelemetry intentTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intent, IntentText = text, IntentScore = $"{score}" };
+            var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intentTelemetry.Intent, IntentText = intentTelemetry.Text, IntentScore = $"{intentTelemetry.Score}" };
             return record.AsStringWith(_context);
         }
 
-        public string FormatEntity(string kind, string value)
+        public string FormatEntity(EntityTelemetry entityTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "entity", EntityType = kind, EntityValue = value };
+            var record = new SingleRowTelemetryRecord { RecordType = "entity", EntityType = entityTelemetry.Kind, EntityValue = entityTelemetry.Value };
             return record.AsStringWith(_context);
         }
 
-        public string FormatResponse(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit)
+        public string FormatResponse(ResponseTelemetry responseTelemetry)
         {
 
-            var duration = startTime.Subtract(endDateTime).TotalMilliseconds;
+            var duration = responseTelemetry.StartTime.Subtract(responseTelemetry.EndDateTime).TotalMilliseconds;
             var record = new SingleRowTelemetryRecord
             {
                 RecordType = "response",
-                ResponseText = text,
-                ResponseImageUrl = imageUrl,
-                ResponseJson = json,
-                ResponseResult = result,
+                ResponseText = responseTelemetry.Text,
+                ResponseImageUrl = responseTelemetry.ImageUrl,
+                ResponseJson = responseTelemetry.Json,
+                ResponseResult = responseTelemetry.Result,
                 ResponseDuration = $"{duration}",
-                ResponseCacheHit = $"{isCacheHit}"
+                ResponseCacheHit = $"{responseTelemetry.IsCacheHit}"
             };
 
             return record.AsStringWith(_context);
         }
 
-        public string FormatCounter(string counter, int count)
+        public string FormatCounter(CounterTelemetry counterTelemetry)
         {
-            var record = new SingleRowTelemetryRecord { RecordType = "counter", CounterName = counter, CounterValue = $"{count}" };
+            var record = new SingleRowTelemetryRecord { RecordType = "counter", CounterName = counterTelemetry.Counter, CounterValue = $"{counterTelemetry.Count}" };
             return record.AsStringWith(_context);
         }
 
-        public string FormatException(string component, string context, Exception ex)
+        public string FormatException(ExceptionTelemetry exceptionTelemetry)
         {
             var record = new SingleRowTelemetryRecord
             {
                 RecordType = "exception",
-                ExceptionContext = context,
-                ExceptionComponent = component,
-                ExceptionMessage = ex.Message,
-                ExceptionDetail = ex.ToString(),
-                ExceptionType = ex.GetType().ToString()
+                ExceptionContext = exceptionTelemetry.Context,
+                ExceptionComponent = exceptionTelemetry.Component,
+                ExceptionMessage = exceptionTelemetry.Ex.Message,
+                ExceptionDetail = exceptionTelemetry.Ex.ToString(),
+                ExceptionType = exceptionTelemetry.Ex.GetType().ToString()
             };
 
             return record.AsStringWith(_context);
