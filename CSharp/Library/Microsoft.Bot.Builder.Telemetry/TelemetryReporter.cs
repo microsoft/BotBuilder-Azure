@@ -75,7 +75,16 @@ namespace Microsoft.Bot.Builder.Telemetry
             List<Task> tasks = new List<Task>();
             foreach (var entity in entities)
             {
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteEntityAsync(new EntityTelemetry(entity.Key, entity.Value))); });
+                TelemetryWriters.ForEach(
+                    tw =>
+                    {
+                        tasks.Add(
+                            tw.WriteEntityAsync(new SingleRowTelemetryRecord
+                            {
+                                EntityType = entity.Key,
+                                EntityValue = entity.Value
+                            }));
+                    });
             }
 
             return tasks;
@@ -119,7 +128,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteCounterAsync(new CounterTelemetry(dialog))); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteCounterAsync(new SingleRowTelemetryRecord { CounterName = dialog, CounterValue = 1 })); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }

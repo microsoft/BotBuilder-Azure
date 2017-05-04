@@ -78,12 +78,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
         {
             //we can intercept the debug stream, but for now this 
             // will be very simple, we call all methods and ensure that there is no exceptions
-            await processor.WriteCounterAsync(new CounterTelemetry($"counterNameValue ({uniqueTestRunId})"));
-            await processor.WriteExceptionAsync(new ExceptionTelemetry($"componentName ({uniqueTestRunId})", "component context", new Exception("this is a bad exception")));
-            await processor.WriteServiceResultAsync(new ServiceResultTelemetry($"serviceNameValue ({uniqueTestRunId})", DateTime.Now, DateTime.Now.AddSeconds(10), "HTTP:200", true));
-            await processor.WriteEntityAsync(new EntityTelemetry($"kindNameValue ({uniqueTestRunId})", "value"));
-            await processor.WriteIntentAsync(new IntentTelemetry($"IntentNameValue ({uniqueTestRunId})", "intent text", 0.5f));
-            await processor.WriteResponseAsync(new ResponseTelemetry($"ResponseText ({uniqueTestRunId})", "imageUrl", "{someProperty: \"some json value\"}", "this is a result", DateTime.Now, DateTime.Now.Add(TimeSpan.FromMilliseconds(100)), false));
+            await processor.WriteCounterAsync(new SingleRowTelemetryRecord { CounterName = $"counterNameValue ({uniqueTestRunId})" });
+            await processor.WriteExceptionAsync(new SingleRowTelemetryRecord { ExceptionComponent = $"componentName ({uniqueTestRunId})", ExceptionContext = "component context", Ex = new Exception("this is a bad exception") });
+            await processor.WriteServiceResultAsync(new SingleRowTelemetryRecord { ServiceResultName = $"serviceNameValue ({uniqueTestRunId})", ServiceResultStartDateTime = DateTime.Now, ServiceResultEndDateTime = DateTime.Now.AddSeconds(10), ServiceResultResponse = "HTTP:200", ServiceResultSuccess = true });
+            await processor.WriteEntityAsync(new SingleRowTelemetryRecord { EntityType = $"kindNameValue ({uniqueTestRunId})", EntityValue = "value" });
+            await processor.WriteIntentAsync(new SingleRowTelemetryRecord { IntentName = $"IntentNameValue ({uniqueTestRunId})", IntentText = "intent text", IntentScore = 0.5f });
+            await processor.WriteResponseAsync(new SingleRowTelemetryRecord { ResponseText = $"ResponseText ({uniqueTestRunId})", ResponseImageUrl = "imageUrl", ResponseJson = "{someProperty: \"some json value\"}", ResponseResult = "this is a result", ResponseStartTime = DateTime.Now, ResponseEndDateTime = DateTime.Now.Add(TimeSpan.FromMilliseconds(100)), ResponseIsCacheHit = false });
         }
     }
 }
