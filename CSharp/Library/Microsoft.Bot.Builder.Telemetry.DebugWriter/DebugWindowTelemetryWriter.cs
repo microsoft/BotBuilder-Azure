@@ -17,60 +17,60 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             SetField.NotNull(out _outputFormatter, nameof(formatter), formatter);
         }
 
-        public async Task WriteCounterAsync(string counter, int count = 1)
+        public async Task WriteCounterAsync(CounterTelemetry counterTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
-                Debug.WriteLine(_outputFormatter.FormatCounter(counter, count));
+                Debug.WriteLine(_outputFormatter.FormatCounter(counterTelemetry.Counter, counterTelemetry.Count));
             }
         }
 
-        public async Task WriteExceptionAsync(string component, string context, Exception e)
+        public async Task WriteExceptionAsync(ExceptionTelemetry exceptionTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {
-                Debug.WriteLine(_outputFormatter.FormatException(component, context, e));
+                Debug.WriteLine(_outputFormatter.FormatException(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E));
             }
         }
 
-        public async Task WriteServiceResultAsync(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true)
+        public async Task WriteServiceResultAsync(ResultTelemetry resultTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
-                Debug.WriteLine(_outputFormatter.FormatServiceResult(serviceName, startTime, endDateTime, result, success));
+                Debug.WriteLine(_outputFormatter.FormatServiceResult(resultTelemetry.ServiceName, resultTelemetry.StartTime, resultTelemetry.EndDateTime, resultTelemetry.Result, resultTelemetry.Success));
 
             }
         }
 
-        public async Task WriteEntityAsync(string kind, string value)
+        public async Task WriteEntityAsync(EntityTelemetry entityTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
             {
-                Debug.WriteLine(_outputFormatter.FormatEntity(kind, value));
+                Debug.WriteLine(_outputFormatter.FormatEntity(entityTelemetry.Kind, entityTelemetry.Value));
             }
         }
 
-        public async Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null)
+        public async Task WriteIntentAsync(IntentTelemetry intentTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
-                Debug.WriteLine(_outputFormatter.FormatIntent(intent, text, score));
+                Debug.WriteLine(_outputFormatter.FormatIntent(intentTelemetry.Intent, intentTelemetry.Text, intentTelemetry.Score));
 
-                if (null != entities)
+                if (null != intentTelemetry.Entities)
                 {
-                    foreach (var entity in entities)
+                    foreach (var entity in intentTelemetry.Entities)
                     {
-                        await WriteEntityAsync(entity.Key, entity.Value);
+                        await WriteEntityAsync(new EntityTelemetry(entity.Key, entity.Value));
                     }
                 }
             }
         }
 
-        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false)
+        public async Task WriteResponseAsync(ResponseTelemetry responseTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
-                Debug.WriteLine(_outputFormatter.FormatResponse(text, imageUrl, json, result, startTime, endDateTime, isCacheHit));
+                Debug.WriteLine(_outputFormatter.FormatResponse(responseTelemetry.Text, responseTelemetry.ImageUrl, responseTelemetry.Json, responseTelemetry.Result, responseTelemetry.StartTime, responseTelemetry.EndDateTime, responseTelemetry.IsCacheHit));
             }
         }
 

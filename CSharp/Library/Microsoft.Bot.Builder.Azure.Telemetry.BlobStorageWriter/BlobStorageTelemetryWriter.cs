@@ -61,23 +61,23 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             //no-op; left to ease future use if needed
         }
 
-        public async Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null)
+        public async Task WriteIntentAsync(IntentTelemetry intentTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
                 await Task.Run(async () =>
                 {
                     //process each entity if we have any
-                    if (null != entities)
+                    if (null != intentTelemetry.Entities)
                     {
-                        foreach (var entity in entities)
+                        foreach (var entity in intentTelemetry.Entities)
                         {
-                            await WriteEntityAsync(entity.Key, entity.Value);
+                            await WriteEntityAsync(new EntityTelemetry(entity.Key, entity.Value));
                         }
                     }
 
                     //now process the intent
-                    await AppendToBlob(_formatter.FormatIntent(intent, text, score));
+                    await AppendToBlob(_formatter.FormatIntent(intentTelemetry.Intent, intentTelemetry.Text, intentTelemetry.Score));
 
                     DoPostLogActions();
                 });
@@ -92,64 +92,64 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             }
         }
 
-        public async Task WriteEntityAsync(string kind, string value)
+        public async Task WriteEntityAsync(EntityTelemetry entityTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatEntity(kind, value));
+                    await AppendToBlob(_formatter.FormatEntity(entityTelemetry.Kind, entityTelemetry.Value));
                     DoPostLogActions();
 
                 });
             }
         }
 
-        public async Task WriteResponseAsync(string text, string imageUrl, string json, string result, DateTime startDateTime, DateTime endDateTime, bool isCacheHit = false)
+        public async Task WriteResponseAsync(ResponseTelemetry responseTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatResponse(text, imageUrl, json, result, startDateTime, endDateTime, isCacheHit));
+                    await AppendToBlob(_formatter.FormatResponse(responseTelemetry.Text, responseTelemetry.ImageUrl, responseTelemetry.Json, responseTelemetry.Result, responseTelemetry.StartTime, responseTelemetry.EndDateTime, responseTelemetry.IsCacheHit));
                     DoPostLogActions();
 
                 });
             }
         }
 
-        public async Task WriteServiceResultAsync(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true)
+        public async Task WriteServiceResultAsync(ResultTelemetry resultTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatServiceResult(serviceName, startTime, endDateTime, result, success));
+                    await AppendToBlob(_formatter.FormatServiceResult(resultTelemetry.ServiceName, resultTelemetry.StartTime, resultTelemetry.EndDateTime, resultTelemetry.Result, resultTelemetry.Success));
                     DoPostLogActions();
                 });
             }
 
         }
 
-        public async Task WriteCounterAsync(string counter, int count = 1)
+        public async Task WriteCounterAsync(CounterTelemetry counterTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatCounter(counter, count));
+                    await AppendToBlob(_formatter.FormatCounter(counterTelemetry.Counter, counterTelemetry.Count));
                     DoPostLogActions();
                 });
             }
         }
 
-        public async Task WriteExceptionAsync(string component, string context, Exception e)
+        public async Task WriteExceptionAsync(ExceptionTelemetry exceptionTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatException(component, context, e));
+                    await AppendToBlob(_formatter.FormatException(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E));
                     DoPostLogActions();
                 });
             }

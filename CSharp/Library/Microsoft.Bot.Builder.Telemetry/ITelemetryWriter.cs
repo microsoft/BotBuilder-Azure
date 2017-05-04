@@ -4,14 +4,108 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Bot.Builder.Telemetry
 {
+    public class IntentTelemetry
+    {
+        public IntentTelemetry(string intent, string text, double score, Dictionary<string, string> entities = null)
+        {
+            Intent = intent;
+            Text = text;
+            Score = score;
+            Entities = entities;
+        }
+
+        public string Intent { get; private set; }
+        public string Text { get; private set; }
+        public double Score { get; private set; }
+        public Dictionary<string, string> Entities { get; private set; }
+    }
+
+    public class EntityTelemetry
+    {
+        public EntityTelemetry(string kind, string value)
+        {
+            Kind = kind;
+            Value = value;
+        }
+
+        public string Kind { get; private set; }
+        public string Value { get; private set; }
+    }
+
+    public class CounterTelemetry
+    {
+        public CounterTelemetry(string counter, int count = 1)
+        {
+            Counter = counter;
+            Count = count;
+        }
+
+        public string Counter { get; private set; }
+        public int Count { get; private set; }
+    }
+
+    public class ResponseTelemetry
+    {
+        public ResponseTelemetry(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false)
+        {
+            Text = text;
+            ImageUrl = imageUrl;
+            Json = json;
+            Result = result;
+            StartTime = startTime;
+            EndDateTime = endDateTime;
+            IsCacheHit = isCacheHit;
+        }
+
+        public string Text { get; private set; }
+        public string ImageUrl { get; private set; }
+        public string Json { get; private set; }
+        public string Result { get; private set; }
+        public DateTime StartTime { get; private set; }
+        public DateTime EndDateTime { get; private set; }
+        public bool IsCacheHit { get; private set; }
+    }
+
+    public class ResultTelemetry
+    {
+        public ResultTelemetry(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true)
+        {
+            ServiceName = serviceName;
+            StartTime = startTime;
+            EndDateTime = endDateTime;
+            Result = result;
+            Success = success;
+        }
+
+        public string ServiceName { get; private set; }
+        public DateTime StartTime { get; private set; }
+        public DateTime EndDateTime { get; private set; }
+        public string Result { get; private set; }
+        public bool Success { get; private set; }
+    }
+
+    public class ExceptionTelemetry
+    {
+        public ExceptionTelemetry(string component, string context, Exception e)
+        {
+            Component = component;
+            Context = context;
+            E = e;
+        }
+
+        public string Component { get; private set; }
+        public string Context { get; private set; }
+        public Exception E { get; private set; }
+    }
+
     public interface ITelemetryWriter : ISetTelemetryContext
     {
-        Task WriteIntentAsync(string intent, string text, double score, Dictionary<string, string> entities = null);
-        Task WriteEntityAsync(string kind, string value);
-        Task WriteCounterAsync(string counter, int count = 1);
-        Task WriteResponseAsync(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false);
-        Task WriteServiceResultAsync(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true);
-        Task WriteExceptionAsync(string component, string context, Exception e);
+        Task WriteIntentAsync(IntentTelemetry intentTelemetry);
+        Task WriteEntityAsync(EntityTelemetry entityTelemetry);
+        Task WriteCounterAsync(CounterTelemetry counterTelemetry);
+        Task WriteResponseAsync(ResponseTelemetry responseTelemetry);
+        Task WriteServiceResultAsync(ResultTelemetry resultTelemetry);
+        Task WriteExceptionAsync(ExceptionTelemetry exceptionTelemetry);
         Task WriteEventAsync(string key, string value);
         Task WriteEventAsync(string key, double value);
         Task WriteEventAsync(Dictionary<string, double> metrics);
