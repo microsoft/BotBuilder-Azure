@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.Bot.Builder.Telemetry
+namespace Microsoft.Bot.Builder.Telemetry.Data
 {
     public class SingleRowTelemetryRecord
         : ICommonTelemetry,

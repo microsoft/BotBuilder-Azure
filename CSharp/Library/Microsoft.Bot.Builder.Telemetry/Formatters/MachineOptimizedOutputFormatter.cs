@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Telemetry.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

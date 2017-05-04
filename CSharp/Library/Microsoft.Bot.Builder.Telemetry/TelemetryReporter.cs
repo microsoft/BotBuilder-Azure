@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Telemetry.Data;
 using Microsoft.Bot.Connector;
 
 namespace Microsoft.Bot.Builder.Telemetry

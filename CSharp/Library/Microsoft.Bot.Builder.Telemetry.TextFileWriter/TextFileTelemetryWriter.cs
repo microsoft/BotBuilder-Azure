@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Telemetry.Data;
 
 namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
 {
