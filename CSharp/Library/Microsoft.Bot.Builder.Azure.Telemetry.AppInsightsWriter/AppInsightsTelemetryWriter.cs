@@ -5,6 +5,7 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Telemetry;
+using Microsoft.Bot.Builder.Telemetry.Data;
 
 namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
 {

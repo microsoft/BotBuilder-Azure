@@ -18,7 +18,7 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         public List<ITelemetryWriter> TelemetryWriters { get; set; }
 
-        public async Task AddLuisEventDetailsAsync(IIntentTelemetry intentTelemetry)
+        public async Task ReportIntentAsync(IIntentTelemetry intentTelemetry)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public async Task AddResponseAsync(IResponseTelemetry responseTelemetry)
+        public async Task ReportResponseAsync(IResponseTelemetry responseTelemetry)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             return tasks;
         }
 
-        public async Task AddServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry)
+        public async Task ReportServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             TelemetryWriters.Clear();
         }
 
-        public async Task AddDialogImpressionAsync(string dialog)
+        public async Task ReportDialogImpressionAsync(string dialog)
         {
             try
             {
@@ -145,17 +145,17 @@ namespace Microsoft.Bot.Builder.Telemetry
             TelemetryWriters.ForEach(tw => tw.SetContext(context));
         }
 
-        public async Task AddEventAsync(string key, string value)
+        public async Task ReportEventAsync(string key, string value)
         {
-            await AddEventAsync(new Dictionary<string, string> { { key, value } });
+            await ReportEventAsync(new Dictionary<string, string> { { key, value } });
         }
 
-        public async Task AddEventAsync(string key, double value)
+        public async Task ReportEventAsync(string key, double value)
         {
-            await AddEventAsync(new Dictionary<string, double> { { key, value } });
+            await ReportEventAsync(new Dictionary<string, double> { { key, value } });
         }
 
-        public async Task AddEventAsync(Dictionary<string, double> metrics)
+        public async Task ReportEventAsync(Dictionary<string, double> metrics)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public async Task AddEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
+        public async Task ReportEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
         {
             try
             {

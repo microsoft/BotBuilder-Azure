@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Telemetry.Data;
 
 namespace Microsoft.Bot.Builder.Telemetry.Formatters
 {
