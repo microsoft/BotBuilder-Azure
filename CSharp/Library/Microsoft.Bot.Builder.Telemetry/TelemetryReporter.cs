@@ -17,15 +17,15 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         public List<ITelemetryWriter> TelemetryWriters { get; set; }
 
-        public async Task AddLuisEventDetailsAsync(string intent, string text, double confidence, Dictionary<string, string> entities)
+        public async Task AddLuisEventDetailsAsync(IntentTelemetry intentTelemetry)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue intent
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(new IntentTelemetry(intent, text, confidence))); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(intentTelemetry)); });
                 //enqueue every entity
-                TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(entities)); });
+                TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(intentTelemetry.Entities)); });
 
                 //await all in parallel.
                 await Task.WhenAll(tasks);
@@ -37,13 +37,13 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public async Task AddResponseAsync(string text, string imageUrl, string json, string result, DateTime startTime, DateTime endDateTime, bool isCacheHit = false)
+        public async Task AddResponseAsync(ResponseTelemetry responseTelemetry)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(new ResponseTelemetry(text, imageUrl, json, result, startTime, endDateTime, isCacheHit))); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(responseTelemetry)); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }
@@ -81,13 +81,13 @@ namespace Microsoft.Bot.Builder.Telemetry
             return tasks;
         }
 
-        public async Task AddServiceResultAsync(string serviceName, DateTime startTime, DateTime endTime, string result, bool success = true)
+        public async Task AddServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry)
         {
             try
             {
                 var tasks = new List<Task>();
                 //enqueue all tasks
-                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteServiceResultAsync(new ServiceResultTelemetry(serviceName, startTime, endTime, result, success))); });
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteServiceResultAsync(serviceResultTelemetry)); });
                 //await all in parallel.
                 await Task.WhenAll(tasks);
             }
