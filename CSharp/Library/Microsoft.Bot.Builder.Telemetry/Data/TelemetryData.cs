@@ -31,13 +31,13 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         //IIntentTelemetryData
         public string IntentName { get; set; }
         public string IntentText { get; set; }
-        public double IntentScore { get; set; }
+        public double? IntentScore { get; set; }
         public IList<IEntityTelemetryData> IntentEntities { get; }
 
         //IEntityTelemetryData
         public string EntityType { get; set; }
         public string EntityValue { get; set; }
-        public double EntityConfidenceScore { get; set; }
+        public double? EntityConfidenceScore { get; set; }
 
         //IResponseTelemetryData
         public string ResponseText { get; set; }
@@ -69,9 +69,9 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         //IExceptionTelemetryData
         public string ExceptionComponent { get; set; }
         public string ExceptionContext { get; set; }
-        public Type ExceptionType => Ex?.GetType() ?? typeof(object);
-        public string ExceptionMessage => Ex?.Message ?? string.Empty;
-        public string ExceptionDetail => Ex?.ToString() ?? string.Empty;
+        public Type ExceptionType => Ex?.GetType();
+        public string ExceptionMessage => Ex?.Message;
+        public string ExceptionDetail => Ex?.ToString();
         public Exception Ex { get; set; }
 
 

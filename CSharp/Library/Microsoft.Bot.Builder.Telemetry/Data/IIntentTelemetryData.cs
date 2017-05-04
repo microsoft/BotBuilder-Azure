@@ -6,7 +6,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
     {
         string IntentName { get; set; }
         string IntentText { get; set; }
-        double IntentScore { get; set; }
+        double? IntentScore { get; set; }
         IList<IEntityTelemetryData> IntentEntities { get; }
     }
 }

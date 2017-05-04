@@ -4,6 +4,6 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
     {
         string EntityType { get; set; }
         string EntityValue { get; set; }
-        double EntityConfidenceScore { get; set; }
+        double? EntityConfidenceScore { get; set; }
     }
 }
