@@ -22,7 +22,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             _context = context;
         }
 
-        public string FormatServiceResult(ServiceResultTelemetry serviceResultTelemetry)
+        public string FormatServiceResult(IServiceResultTelemetry serviceResultTelemetry)
         {
             var record = new SingleRowTelemetryRecord
             {
@@ -36,19 +36,19 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return record.AsStringWith(_context);
         }
 
-        public string FormatIntent(IntentTelemetry intentTelemetry)
+        public string FormatIntent(IIntentTelemetry intentTelemetry)
         {
             var record = new SingleRowTelemetryRecord { RecordType = "intent", IntentName = intentTelemetry.Intent, IntentText = intentTelemetry.Text, IntentScore = $"{intentTelemetry.Score}" };
             return record.AsStringWith(_context);
         }
 
-        public string FormatEntity(EntityTelemetry entityTelemetry)
+        public string FormatEntity(IEntityTelemetry entityTelemetry)
         {
             var record = new SingleRowTelemetryRecord { RecordType = "entity", EntityType = entityTelemetry.Kind, EntityValue = entityTelemetry.Value };
             return record.AsStringWith(_context);
         }
 
-        public string FormatResponse(ResponseTelemetry responseTelemetry)
+        public string FormatResponse(IResponseTelemetry responseTelemetry)
         {
 
             var duration = responseTelemetry.StartTime.Subtract(responseTelemetry.EndDateTime).TotalMilliseconds;
@@ -66,13 +66,13 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return record.AsStringWith(_context);
         }
 
-        public string FormatCounter(CounterTelemetry counterTelemetry)
+        public string FormatCounter(ICounterTelemetry counterTelemetry)
         {
             var record = new SingleRowTelemetryRecord { RecordType = "counter", CounterName = counterTelemetry.Counter, CounterValue = $"{counterTelemetry.Count}" };
             return record.AsStringWith(_context);
         }
 
-        public string FormatException(ExceptionTelemetry exceptionTelemetry)
+        public string FormatException(IExceptionTelemetry exceptionTelemetry)
         {
             var record = new SingleRowTelemetryRecord
             {

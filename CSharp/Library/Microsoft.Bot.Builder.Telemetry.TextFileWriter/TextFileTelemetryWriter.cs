@@ -34,7 +34,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             //method left in place to make it easy to add behavior here later if/as needed
         }
 
-        public async Task WriteServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry)
+        public async Task WriteServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
@@ -46,7 +46,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteIntentAsync(IntentTelemetry intentTelemetry)
+        public async Task WriteIntentAsync(IIntentTelemetry intentTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
@@ -68,7 +68,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteEntityAsync(EntityTelemetry entityTelemetry)
+        public async Task WriteEntityAsync(IEntityTelemetry entityTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
             {
@@ -80,7 +80,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteResponseAsync(ResponseTelemetry responseTelemetry)
+        public async Task WriteResponseAsync(IResponseTelemetry responseTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
@@ -92,7 +92,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteCounterAsync(CounterTelemetry counterTelemetry)
+        public async Task WriteCounterAsync(ICounterTelemetry counterTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
@@ -104,7 +104,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteExceptionAsync(ExceptionTelemetry exceptionTelemetry)
+        public async Task WriteExceptionAsync(IExceptionTelemetry exceptionTelemetry)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {

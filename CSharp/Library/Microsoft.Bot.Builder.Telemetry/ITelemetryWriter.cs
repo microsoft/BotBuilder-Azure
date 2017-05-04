@@ -147,12 +147,12 @@ namespace Microsoft.Bot.Builder.Telemetry
 
     public interface ITelemetryWriter : ISetTelemetryContext
     {
-        Task WriteIntentAsync(IntentTelemetry intentTelemetry);
-        Task WriteEntityAsync(EntityTelemetry entityTelemetry);
-        Task WriteCounterAsync(CounterTelemetry counterTelemetry);
-        Task WriteResponseAsync(ResponseTelemetry responseTelemetry);
-        Task WriteServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry);
-        Task WriteExceptionAsync(ExceptionTelemetry exceptionTelemetry);
+        Task WriteIntentAsync(IIntentTelemetry intentTelemetry);
+        Task WriteEntityAsync(IEntityTelemetry entityTelemetry);
+        Task WriteCounterAsync(ICounterTelemetry counterTelemetry);
+        Task WriteResponseAsync(IResponseTelemetry responseTelemetry);
+        Task WriteServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry);
+        Task WriteExceptionAsync(IExceptionTelemetry exceptionTelemetry);
         Task WriteEventAsync(string key, string value);
         Task WriteEventAsync(string key, double value);
         Task WriteEventAsync(Dictionary<string, double> metrics);

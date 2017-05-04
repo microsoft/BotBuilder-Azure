@@ -17,7 +17,7 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         public List<ITelemetryWriter> TelemetryWriters { get; set; }
 
-        public async Task AddLuisEventDetailsAsync(IntentTelemetry intentTelemetry)
+        public async Task AddLuisEventDetailsAsync(IIntentTelemetry intentTelemetry)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public async Task AddResponseAsync(ResponseTelemetry responseTelemetry)
+        public async Task AddResponseAsync(IResponseTelemetry responseTelemetry)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             return tasks;
         }
 
-        public async Task AddServiceResultAsync(ServiceResultTelemetry serviceResultTelemetry)
+        public async Task AddServiceResultAsync(IServiceResultTelemetry serviceResultTelemetry)
         {
             try
             {
