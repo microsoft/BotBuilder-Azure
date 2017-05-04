@@ -77,7 +77,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
                     }
 
                     //now process the intent
-                    await AppendToBlob(_formatter.FormatIntent(new IntentTelemetry(intentTelemetry.Intent, intentTelemetry.Text, intentTelemetry.Score)));
+                    await AppendToBlob(_formatter.FormatIntent(intentTelemetry));
 
                     DoPostLogActions();
                 });
@@ -98,7 +98,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatEntity(new EntityTelemetry(entityTelemetry.Kind, entityTelemetry.Value)));
+                    await AppendToBlob(_formatter.FormatEntity(entityTelemetry));
                     DoPostLogActions();
 
                 });
@@ -111,7 +111,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatResponse(new ResponseTelemetry(responseTelemetry.Text, responseTelemetry.ImageUrl, responseTelemetry.Json, responseTelemetry.Result, responseTelemetry.StartTime, responseTelemetry.EndDateTime, responseTelemetry.IsCacheHit)));
+                    await AppendToBlob(_formatter.FormatResponse(responseTelemetry));
                     DoPostLogActions();
 
                 });
@@ -124,7 +124,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatServiceResult(new ServiceResultTelemetry(new ServiceResultTelemetry(serviceResultTelemetry.ServiceName, serviceResultTelemetry.StartTime, serviceResultTelemetry.EndDateTime, serviceResultTelemetry.Result, serviceResultTelemetry.Success))));
+                    await AppendToBlob(_formatter.FormatServiceResult(serviceResultTelemetry));
                     DoPostLogActions();
                 });
             }
@@ -137,7 +137,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatCounter(new CounterTelemetry(counterTelemetry.Counter, counterTelemetry.Count)));
+                    await AppendToBlob(_formatter.FormatCounter(counterTelemetry));
                     DoPostLogActions();
                 });
             }
@@ -149,7 +149,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             {
                 await Task.Run(async () =>
                 {
-                    await AppendToBlob(_formatter.FormatException(new ExceptionTelemetry(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E)));
+                    await AppendToBlob(_formatter.FormatException(exceptionTelemetry));
                     DoPostLogActions();
                 });
             }

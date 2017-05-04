@@ -46,7 +46,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatServiceResult(ServiceResultTelemetry serviceResultTelemetry)
         {
-            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tServiceResult: [{serviceResultTelemetry.ServiceName}] - result: [{serviceResultTelemetry.Result}] - duration(ms): [{serviceResultTelemetry.EndTime.Subtract(serviceResultTelemetry.StartTime).TotalMilliseconds}] - success: [{serviceResultTelemetry.Success}]";
+            return $"{GetDateTimeString()}\t{GetBotContextProperties()}\tServiceResult: [{serviceResultTelemetry.ServiceName}] - result: [{serviceResultTelemetry.Result}] - duration(ms): [{serviceResultTelemetry.EndDateTime.Subtract(serviceResultTelemetry.StartDateTime).TotalMilliseconds}] - success: [{serviceResultTelemetry.Success}]";
         }
 
         public void SetContext(ITelemetryContext context)

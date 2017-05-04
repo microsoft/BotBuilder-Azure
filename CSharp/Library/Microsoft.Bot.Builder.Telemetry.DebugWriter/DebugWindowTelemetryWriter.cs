@@ -29,7 +29,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {
-                Debug.WriteLine(_outputFormatter.FormatException(new ExceptionTelemetry(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.E)));
+                Debug.WriteLine(_outputFormatter.FormatException(new ExceptionTelemetry(exceptionTelemetry.Component, exceptionTelemetry.Context, exceptionTelemetry.Ex)));
             }
         }
 
@@ -37,7 +37,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
-                Debug.WriteLine(_outputFormatter.FormatServiceResult(new ServiceResultTelemetry(serviceResultTelemetry.ServiceName, serviceResultTelemetry.StartTime, serviceResultTelemetry.EndDateTime, serviceResultTelemetry.Result, serviceResultTelemetry.Success)));
+                Debug.WriteLine(_outputFormatter.FormatServiceResult(new ServiceResultTelemetry(serviceResultTelemetry.ServiceName, serviceResultTelemetry.StartDateTime, serviceResultTelemetry.EndDateTime, serviceResultTelemetry.Result, serviceResultTelemetry.Success)));
 
             }
         }

@@ -68,17 +68,17 @@ namespace Microsoft.Bot.Builder.Telemetry
 
     public class ServiceResultTelemetry
     {
-        public ServiceResultTelemetry(string serviceName, DateTime startTime, DateTime endDateTime, string result, bool success = true)
+        public ServiceResultTelemetry(string serviceName, DateTime startDateTime, DateTime endDateTime, string result, bool success = true)
         {
             ServiceName = serviceName;
-            StartTime = startTime;
+            StartDateTime = startDateTime;
             EndDateTime = endDateTime;
             Result = result;
             Success = success;
         }
 
         public string ServiceName { get; private set; }
-        public DateTime StartTime { get; private set; }
+        public DateTime StartDateTime { get; private set; }
         public DateTime EndDateTime { get; private set; }
         public string Result { get; private set; }
         public bool Success { get; private set; }
@@ -86,16 +86,16 @@ namespace Microsoft.Bot.Builder.Telemetry
 
     public class ExceptionTelemetry
     {
-        public ExceptionTelemetry(string component, string context, Exception e)
+        public ExceptionTelemetry(string component, string context, Exception ex)
         {
             Component = component;
             Context = context;
-            E = e;
+            Ex = ex;
         }
 
         public string Component { get; private set; }
         public string Context { get; private set; }
-        public Exception E { get; private set; }
+        public Exception Ex { get; private set; }
     }
 
     public interface ITelemetryWriter : ISetTelemetryContext

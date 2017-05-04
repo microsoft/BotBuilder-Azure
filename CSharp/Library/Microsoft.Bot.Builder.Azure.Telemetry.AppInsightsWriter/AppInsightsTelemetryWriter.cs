@@ -143,7 +143,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"millisecondsDuration", serviceResultTelemetry.EndDateTime.Subtract(serviceResultTelemetry.StartTime).TotalMilliseconds }
+                        {"millisecondsDuration", serviceResultTelemetry.EndDateTime.Subtract(serviceResultTelemetry.StartDateTime).TotalMilliseconds }
                     };
 
                     _telemetry.TrackEvent("ServiceResult", properties, metrics);
@@ -164,7 +164,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("component", exceptionTelemetry.Component);
                     properties.Add("context", exceptionTelemetry.Context);
 
-                    _telemetry.TrackException(exceptionTelemetry.E, properties);
+                    _telemetry.TrackException(exceptionTelemetry.Ex, properties);
                     DoPostLogActions();
                 });
             }

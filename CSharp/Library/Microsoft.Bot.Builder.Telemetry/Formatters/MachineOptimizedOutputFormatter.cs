@@ -30,7 +30,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
                 ServiceResultName = serviceResultTelemetry.ServiceName,
                 ServiceResultResponse = serviceResultTelemetry.Result,
                 ServiceResultSuccess = $"{serviceResultTelemetry.Success}",
-                ServiceResultMilliseconds = $"{serviceResultTelemetry.EndTime.Subtract(serviceResultTelemetry.StartTime).TotalMilliseconds}"
+                ServiceResultMilliseconds = $"{serviceResultTelemetry.EndDateTime.Subtract(serviceResultTelemetry.StartDateTime).TotalMilliseconds}"
             };
 
             return record.AsStringWith(_context);
