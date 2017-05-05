@@ -61,7 +61,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"score", intentTelemetryData.IntentScore }
+                        {"score", intentTelemetryData.IntentConfidenceScore ?? 0d }
                     };
 
                     _telemetry.TrackEvent("Intent", properties, metrics);
@@ -82,7 +82,12 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("entity", entityTelemetryData.EntityType);
                     properties.Add("value", entityTelemetryData.EntityValue);
 
-                    _telemetry.TrackEvent("Entity", properties);
+                    var metrics = new Dictionary<string, double>
+                    {
+                        {"score", entityTelemetryData.EntityConfidenceScore ?? 0d }
+                    };
+
+                    _telemetry.TrackEvent("Entity", properties, metrics);
                     DoPostLogActions();
 
                 });
@@ -103,7 +108,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("image", responseTelemetryData.ResponseImageUrl);
                     properties.Add("json", responseTelemetryData.ResponseJson);
                     properties.Add("result", responseTelemetryData.ResponseResult);
-                    properties.Add("duration", $"{duration}");
+                    properties.Add("millisecondsDuration", $"{duration}");
                     properties.Add("cacheHit", $"{responseTelemetryData.ResponseIsCacheHit}");
 
                     _telemetry.TrackEvent("Response", properties);
