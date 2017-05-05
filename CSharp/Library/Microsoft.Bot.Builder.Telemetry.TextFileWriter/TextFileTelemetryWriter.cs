@@ -26,7 +26,10 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
 
         private void Initialize()
         {
-            //no-op
+            if (_configuration.OverwriteFileIfExists && File.Exists(_configuration.Filename))
+            {
+                File.Delete(_configuration.Filename);
+            }
         }
 
         private void DoPostLogActions()
@@ -62,7 +65,6 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
                             await WriteEntityAsync(entity);
                         }
                     }
-
 
                     DoPostLogActions();
                 });
