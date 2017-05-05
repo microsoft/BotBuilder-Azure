@@ -55,6 +55,24 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
+
+        public async Task ReportExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
+        {
+            try
+            {
+                var tasks = new List<Task>();
+                //enqueue all tasks
+                TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteExceptionAsync(exceptionTelemetryData)); });
+                //await all in parallel.
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception e)
+            {
+                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
+                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+            }
+        }
+
         public async Task SetContextFrom(IActivity activity, ITelemetryContext context = null)
         {
             if (null == context)

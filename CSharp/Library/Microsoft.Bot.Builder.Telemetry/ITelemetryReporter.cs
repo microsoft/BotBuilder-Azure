@@ -12,6 +12,7 @@ namespace Microsoft.Bot.Builder.Telemetry
         Task ReportResponseAsync(IResponseTelemetryData responseTelemetryData);
         Task ReportDialogImpressionAsync(string dialog);
         Task ReportServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData);
+        Task ReportExceptionAsync(IExceptionTelemetryData exceptionTelemetryData);
         Task ReportEventAsync(string key, string value);
         Task ReportEventAsync(string key, double value);
         Task ReportEventAsync(Dictionary<string, double> metrics);
