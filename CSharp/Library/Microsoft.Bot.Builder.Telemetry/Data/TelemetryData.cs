@@ -31,7 +31,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         //IIntentTelemetryData
         public string IntentName { get; set; }
         public string IntentText { get; set; }
-        public double? IntentScore { get; set; }
+        public double? IntentConfidenceScore { get; set; }
         public IList<IEntityTelemetryData> IntentEntities { get; }
 
         //IEntityTelemetryData
@@ -89,7 +89,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
 
             sb.Append($"\t{IntentName}");
             sb.Append($"\t{IntentText}");
-            sb.Append($"\t{IntentScore}");
+            sb.Append($"\t{IntentConfidenceScore}");
 
             sb.Append($"\t{EntityType}");
             sb.Append($"\t{EntityValue}");

@@ -41,7 +41,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatIntent(IIntentTelemetryData intentTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentScore})] - [{intentTelemetryData.IntentText}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentConfidenceScore})] - [{intentTelemetryData.IntentText}]";
         }
 
         public string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData)

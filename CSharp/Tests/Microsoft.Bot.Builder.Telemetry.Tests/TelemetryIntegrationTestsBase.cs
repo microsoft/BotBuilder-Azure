@@ -83,7 +83,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
             await processor.WriteExceptionAsync(new TelemetryData { ExceptionComponent = $"componentName ({uniqueTestRunId})", ExceptionContext = "component context", Ex = new Exception("this is a bad exception") });
             await processor.WriteServiceResultAsync(new TelemetryData { ServiceResultName = $"serviceNameValue ({uniqueTestRunId})", ServiceResultStartDateTime = DateTime.Now, ServiceResultEndDateTime = DateTime.Now.AddSeconds(10), ServiceResultResponse = "HTTP:200", ServiceResultSuccess = true });
             await processor.WriteEntityAsync(new TelemetryData { EntityType = $"kindNameValue ({uniqueTestRunId})", EntityValue = "value" });
-            await processor.WriteIntentAsync(new TelemetryData { IntentName = $"IntentNameValue ({uniqueTestRunId})", IntentText = "intent text", IntentScore = 0.5f });
+            await processor.WriteIntentAsync(new TelemetryData { IntentName = $"IntentNameValue ({uniqueTestRunId})", IntentText = "intent text", IntentConfidenceScore = 0.5f });
             await processor.WriteResponseAsync(new TelemetryData { ResponseText = $"ResponseText ({uniqueTestRunId})", ResponseImageUrl = "imageUrl", ResponseJson = "{someProperty: \"some json value\"}", ResponseResult = "this is a result", ResponseStartDateTime = DateTime.Now, ResponseEndDateTime = DateTime.Now.Add(TimeSpan.FromMilliseconds(100)), ResponseIsCacheHit = false });
         }
     }

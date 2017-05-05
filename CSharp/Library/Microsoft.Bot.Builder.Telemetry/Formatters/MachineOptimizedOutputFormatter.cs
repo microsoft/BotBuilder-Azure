@@ -45,7 +45,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
                 RecordType = "intent",
                 IntentName = intentTelemetryData.IntentName,
                 IntentText = intentTelemetryData.IntentText,
-                IntentScore = intentTelemetryData.IntentScore
+                IntentConfidenceScore = intentTelemetryData.IntentConfidenceScore
             };
             return record.AsStringWith(_context);
         }
