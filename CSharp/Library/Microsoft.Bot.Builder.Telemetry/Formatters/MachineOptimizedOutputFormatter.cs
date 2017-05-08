@@ -25,96 +25,44 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData)
         {
-            var record = new TelemetryData
-            {
-                RecordType = "serviceResult",
-                ServiceResultName = serviceResultTelemetryData.ServiceResultName,
-                ServiceResultResponse = serviceResultTelemetryData.ServiceResultResponse,
-                ServiceResultSuccess = serviceResultTelemetryData.ServiceResultSuccess,
-                ServiceResultStartDateTime = serviceResultTelemetryData.ServiceResultStartDateTime,
-                ServiceResultEndDateTime = serviceResultTelemetryData.ServiceResultEndDateTime,
-            };
-
-            return record.AsStringWith(_context);
+            serviceResultTelemetryData.RecordType = "serviceResult";
+            return serviceResultTelemetryData.AsStringWith(_context);
         }
 
         public string FormatIntent(IIntentTelemetryData intentTelemetryData)
         {
-            var record = new TelemetryData
-            {
-                RecordType = "intent",
-                IntentName = intentTelemetryData.IntentName,
-                IntentText = intentTelemetryData.IntentText,
-                IntentConfidenceScore = intentTelemetryData.IntentConfidenceScore
-            };
-            return record.AsStringWith(_context);
+            intentTelemetryData.RecordType = "intent";
+            return intentTelemetryData.AsStringWith(_context);
         }
 
         public string FormatEntity(IEntityTelemetryData entityTelemetryData)
         {
-            var record = new TelemetryData
-            {
-                RecordType = "entity",
-                EntityType = entityTelemetryData.EntityType,
-                EntityValue = entityTelemetryData.EntityValue,
-                EntityConfidenceScore = entityTelemetryData.EntityConfidenceScore
-            };
-            return record.AsStringWith(_context);
+            entityTelemetryData.RecordType = "entity";
+            return entityTelemetryData.AsStringWith(_context);
         }
 
         public string FormatResponse(IResponseTelemetryData responseTelemetryData)
         {
-            var record = new TelemetryData
-            {
-                RecordType = "response",
-                ResponseText = responseTelemetryData.ResponseText,
-                ResponseImageUrl = responseTelemetryData.ResponseImageUrl,
-                ResponseJson = responseTelemetryData.ResponseJson,
-                ResponseResult = responseTelemetryData.ResponseResult,
-                ResponseType = responseTelemetryData.ResponseType,
-                ResponseStartDateTime = responseTelemetryData.ResponseStartDateTime,
-                ResponseEndDateTime = responseTelemetryData.ResponseEndDateTime,
-                ResponseIsCacheHit = responseTelemetryData.ResponseIsCacheHit
-            };
-
-            return record.AsStringWith(_context);
+            responseTelemetryData.RecordType = "response";
+            return responseTelemetryData.AsStringWith(_context);
         }
 
         public string FormatCounter(ICounterTelemetryData counterTelemetryData)
         {
-            var record = new TelemetryData
-            {
-                RecordType = "counter",
-                CounterCategory = counterTelemetryData.CounterCategory,
-                CounterName = counterTelemetryData.CounterName,
-                CounterValue = counterTelemetryData.CounterValue
-            };
-            return record.AsStringWith(_context);
+            counterTelemetryData.RecordType = "counter";
+            return counterTelemetryData.AsStringWith(_context);
         }
 
         public string FormatMeasure(IMeasureTelemetryData measureTelemetryData)
         {
-            var record = new TelemetryData
-            {
-                RecordType = "measure",
-                MeasureCategory = measureTelemetryData.MeasureCategory,
-                CounterName = measureTelemetryData.MeasureName,
-                CounterValue = measureTelemetryData.MeasureValue
-            };
-            return record.AsStringWith(_context);
+            measureTelemetryData.RecordType = "measure";
+            return measureTelemetryData.AsStringWith(_context);
         }
 
         public string FormatException(IExceptionTelemetryData exceptionTelemetryData)
         {
-            var record = new TelemetryData
-            {
-                RecordType = "exception",
-                ExceptionContext = exceptionTelemetryData.ExceptionContext,
-                ExceptionComponent = exceptionTelemetryData.ExceptionComponent,
-                Ex = exceptionTelemetryData.Ex,
-            };
-
-            return record.AsStringWith(_context);
+            exceptionTelemetryData.RecordType = "exception";
+            return exceptionTelemetryData.AsStringWith(_context);
         }
 
         public string FormatEvent(Dictionary<string, double> metrics)

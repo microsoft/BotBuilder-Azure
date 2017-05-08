@@ -11,5 +11,6 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         string ConversationId { get; set; }
         string ActivityId { get; set; }
         string UserId { get; set; }
+        string AsStringWith(ITelemetryContext context);
     }
 }
