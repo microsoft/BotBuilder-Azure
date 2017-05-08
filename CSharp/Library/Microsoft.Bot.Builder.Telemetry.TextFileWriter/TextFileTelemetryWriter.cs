@@ -83,6 +83,18 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
+        public async Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
+        {
+            if (_configuration.Handles(TelemetryTypes.Requests))
+            {
+                await Task.Run(() =>
+                {
+                    ThreadsafeWriteToFile(_outputFormatter.FormatRequest(requestTelemetryData));
+                    DoPostLogActions();
+                });
+            }
+        }
+
         public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))

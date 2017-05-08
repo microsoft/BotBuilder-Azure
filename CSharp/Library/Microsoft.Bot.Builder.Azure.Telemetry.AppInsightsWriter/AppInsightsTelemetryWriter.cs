@@ -95,12 +95,30 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
             }
         }
 
+        public async Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
+        {
+            if (_configuration.Handles(TelemetryTypes.Responses))
+            {
+                var duration = requestTelemetryData.RequestStartDateTime.Subtract(requestTelemetryData.RequestEndDateTime).TotalMilliseconds;
+
+                await Task.Run(() =>
+                {
+                    var properties = GetBotContextProperties();
+
+                    properties.Add("millisecondsDuration", $"{duration}");
+                    properties.Add("cacheHit", $"{requestTelemetryData.RequestIsCacheHit}");
+
+                    _telemetry.TrackEvent("Request", properties);
+                    DoPostLogActions();
+
+                });
+            }
+        }
+
         public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
-                var duration = responseTelemetryData.ResponseStartDateTime.Subtract(responseTelemetryData.ResponseEndDateTime).TotalMilliseconds;
-
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
@@ -110,8 +128,6 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("json", responseTelemetryData.ResponseJson);
                     properties.Add("result", responseTelemetryData.ResponseResult);
                     properties.Add("type", responseTelemetryData.ResponseType);
-                    properties.Add("millisecondsDuration", $"{duration}");
-                    properties.Add("cacheHit", $"{responseTelemetryData.ResponseIsCacheHit}");
 
                     _telemetry.TrackEvent("Response", properties);
                     DoPostLogActions();

@@ -29,6 +29,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return serviceResultTelemetryData.AsStringWith(_context);
         }
 
+        public string FormatRequest(IRequestTelemetryData requestTelemetryData)
+        {
+            requestTelemetryData.RecordType = "request";
+            return requestTelemetryData.AsStringWith(_context);
+        }
+
         public string FormatIntent(IIntentTelemetryData intentTelemetryData)
         {
             intentTelemetryData.RecordType = "intent";

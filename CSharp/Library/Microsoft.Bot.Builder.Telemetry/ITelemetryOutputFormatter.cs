@@ -7,6 +7,7 @@ namespace Microsoft.Bot.Builder.Telemetry
     public interface ITelemetryOutputFormatter : ISetTelemetryContext
     {
         string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData);
+        string FormatRequest(IRequestTelemetryData requestTelemetryData);
         string FormatIntent(IIntentTelemetryData intentTelemetryData);
         string FormatEntity(IEntityTelemetryData entityTelemetryData);
         string FormatCounter(ICounterTelemetryData counterTelemetryData);

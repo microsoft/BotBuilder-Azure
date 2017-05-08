@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="AllIdsAndTimestampTelemetryContextCorrelationIdGenerator.cs" />
     <Compile Include="Data\IMeasureTelemetryData.cs" />
+    <Compile Include="Data\IRequestTelemetryData.cs" />
     <Compile Include="DateTimeProvider.cs" />
     <Compile Include="Formatters\MachineOptimizedOutputFormatter.cs" />
     <Compile Include="Formatters\ReadabilityOptimizedOutputFormatter.cs" />

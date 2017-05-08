@@ -9,6 +9,7 @@ namespace Microsoft.Bot.Builder.Telemetry
     public interface ITelemetryReporter : ISetTelemetryContext
     {
         Task ReportIntentAsync(IIntentTelemetryData intentTelemetryData);
+        Task ReportRequestAsync(IRequestTelemetryData requestTelemetryData);
         Task ReportResponseAsync(IResponseTelemetryData responseTelemetryData);
         Task ReportDialogImpressionAsync(string dialog);
         Task ReportServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData);

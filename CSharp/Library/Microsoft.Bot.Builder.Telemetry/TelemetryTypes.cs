@@ -6,13 +6,14 @@ namespace Microsoft.Bot.Builder.Telemetry
     public enum TelemetryTypes
     {
         None = 0,
-        Intents = 1,
-        Entities = 2,
-        Responses = 4,
-        Counters = 8,
-        ServiceResults = 16,
-        Exceptions = 32,
-        CustomEvents = 64,
-        All = ~0
+        Requests=1,
+        Intents = 2,
+        Entities = 4,
+        Responses = 8,
+        Counters = 16,
+        ServiceResults = 32,
+        Exceptions = 64,
+        CustomEvents = 128,
+        All = ~0,
     }
 }

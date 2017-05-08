@@ -34,9 +34,14 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tEntity: [{entityTelemetryData.EntityType} ({entityTelemetryData.EntityConfidenceScore}) / Ambiguous: {entityTelemetryData.EntityIsAmbiguous}]-[{entityTelemetryData.EntityValue}]";
         }
 
+        public string FormatRequest(IRequestTelemetryData requestTelemetryData)
+        {
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tRequest: [ Duration (ms): {requestTelemetryData.RequestMilliseconds} / cache hit?: {requestTelemetryData.RequestIsCacheHit}]";
+        }
+
         public string FormatResponse(IResponseTelemetryData responseTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tResponse: [ result: {responseTelemetryData.ResponseResult} / image URL: {responseTelemetryData.ResponseImageUrl} / JSON: {responseTelemetryData.ResponseJson} / result: {responseTelemetryData.ResponseResult} / type: {responseTelemetryData.ResponseType} / duration (ms): {responseTelemetryData.ResponseMilliseconds} / cache hit?: {responseTelemetryData.ResponseIsCacheHit}] - [{responseTelemetryData.ResponseText}] ";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tResponse: [ result: {responseTelemetryData.ResponseResult} / image URL: {responseTelemetryData.ResponseImageUrl} / JSON: {responseTelemetryData.ResponseJson} / result: {responseTelemetryData.ResponseResult} / type: {responseTelemetryData.ResponseType}] - [{responseTelemetryData.ResponseText}] ";
         }
 
         public string FormatException(IExceptionTelemetryData exceptionTelemetryData)

@@ -75,6 +75,14 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             }
         }
 
+        public async Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
+        {
+            if (_configuration.Handles(TelemetryTypes.Responses))
+            {
+                Debug.WriteLine(_outputFormatter.FormatRequest(requestTelemetryData));
+            }
+        }
+
         public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))

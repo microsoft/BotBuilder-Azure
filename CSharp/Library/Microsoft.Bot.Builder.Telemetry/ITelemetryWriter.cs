@@ -17,5 +17,6 @@ namespace Microsoft.Bot.Builder.Telemetry
         Task WriteEventAsync(string key, double value);
         Task WriteEventAsync(Dictionary<string, double> metrics);
         Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null);
+        Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData);
     }
 }

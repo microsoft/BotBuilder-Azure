@@ -6,6 +6,7 @@ using System.Text;
 namespace Microsoft.Bot.Builder.Telemetry.Data
 {
     public class TelemetryData :
+        IRequestTelemetryData,
         IIntentTelemetryData,
         IEntityTelemetryData,
         IResponseTelemetryData,
@@ -30,6 +31,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string ActivityId { get; set; }
         public string UserId { get; set; }
 
+        //IRequestTelemetryData
+        public DateTime RequestStartDateTime { get; set; }
+        public DateTime RequestEndDateTime { get; set; }
+        public bool RequestIsCacheHit { get; set; }
+        public double RequestMilliseconds => RequestStartDateTime.Subtract(RequestEndDateTime).TotalMilliseconds;
+
         //IIntentTelemetryData
         public string IntentName { get; set; }
         public string IntentText { get; set; }
@@ -50,11 +57,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string ResponseJson { get; set; }
         public string ResponseResult { get; set; }
         public string ResponseType { get; set; }
-        public DateTime ResponseStartDateTime { get; set; }
-        public DateTime ResponseEndDateTime { get; set; }
-        public bool ResponseIsCacheHit { get; set; }
-        public double ResponseMilliseconds => ResponseStartDateTime.Subtract(ResponseEndDateTime).TotalMilliseconds;
-
+ 
         //ICounterTelemetryData
         public string CounterCategory { get; set; }
         public string CounterName { get; set; }
@@ -98,6 +101,9 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             sb.Append($"\t{context.ActivityId}");
             sb.Append($"\t{context.UserId}");
 
+            sb.Append($"\t{RequestIsCacheHit}");
+            sb.Append($"\t{RequestMilliseconds}");
+
             sb.Append($"\t{IntentName}");
             sb.Append($"\t{IntentText}");
             sb.Append($"\t{IntentConfidenceScore}");
@@ -113,9 +119,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             sb.Append($"\t{ResponseJson}");
             sb.Append($"\t{ResponseResult}");
             sb.Append($"\t{ResponseType}");
-            sb.Append($"\t{ResponseIsCacheHit}");
-            sb.Append($"\t{ResponseMilliseconds}");
-
+     
             sb.Append($"\t{CounterCategory}");
             sb.Append($"\t{CounterName}");
             sb.Append($"\t{CounterValue}");
