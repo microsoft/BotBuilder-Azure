@@ -21,7 +21,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
         }
         public string FormatCounter(ICounterTelemetryData counterTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tCounter: [{counterTelemetryData.CounterName}] - Count: [{counterTelemetryData.CounterValue}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tCounter: [{counterTelemetryData.CounterCategory}/{counterTelemetryData.CounterName}] - Count: [{counterTelemetryData.CounterValue}]";
+        }
+
+        public string FormatMeasure(IMeasureTelemetryData measureTelemetryData)
+        {
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tMeasure: [{measureTelemetryData.MeasureCategory}/{measureTelemetryData.MeasureName}] - Value: [{measureTelemetryData.MeasureValue}]";
         }
 
         public string FormatEntity(IEntityTelemetryData entityTelemetryData)

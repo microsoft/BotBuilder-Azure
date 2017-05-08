@@ -127,11 +127,30 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
+                    properties.Add("category", counterTelemetryData.CounterCategory);
                     properties.Add("name", counterTelemetryData.CounterName);
 
                     var metrics = new Dictionary<string, double> { { "count", counterTelemetryData.CounterValue } };
 
                     _telemetry.TrackEvent("Counter", properties, metrics);
+                    DoPostLogActions();
+                });
+            }
+        }
+
+        public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
+        {
+            if (_configuration.Handles(TelemetryTypes.Counters))
+            {
+                await Task.Run(() =>
+                {
+                    var properties = GetBotContextProperties();
+                    properties.Add("category", measureTelemetryData.MeasureCategory);
+                    properties.Add("name", measureTelemetryData.MeasureName);
+
+                    var metrics = new Dictionary<string, double> { { "value", measureTelemetryData.MeasureValue } };
+
+                    _telemetry.TrackEvent("Measure", properties, metrics);
                     DoPostLogActions();
                 });
             }

@@ -9,6 +9,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         IEntityTelemetryData,
         IResponseTelemetryData,
         ICounterTelemetryData,
+        IMeasureTelemetryData,
         IServiceResultTelemetryData,
         IExceptionTelemetryData,
         ITraceTelemetryData
@@ -51,8 +52,14 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public double ResponseMilliseconds => ResponseStartDateTime.Subtract(ResponseEndDateTime).TotalMilliseconds;
 
         //ICounterTelemetryData
+        public string CounterCategory { get; set; }
         public string CounterName { get; set; }
         public int CounterValue { get; set; }
+
+        //IMeasureTelemetryData
+        public string MeasureCategory { get; set; }
+        public string MeasureName { get; set; }
+        public int MeasureValue { get; set; }
 
         //IServiceResultTelemetryData
         public string ServiceResultName { get; set; }
@@ -103,8 +110,13 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             sb.Append($"\t{ResponseIsCacheHit}");
             sb.Append($"\t{ResponseMilliseconds}");
 
+            sb.Append($"\t{CounterCategory}");
             sb.Append($"\t{CounterName}");
             sb.Append($"\t{CounterValue}");
+
+            sb.Append($"\t{MeasureCategory}");
+            sb.Append($"\t{MeasureName}");
+            sb.Append($"\t{MeasureValue}");
 
             sb.Append($"\t{ServiceResultName}");
             sb.Append($"\t{ServiceResultMilliseconds}");
@@ -129,9 +141,10 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public static IEntityTelemetryData NewEntityData() { return new TelemetryData(); }
         public static IResponseTelemetryData NewResponseData() { return new TelemetryData(); }
         public static ICounterTelemetryData NewCounterData() { return new TelemetryData(); }
+        public static IMeasureTelemetryData NewMeasureData() { return new TelemetryData(); }
         public static IServiceResultTelemetryData NewServiceResultData() { return new TelemetryData(); }
         public static IExceptionTelemetryData NewExceptionData() { return new TelemetryData(); }
         public static ITraceTelemetryData NewTraceData() { return new TelemetryData(); }
-        
+
     }
 }

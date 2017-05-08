@@ -85,8 +85,21 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
             var record = new TelemetryData
             {
                 RecordType = "counter",
+                CounterCategory = counterTelemetryData.CounterCategory,
                 CounterName = counterTelemetryData.CounterName,
                 CounterValue = counterTelemetryData.CounterValue
+            };
+            return record.AsStringWith(_context);
+        }
+
+        public string FormatMeasure(IMeasureTelemetryData measureTelemetryData)
+        {
+            var record = new TelemetryData
+            {
+                RecordType = "measure",
+                MeasureCategory = measureTelemetryData.MeasureCategory,
+                CounterName = measureTelemetryData.MeasureName,
+                CounterValue = measureTelemetryData.MeasureValue
             };
             return record.AsStringWith(_context);
         }

@@ -10,6 +10,7 @@ namespace Microsoft.Bot.Builder.Telemetry
         string FormatIntent(IIntentTelemetryData intentTelemetryData);
         string FormatEntity(IEntityTelemetryData entityTelemetryData);
         string FormatCounter(ICounterTelemetryData counterTelemetryData);
+        string FormatMeasure(IMeasureTelemetryData measureTelemetryData);
         string FormatException(IExceptionTelemetryData exceptionTelemetryData);
         string FormatEvent(Dictionary<string, double> metrics);
         string FormatEvent(Dictionary<string, string> properties, Dictionary<string, double> metrics = null);

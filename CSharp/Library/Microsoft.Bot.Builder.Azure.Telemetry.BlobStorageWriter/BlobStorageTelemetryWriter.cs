@@ -144,6 +144,18 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
             }
         }
 
+        public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
+        {
+            if (_configuration.Handles(TelemetryTypes.Counters))
+            {
+                await Task.Run(async () =>
+                {
+                    await AppendToBlob(_formatter.FormatMeasure(measureTelemetryData));
+                    DoPostLogActions();
+                });
+            }
+        }
+
         public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))

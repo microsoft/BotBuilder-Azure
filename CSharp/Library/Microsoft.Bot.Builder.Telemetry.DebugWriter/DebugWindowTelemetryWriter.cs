@@ -26,6 +26,14 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             }
         }
 
+        public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
+        {
+            if (_configuration.Handles(TelemetryTypes.Counters))
+            {
+                Debug.WriteLine(_outputFormatter.FormatMeasure(measureTelemetryData));
+            }
+        }
+
         public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))

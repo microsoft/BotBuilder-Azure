@@ -9,6 +9,7 @@ namespace Microsoft.Bot.Builder.Telemetry
         Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData);
         Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData);
         Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData);
+        Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData);
         Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData);
         Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData);
         Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData);
