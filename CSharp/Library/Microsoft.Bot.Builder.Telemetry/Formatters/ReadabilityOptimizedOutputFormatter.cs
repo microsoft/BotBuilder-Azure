@@ -41,7 +41,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatResponse(IResponseTelemetryData responseTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tResponse: [ result: {responseTelemetryData.ResponseResult} / image URL: {responseTelemetryData.ResponseImageUrl} / JSON: {responseTelemetryData.ResponseJson} / result: {responseTelemetryData.ResponseResult} / type: {responseTelemetryData.ResponseType}] - [{responseTelemetryData.ResponseText}] ";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tResponse: [ result: {responseTelemetryData.ResponseResult} / image URL: {responseTelemetryData.ResponseImageUrl} / JSON: {responseTelemetryData.ResponseJson} / result: {responseTelemetryData.ResponseResult} / quality: {responseTelemetryData.ResponseResultQuality} / type: {responseTelemetryData.ResponseType}] - [{responseTelemetryData.ResponseText}] ";
         }
 
         public string FormatException(IExceptionTelemetryData exceptionTelemetryData)

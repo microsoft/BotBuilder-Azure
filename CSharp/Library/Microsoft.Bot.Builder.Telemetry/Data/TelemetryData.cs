@@ -56,6 +56,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string ResponseImageUrl { get; set; }
         public string ResponseJson { get; set; }
         public string ResponseResult { get; set; }
+        public string ResponseResultQuality { get; set; }
         public string ResponseType { get; set; }
  
         //ICounterTelemetryData

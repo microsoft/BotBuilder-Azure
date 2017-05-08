@@ -8,6 +8,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         string ResponseImageUrl { get; set; }
         string ResponseJson { get; set; }
         string ResponseResult { get; set; }
+        string ResponseResultQuality { get; set; }
         string ResponseType { get; set; }
     }
 }
