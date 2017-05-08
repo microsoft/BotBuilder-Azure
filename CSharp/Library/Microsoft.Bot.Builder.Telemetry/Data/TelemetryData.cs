@@ -35,7 +35,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public DateTime RequestStartDateTime { get; set; }
         public DateTime RequestEndDateTime { get; set; }
         public bool RequestIsCacheHit { get; set; }
-        public double RequestMilliseconds => RequestStartDateTime.Subtract(RequestEndDateTime).TotalMilliseconds;
+        public double RequestMilliseconds => RequestEndDateTime.Subtract(RequestStartDateTime).TotalMilliseconds;
 
         //IIntentTelemetryData
         public string IntentName { get; set; }
@@ -70,7 +70,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
 
         //IServiceResultTelemetryData
         public string ServiceResultName { get; set; }
-        public double ServiceResultMilliseconds => ServiceResultStartDateTime.Subtract(ServiceResultEndDateTime).TotalMilliseconds;
+        public double ServiceResultMilliseconds => ServiceResultEndDateTime.Subtract(ServiceResultStartDateTime).TotalMilliseconds;
         public bool ServiceResultSuccess { get; set; }
         public string ServiceResultResponse { get; set; }
         public DateTime ServiceResultStartDateTime { get; set; }
@@ -149,6 +149,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
 
         public static IIntentTelemetryData NewIntentData() { return new TelemetryData(); }
         public static IEntityTelemetryData NewEntityData() { return new TelemetryData(); }
+        public static IRequestTelemetryData NewRequestData() { return new TelemetryData(); }
         public static IResponseTelemetryData NewResponseData() { return new TelemetryData(); }
         public static ICounterTelemetryData NewCounterData() { return new TelemetryData(); }
         public static IMeasureTelemetryData NewMeasureData() { return new TelemetryData(); }
