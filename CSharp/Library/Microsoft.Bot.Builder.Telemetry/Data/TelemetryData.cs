@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.Bot.Builder.Telemetry.Data
@@ -33,12 +34,15 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string IntentName { get; set; }
         public string IntentText { get; set; }
         public double? IntentConfidenceScore { get; set; }
+        public bool IntentIsAmbiguous { get; set; }
+        public bool IntentHasAmbiguousEntities => IntentEntities.Any(entity => entity.EntityIsAmbiguous);
         public IList<IEntityTelemetryData> IntentEntities { get; }
 
         //IEntityTelemetryData
         public string EntityType { get; set; }
         public string EntityValue { get; set; }
         public double? EntityConfidenceScore { get; set; }
+        public bool EntityIsAmbiguous { get; set; }
 
         //IResponseTelemetryData
         public string ResponseText { get; set; }
@@ -97,10 +101,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             sb.Append($"\t{IntentName}");
             sb.Append($"\t{IntentText}");
             sb.Append($"\t{IntentConfidenceScore}");
+            sb.Append($"\t{IntentIsAmbiguous}");
 
             sb.Append($"\t{EntityType}");
             sb.Append($"\t{EntityValue}");
             sb.Append($"\t{EntityConfidenceScore}");
+            sb.Append($"\t{EntityIsAmbiguous}");
 
             sb.Append($"\t{ResponseText}");
             sb.Append($"\t{ResponseImageUrl}");

@@ -7,6 +7,8 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         string IntentName { get; set; }
         string IntentText { get; set; }
         double? IntentConfidenceScore { get; set; }
+        bool IntentIsAmbiguous { get; set; }
+        bool IntentHasAmbiguousEntities { get; }
         IList<IEntityTelemetryData> IntentEntities { get; }
     }
 }

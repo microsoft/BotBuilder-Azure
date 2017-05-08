@@ -31,7 +31,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatEntity(IEntityTelemetryData entityTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tEntity: [{entityTelemetryData.EntityType} ({entityTelemetryData.EntityConfidenceScore})]-[{entityTelemetryData.EntityValue}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tEntity: [{entityTelemetryData.EntityType} ({entityTelemetryData.EntityConfidenceScore}) / Ambiguous: {entityTelemetryData.EntityIsAmbiguous}]-[{entityTelemetryData.EntityValue}]";
         }
 
         public string FormatResponse(IResponseTelemetryData responseTelemetryData)
@@ -46,7 +46,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatIntent(IIntentTelemetryData intentTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentConfidenceScore})] - [{intentTelemetryData.IntentText}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentConfidenceScore}) / Ambiguous: {intentTelemetryData.IntentIsAmbiguous} / Ambiguous Entities: {intentTelemetryData.IntentHasAmbiguousEntities}] - [{intentTelemetryData.IntentText}]";
         }
 
         public string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData)
