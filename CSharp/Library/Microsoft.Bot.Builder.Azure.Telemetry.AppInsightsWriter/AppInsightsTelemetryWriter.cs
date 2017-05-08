@@ -58,6 +58,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
                     properties.Add("intent", intentTelemetryData.IntentName);
+                    properties.Add("text", intentTelemetryData.IntentText);
 
                     var metrics = new Dictionary<string, double>
                     {
@@ -108,6 +109,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("image", responseTelemetryData.ResponseImageUrl);
                     properties.Add("json", responseTelemetryData.ResponseJson);
                     properties.Add("result", responseTelemetryData.ResponseResult);
+                    properties.Add("type", responseTelemetryData.ResponseType);
                     properties.Add("millisecondsDuration", $"{duration}");
                     properties.Add("cacheHit", $"{responseTelemetryData.ResponseIsCacheHit}");
 
@@ -146,6 +148,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                     properties.Add("serviceName", serviceResultTelemetryData.ServiceResultName);
                     properties.Add("result", serviceResultTelemetryData.ServiceResultResponse);
                     properties.Add("success", serviceResultTelemetryData.ServiceResultSuccess.ToString());
+                    properties.Add("resppnse", serviceResultTelemetryData.ServiceResultResponse);
 
                     var metrics = new Dictionary<string, double>
                     {
