@@ -46,6 +46,8 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
         [TestMethod]
         public void CanCloneWithOnlyDifferentTimestampAndCorrelationIdResult()
         {
+            Thread.Sleep(1000); //need to pause sufficiently here to ensure the clock moves forward
+
             var clonedContext = _telemetryContext.CloneWithRefreshedTimestamp();
 
             Assert.AreEqual(clonedContext.ActivityId, _telemetryContext.ActivityId);
