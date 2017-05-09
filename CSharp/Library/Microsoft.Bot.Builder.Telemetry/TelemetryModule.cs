@@ -42,7 +42,7 @@ namespace Microsoft.Bot.Builder.Telemetry
                 RegisterTelemetryWriterInstances(builder);
             }
 
-            if (_configuration.WriterDiscoveryStrategy==TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies)
+            if (_configuration.WriterDiscoveryStrategy == TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies)
             {
                 RegisterTelemetryWritersFromAssemblies(builder);
             }
@@ -126,6 +126,9 @@ namespace Microsoft.Bot.Builder.Telemetry
             TelemetryWriterTypes = new List<Type>();
             TelemetryWriterInstances = new List<ITelemetryWriter>();
             TelemetryWriterAssemblies = new List<Assembly>();
+
+            //default discovery strategy is to use *all* collections with any elements added
+            WriterDiscoveryStrategy = TelemetryWriterDiscoveryStrategy.All;
         }
     }
 
@@ -136,5 +139,6 @@ namespace Microsoft.Bot.Builder.Telemetry
         UseAllWritersInExplicitAssemblies = 1,
         UseExplicitlyDeclaredTypes = 2,
         UseExplicitlyDeclaredInstances = 4,
+        All = ~0,
     }
 }
