@@ -64,14 +64,6 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
                 Debug.WriteLine(_outputFormatter.FormatIntent(intentTelemetryData));
-
-                if (null != intentTelemetryData.IntentEntities)
-                {
-                    foreach (var entity in intentTelemetryData.IntentEntities)
-                    {
-                        await WriteEntityAsync(entity);
-                    }
-                }
             }
         }
 

@@ -54,18 +54,9 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
-                await Task.Run(async () =>
+                await Task.Run(() =>
                 {
                     ThreadsafeWriteToFile(_outputFormatter.FormatIntent(intentTelemetryData));
-
-                    if (null != intentTelemetryData.IntentEntities)
-                    {
-                        foreach (var entity in intentTelemetryData.IntentEntities)
-                        {
-                            await WriteEntityAsync(entity);
-                        }
-                    }
-
                     DoPostLogActions();
                 });
             }
