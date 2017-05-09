@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Autofac;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Telemetry.Formatters;
+using Module = Autofac.Module;
 
 namespace Microsoft.Bot.Builder.Telemetry
 {
@@ -28,8 +31,32 @@ namespace Microsoft.Bot.Builder.Telemetry
         private void RegisterAllTelemetryWriters(ContainerBuilder builder)
         {
             RegisterTelemetryWriterConfigurations(builder);
-            RegisterTelemetryWriterTypes(builder);
-            RegisterTelemetryWriterInstances(builder);
+
+            if (_configuration.WriterDiscoveryStrategy == TelemetryWriterDiscoveryStrategy.UseExplicitlyDeclaredTypes)
+            {
+                RegisterTelemetryWriterTypes(builder);
+            }
+
+            if (_configuration.WriterDiscoveryStrategy == TelemetryWriterDiscoveryStrategy.UseExplicitlyDeclaredInstances)
+            {
+                RegisterTelemetryWriterInstances(builder);
+            }
+
+            if (_configuration.WriterDiscoveryStrategy==TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies)
+            {
+                RegisterTelemetryWritersFromAssemblies(builder);
+            }
+        }
+
+        private void RegisterTelemetryWritersFromAssemblies(ContainerBuilder builder)
+        {
+            foreach (var assembly in _configuration.TelemetryWriterAssemblies)
+            {
+                builder.RegisterAssemblyTypes(assembly)
+                    .Where(t => t.GetInterfaces().Contains(typeof(ITelemetryWriter)))
+                    .AsImplementedInterfaces()
+                    .SingleInstance();
+            }
         }
 
         private void RegisterAllRequiredDefaultTypes(ContainerBuilder builder)
@@ -90,6 +117,7 @@ namespace Microsoft.Bot.Builder.Telemetry
         public IList<object> TelemetryWriterConfigurations { get; set; }
         public IList<Type> TelemetryWriterTypes { get; set; }
         public IList<ITelemetryWriter> TelemetryWriterInstances { get; set; }
+        public IList<Assembly> TelemetryWriterAssemblies { get; set; }
 
 
         public TelemetryModuleConfiguration()
@@ -97,6 +125,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             TelemetryWriterConfigurations = new List<object>();
             TelemetryWriterTypes = new List<Type>();
             TelemetryWriterInstances = new List<ITelemetryWriter>();
+            TelemetryWriterAssemblies = new List<Assembly>();
         }
     }
 
@@ -104,9 +133,8 @@ namespace Microsoft.Bot.Builder.Telemetry
     public enum TelemetryWriterDiscoveryStrategy
     {
         None = 0,
-        ScanExplicitFileSystemLocation = 1,
-        ScanAssemblyFileSystemLocation = 2,
-        UseExplicitlyDeclaredTypes = 4,
-        UseExplicitlyDeclaredInstances = 8,
+        UseAllWritersInExplicitAssemblies = 1,
+        UseExplicitlyDeclaredTypes = 2,
+        UseExplicitlyDeclaredInstances = 4,
     }
 }

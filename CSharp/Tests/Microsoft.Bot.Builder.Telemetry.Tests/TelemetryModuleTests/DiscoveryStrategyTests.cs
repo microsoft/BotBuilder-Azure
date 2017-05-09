@@ -10,10 +10,10 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
         {
             var config = new TelemetryModuleConfiguration
             {
-                WriterDiscoveryStrategy = TelemetryWriterDiscoveryStrategy.ScanExplicitFileSystemLocation
+                WriterDiscoveryStrategy = TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies
             };
 
-            Assert.IsFalse(config.WriterDiscoveryStrategy.HasFlag(TelemetryWriterDiscoveryStrategy.ScanAssemblyFileSystemLocation));
+            Assert.IsTrue(config.WriterDiscoveryStrategy.HasFlag(TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies));
         }
 
         [TestMethod]
@@ -21,10 +21,10 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
         {
             var config = new TelemetryModuleConfiguration
             {
-                WriterDiscoveryStrategy = TelemetryWriterDiscoveryStrategy.ScanExplicitFileSystemLocation | TelemetryWriterDiscoveryStrategy.UseExplicitlyDeclaredInstances
+                WriterDiscoveryStrategy = TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies | TelemetryWriterDiscoveryStrategy.UseExplicitlyDeclaredInstances
             };
 
-            Assert.IsTrue(config.WriterDiscoveryStrategy.HasFlag(TelemetryWriterDiscoveryStrategy.ScanExplicitFileSystemLocation));
+            Assert.IsTrue(config.WriterDiscoveryStrategy.HasFlag(TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies));
             Assert.IsTrue(config.WriterDiscoveryStrategy.HasFlag(TelemetryWriterDiscoveryStrategy.UseExplicitlyDeclaredInstances));
         }
     }
