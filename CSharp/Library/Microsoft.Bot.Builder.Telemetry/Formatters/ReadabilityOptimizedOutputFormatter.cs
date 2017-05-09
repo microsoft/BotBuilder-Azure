@@ -36,12 +36,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatRequest(IRequestTelemetryData requestTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tRequest: [ Duration (ms): {requestTelemetryData.RequestMilliseconds} / cache hit?: {requestTelemetryData.RequestIsCacheHit}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tRequest: [Ambiguous: {requestTelemetryData.RequestIsAmbiguous} / Quality: {requestTelemetryData.RequestQuality} / Duration (ms): {requestTelemetryData.RequestMilliseconds} / cache hit?: {requestTelemetryData.RequestIsCacheHit}]";
         }
 
         public string FormatResponse(IResponseTelemetryData responseTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tResponse: [ result: {responseTelemetryData.ResponseResult} / image URL: {responseTelemetryData.ResponseImageUrl} / JSON: {responseTelemetryData.ResponseJson} / result: {responseTelemetryData.ResponseResult} / quality: {responseTelemetryData.ResponseResultQuality} / type: {responseTelemetryData.ResponseType}] - [{responseTelemetryData.ResponseText}] ";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tResponse: [ image URL: {responseTelemetryData.ResponseImageUrl} / JSON: {responseTelemetryData.ResponseJson} / type: {responseTelemetryData.ResponseType}] - [{responseTelemetryData.ResponseText}] ";
         }
 
         public string FormatException(IExceptionTelemetryData exceptionTelemetryData)
@@ -51,7 +51,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Formatters
 
         public string FormatIntent(IIntentTelemetryData intentTelemetryData)
         {
-            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentConfidenceScore}) / Ambiguous: {intentTelemetryData.IntentIsAmbiguous} / Ambiguous Entities: {intentTelemetryData.IntentHasAmbiguousEntities}] - [{intentTelemetryData.IntentText}]";
+            return $"{GetDateTimeString()}\t{GetTelemetryContextProperties()}\tIntent: [{intentTelemetryData.IntentName} ({intentTelemetryData.IntentConfidenceScore}) / Ambiguous Entities: {intentTelemetryData.IntentHasAmbiguousEntities}] - [{intentTelemetryData.IntentText}]";
         }
 
         public string FormatServiceResult(IServiceResultTelemetryData serviceResultTelemetryData)

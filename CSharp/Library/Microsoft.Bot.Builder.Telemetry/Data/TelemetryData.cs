@@ -30,18 +30,22 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string ConversationId { get; set; }
         public string ActivityId { get; set; }
         public string UserId { get; set; }
+        public string Json { get; set; }
 
         //IRequestTelemetryData
         public DateTime RequestStartDateTime { get; set; }
         public DateTime RequestEndDateTime { get; set; }
         public bool RequestIsCacheHit { get; set; }
+        public bool RequestIsAmbiguous { get; set; }
+        public string RequestQuality { get; set; }
+        public bool RequestIsAuthenticated { get; set; }
+
         public double RequestMilliseconds => RequestEndDateTime.Subtract(RequestStartDateTime).TotalMilliseconds;
 
         //IIntentTelemetryData
         public string IntentName { get; set; }
         public string IntentText { get; set; }
         public double? IntentConfidenceScore { get; set; }
-        public bool IntentIsAmbiguous { get; set; }
         public bool IntentHasAmbiguousEntities => IntentEntities.Any(entity => entity.EntityIsAmbiguous);
         public IList<IEntityTelemetryData> IntentEntities { get; }
 
@@ -55,8 +59,6 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         public string ResponseText { get; set; }
         public string ResponseImageUrl { get; set; }
         public string ResponseJson { get; set; }
-        public string ResponseResult { get; set; }
-        public string ResponseResultQuality { get; set; }
         public string ResponseType { get; set; }
  
         //ICounterTelemetryData
@@ -101,14 +103,17 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             sb.Append($"\t{context.ConversationId}");
             sb.Append($"\t{context.ActivityId}");
             sb.Append($"\t{context.UserId}");
+            sb.Append($"\t{Json}");
 
             sb.Append($"\t{RequestIsCacheHit}");
             sb.Append($"\t{RequestMilliseconds}");
+            sb.Append($"\t{RequestIsAmbiguous}");
+            sb.Append($"\t{RequestQuality}");
+            sb.Append($"\t{RequestIsAuthenticated}");
 
             sb.Append($"\t{IntentName}");
             sb.Append($"\t{IntentText}");
             sb.Append($"\t{IntentConfidenceScore}");
-            sb.Append($"\t{IntentIsAmbiguous}");
 
             sb.Append($"\t{EntityType}");
             sb.Append($"\t{EntityValue}");
@@ -118,7 +123,6 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
             sb.Append($"\t{ResponseText}");
             sb.Append($"\t{ResponseImageUrl}");
             sb.Append($"\t{ResponseJson}");
-            sb.Append($"\t{ResponseResult}");
             sb.Append($"\t{ResponseType}");
      
             sb.Append($"\t{CounterCategory}");

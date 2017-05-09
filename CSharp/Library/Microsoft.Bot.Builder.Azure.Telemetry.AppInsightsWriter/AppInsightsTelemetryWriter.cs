@@ -57,8 +57,11 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
-                    properties.Add("intent", intentTelemetryData.IntentName);
+
+                    properties.Add("json", intentTelemetryData.Json);
+                    properties.Add("name", intentTelemetryData.IntentName);
                     properties.Add("text", intentTelemetryData.IntentText);
+                    properties.Add("hasAmbiguousEntities", intentTelemetryData.IntentHasAmbiguousEntities.ToString());
 
                     var metrics = new Dictionary<string, double>
                     {
@@ -80,8 +83,10 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("entity", entityTelemetryData.EntityType);
+                    properties.Add("json", entityTelemetryData.Json);
+                    properties.Add("type", entityTelemetryData.EntityType);
                     properties.Add("value", entityTelemetryData.EntityValue);
+                    properties.Add("isAmbiguous", entityTelemetryData.EntityIsAmbiguous.ToString());
 
                     var metrics = new Dictionary<string, double>
                     {
@@ -105,8 +110,12 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
+                    properties.Add("json", requestTelemetryData.Json);
                     properties.Add("millisecondsDuration", $"{duration}");
                     properties.Add("cacheHit", $"{requestTelemetryData.RequestIsCacheHit}");
+                    properties.Add("isAmbiguous", $"{requestTelemetryData.RequestIsAmbiguous}");
+                    properties.Add("quality", $"{requestTelemetryData.RequestQuality}");
+                    properties.Add("isAuthenticated", $"{requestTelemetryData.RequestIsAuthenticated}");
 
                     _telemetry.TrackEvent("Request", properties);
                     DoPostLogActions();
@@ -123,10 +132,10 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
+                    properties.Add("json", responseTelemetryData.Json);
                     properties.Add("text", responseTelemetryData.ResponseText);
-                    properties.Add("image", responseTelemetryData.ResponseImageUrl);
-                    properties.Add("json", responseTelemetryData.ResponseJson);
-                    properties.Add("result", responseTelemetryData.ResponseResult);
+                    properties.Add("imageUrl", responseTelemetryData.ResponseImageUrl);
+                    properties.Add("responseJson", responseTelemetryData.ResponseJson);
                     properties.Add("type", responseTelemetryData.ResponseType);
 
                     _telemetry.TrackEvent("Response", properties);
@@ -143,6 +152,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
+                    properties.Add("json", counterTelemetryData.Json);
                     properties.Add("category", counterTelemetryData.CounterCategory);
                     properties.Add("name", counterTelemetryData.CounterName);
 
@@ -161,10 +171,11 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 await Task.Run(() =>
                 {
                     var properties = GetBotContextProperties();
+                    properties.Add("json", measureTelemetryData.Json);
                     properties.Add("category", measureTelemetryData.MeasureCategory);
                     properties.Add("name", measureTelemetryData.MeasureName);
 
-                    var metrics = new Dictionary<string, double> { { "value", measureTelemetryData.MeasureValue } };
+                    var metrics = new Dictionary<string, double> { { "measure", measureTelemetryData.MeasureValue } };
 
                     _telemetry.TrackEvent("Measure", properties, metrics);
                     DoPostLogActions();
@@ -180,14 +191,14 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
-                    properties.Add("serviceName", serviceResultTelemetryData.ServiceResultName);
-                    properties.Add("result", serviceResultTelemetryData.ServiceResultResponse);
+                    properties.Add("json", serviceResultTelemetryData.Json);
+                    properties.Add("name", serviceResultTelemetryData.ServiceResultName);
                     properties.Add("success", serviceResultTelemetryData.ServiceResultSuccess.ToString());
-                    properties.Add("resppnse", serviceResultTelemetryData.ServiceResultResponse);
+                    properties.Add("response", serviceResultTelemetryData.ServiceResultResponse);
 
                     var metrics = new Dictionary<string, double>
                     {
-                        {"millisecondsDuration", serviceResultTelemetryData.ServiceResultEndDateTime.Subtract(serviceResultTelemetryData.ServiceResultStartDateTime).TotalMilliseconds }
+                        {"milliseconds", serviceResultTelemetryData.ServiceResultMilliseconds }
                     };
 
                     _telemetry.TrackEvent("ServiceResult", properties, metrics);
@@ -205,6 +216,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
                 {
                     var properties = GetBotContextProperties();
 
+                    properties.Add("json", exceptionTelemetryData.Json);
                     properties.Add("component", exceptionTelemetryData.ExceptionComponent);
                     properties.Add("context", exceptionTelemetryData.ExceptionContext);
 
