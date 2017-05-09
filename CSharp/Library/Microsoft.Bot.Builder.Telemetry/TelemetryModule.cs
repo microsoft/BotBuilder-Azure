@@ -31,21 +31,9 @@ namespace Microsoft.Bot.Builder.Telemetry
         private void RegisterAllTelemetryWriters(ContainerBuilder builder)
         {
             RegisterTelemetryWriterConfigurations(builder);
-
-            if (_configuration.WriterDiscoveryStrategy == TelemetryWriterDiscoveryStrategy.UseExplicitlyDeclaredTypes)
-            {
-                RegisterTelemetryWriterTypes(builder);
-            }
-
-            if (_configuration.WriterDiscoveryStrategy == TelemetryWriterDiscoveryStrategy.UseExplicitlyDeclaredInstances)
-            {
-                RegisterTelemetryWriterInstances(builder);
-            }
-
-            if (_configuration.WriterDiscoveryStrategy == TelemetryWriterDiscoveryStrategy.UseAllWritersInExplicitAssemblies)
-            {
-                RegisterTelemetryWritersFromAssemblies(builder);
-            }
+            RegisterTelemetryWriterTypes(builder);
+            RegisterTelemetryWriterInstances(builder);
+            RegisterTelemetryWritersFromAssemblies(builder);
         }
 
         private void RegisterTelemetryWritersFromAssemblies(ContainerBuilder builder)
@@ -113,7 +101,6 @@ namespace Microsoft.Bot.Builder.Telemetry
 
     public class TelemetryModuleConfiguration
     {
-        public TelemetryWriterDiscoveryStrategy WriterDiscoveryStrategy { get; set; }
         public IList<object> TelemetryWriterConfigurations { get; set; }
         public IList<Type> TelemetryWriterTypes { get; set; }
         public IList<ITelemetryWriter> TelemetryWriterInstances { get; set; }
@@ -126,19 +113,6 @@ namespace Microsoft.Bot.Builder.Telemetry
             TelemetryWriterTypes = new List<Type>();
             TelemetryWriterInstances = new List<ITelemetryWriter>();
             TelemetryWriterAssemblies = new List<Assembly>();
-
-            //default discovery strategy is to use *all* collections with any elements added
-            WriterDiscoveryStrategy = TelemetryWriterDiscoveryStrategy.All;
         }
-    }
-
-    [Flags]
-    public enum TelemetryWriterDiscoveryStrategy
-    {
-        None = 0,
-        UseAllWritersInExplicitAssemblies = 1,
-        UseExplicitlyDeclaredTypes = 2,
-        UseExplicitlyDeclaredInstances = 4,
-        All = ~0,
     }
 }

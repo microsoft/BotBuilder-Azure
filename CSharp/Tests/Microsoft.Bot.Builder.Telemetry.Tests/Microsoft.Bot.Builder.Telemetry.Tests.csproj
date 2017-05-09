@@ -56,7 +56,6 @@
     <Compile Include="TelemetryContextTests.cs" />
     <Compile Include="TelemetryIntegrationTestsBase.cs" />
     <Compile Include="AssertEx.cs" />
-    <Compile Include="TelemetryModuleTests\DiscoveryStrategyTests.cs" />
     <Compile Include="TelemetryModuleTests\TelemetryContextRegistrationTests.cs" />
     <Compile Include="TelemetryModuleTests\TelemetryReporterRegistrationTests.cs" />
     <Compile Include="TelemetryModuleTests\TelemetryWriterTypeRegistrationTests.cs" />
