@@ -99,6 +99,7 @@
     <Compile Include="ITelemetryReporter.cs" />
     <Compile Include="ITelemetryWriter.cs" />
     <Compile Include="Data\ITraceTelemetryData.cs" />
+    <Compile Include="ShardPerMonthStrategy.cs" />
     <Compile Include="ShardPerDayStrategy.cs" />
     <Compile Include="ShardPerMinuteStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
