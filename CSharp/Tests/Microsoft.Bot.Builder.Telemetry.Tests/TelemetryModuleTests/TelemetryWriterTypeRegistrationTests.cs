@@ -48,14 +48,14 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             _containerBuilder.RegisterType<TextFileTelemetryWriterConfiguration>();
             _containerBuilder.RegisterType<DebugWindowTelemetryWriterConfiguration>();
             _containerBuilder.RegisterType<ShardPerDayStrategy>().As<IShardStrategy>();
-            
+
 
 
             _containerBuilder.RegisterModule(new TelemetryModule(config));
             var container = _containerBuilder.Build();
 
-            Assert.IsTrue(container.Resolve<IList<ITelemetryWriter>>().Any(tw=>tw.GetType()== typeof(TextFileTelemetryWriter)));
-            Assert.IsTrue(container.Resolve<IList<ITelemetryWriter>>().Any(tw=>tw.GetType()== typeof(DebugWindowTelemetryWriter)));
+            Assert.IsTrue(container.Resolve<IList<ITelemetryWriter>>().Any(tw => tw.GetType() == typeof(TextFileTelemetryWriter)));
+            Assert.IsTrue(container.Resolve<IList<ITelemetryWriter>>().Any(tw => tw.GetType() == typeof(DebugWindowTelemetryWriter)));
 
         }
 

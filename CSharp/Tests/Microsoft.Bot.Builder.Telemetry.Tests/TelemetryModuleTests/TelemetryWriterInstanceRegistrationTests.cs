@@ -30,14 +30,14 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             _containerBuilder.RegisterModule(new TelemetryModule(config));
             var container = _containerBuilder.Build();
 
-            Assert.IsInstanceOfType(container.Resolve<ITelemetryWriter>(), typeof(TextFileTelemetryWriter),"ITelemetryWriter returned by the container is not the expected type.");
+            Assert.IsInstanceOfType(container.Resolve<ITelemetryWriter>(), typeof(TextFileTelemetryWriter), "ITelemetryWriter returned by the container is not the expected type.");
         }
 
         private static TextFileTelemetryWriter BuildDefaultTextWriter()
         {
             return new TextFileTelemetryWriter(
                 new TextFileTelemetryWriterConfiguration(
-                    new ShardPerDayStrategy()), 
+                    new ShardPerDayStrategy()),
                 new MachineOptimizedOutputFormatter(new TelemetryContext(new DateTimeProvider())));
         }
 
