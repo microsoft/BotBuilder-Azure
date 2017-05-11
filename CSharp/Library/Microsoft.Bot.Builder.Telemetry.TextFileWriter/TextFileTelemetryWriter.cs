@@ -8,16 +8,15 @@ using Microsoft.Bot.Builder.Telemetry.Data;
 
 namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
 {
-    public class TextFileTelemetryWriter : ITelemetryWriter
+    public class TextFileTelemetryWriter : StringOutputTelemetryWriterBase, ITelemetryWriter
     {
         private static readonly ReaderWriterLockSlim ReaderWriterLockInstance = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        private readonly ITelemetryOutputFormatter _outputFormatter;
         private readonly TextFileTelemetryWriterConfiguration _configuration;
 
         public TextFileTelemetryWriter(TextFileTelemetryWriterConfiguration configuration, ITelemetryOutputFormatter formatter)
         {
             SetField.NotNull(out _configuration, nameof(configuration), configuration);
-            SetField.NotNull(out _outputFormatter, nameof(formatter), formatter);
+            SetField.NotNull(out OutputFormatter, nameof(formatter), formatter);
 
             _configuration.ValidateSettings();
 
@@ -32,106 +31,52 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        private void DoPostLogActions()
-        {
-            //no-op
-            //method left in place to make it easy to add behavior here later if/as needed
-        }
-
         public async Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.ServiceResults))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatServiceResult(serviceResultTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(serviceResultTelemetryData, TelemetryTypes.ServiceResults,
+                OutputFormatter.FormatServiceResult);
         }
 
         public async Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Intents))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatIntent(intentTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(intentTelemetryData, TelemetryTypes.Intents,
+                OutputFormatter.FormatIntent);
         }
 
         public async Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Entities))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatEntity(entityTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(entityTelemetryData, TelemetryTypes.Entities,
+                OutputFormatter.FormatEntity);
         }
 
         public async Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Requests))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatRequest(requestTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(requestTelemetryData, TelemetryTypes.Requests,
+                OutputFormatter.FormatRequest);
         }
 
         public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Responses))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatResponse(responseTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(responseTelemetryData, TelemetryTypes.Responses,
+                OutputFormatter.FormatResponse);
         }
 
         public async Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Counters))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatCounter(counterTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(counterTelemetryData, TelemetryTypes.Counters,
+                OutputFormatter.FormatCounter);
         }
 
         public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Measures))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatMeasure(measureTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(measureTelemetryData, TelemetryTypes.Measures,
+                OutputFormatter.FormatMeasure);
         }
 
         public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Exceptions))
-            {
-                await Task.Run(() =>
-                {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatException(exceptionTelemetryData));
-                    DoPostLogActions();
-                });
-            }
+            await DoWriteTelemetry(exceptionTelemetryData, TelemetryTypes.Exceptions,
+                OutputFormatter.FormatException);
         }
 
         private void ThreadsafeWriteToFile(string message)
@@ -147,34 +92,24 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
             }
         }
 
-        public async Task WriteEventAsync(string key, string value)
-        {
-            await WriteEventAsync(new Dictionary<string, string> { { key, value } });
-        }
-
-        public void SetContext(ITelemetryContext context)
-        {
-            _outputFormatter.SetContext(context);
-        }
-
-        public async Task WriteEventAsync(string key, double value)
-        {
-            await WriteEventAsync(new Dictionary<string, double> { { key, value } });
-        }
-
-        public async Task WriteEventAsync(Dictionary<string, double> metrics)
-        {
-            await WriteEventAsync(new Dictionary<string, string>(), metrics);
-        }
-
-        public async Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
+        public override async Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
         {
             if (_configuration.Handles(TelemetryTypes.CustomEvents))
             {
                 await Task.Run(() =>
                 {
-                    ThreadsafeWriteToFile(_outputFormatter.FormatEvent(properties, metrics));
-                    DoPostLogActions();
+                    ThreadsafeWriteToFile(OutputFormatter.FormatEvent(properties, metrics));
+                });
+            }
+        }
+
+        protected override async Task DoWriteTelemetry<TTelemetryData>(TTelemetryData telemetryData, TelemetryTypes handleTypes, Func<TTelemetryData, string> formatter)
+        {
+            if (_configuration.Handles(handleTypes))
+            {
+                await Task.Run(() =>
+                {
+                    ThreadsafeWriteToFile(formatter(telemetryData));
                 });
             }
         }

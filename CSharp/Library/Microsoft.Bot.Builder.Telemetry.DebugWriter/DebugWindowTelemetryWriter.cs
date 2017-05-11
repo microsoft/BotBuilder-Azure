@@ -7,123 +7,79 @@ using Microsoft.Bot.Builder.Telemetry.Data;
 
 namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
 {
-    public class DebugWindowTelemetryWriter : ITelemetryWriter
+    public class DebugWindowTelemetryWriter : StringOutputTelemetryWriterBase, ITelemetryWriter
     {
         private readonly DebugWindowTelemetryWriterConfiguration _configuration;
-        private readonly ITelemetryOutputFormatter _outputFormatter;
 
         public DebugWindowTelemetryWriter(DebugWindowTelemetryWriterConfiguration configuration, ITelemetryOutputFormatter formatter)
         {
             SetField.NotNull(out _configuration, nameof(configuration), configuration);
-            SetField.NotNull(out _outputFormatter, nameof(formatter), formatter);
+            SetField.NotNull(out OutputFormatter, nameof(formatter), formatter);
         }
 
         public Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Counters))
-            {
-                Debug.WriteLine(_outputFormatter.FormatCounter(counterTelemetryData));
-            }
-
+            DoWriteTelemetry(counterTelemetryData, TelemetryTypes.Counters, OutputFormatter.FormatCounter);
             return Task.Delay(0);
         }
 
         public Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Measures))
-            {
-                Debug.WriteLine(_outputFormatter.FormatMeasure(measureTelemetryData));
-            }
-
+            DoWriteTelemetry(measureTelemetryData, TelemetryTypes.Measures, OutputFormatter.FormatMeasure);
             return Task.Delay(0);
         }
 
         public Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Exceptions))
-            {
-                Debug.WriteLine(_outputFormatter.FormatException(exceptionTelemetryData));
-            }
-
+            DoWriteTelemetry(exceptionTelemetryData, TelemetryTypes.Exceptions, OutputFormatter.FormatException);
             return Task.Delay(0);
         }
 
         public Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.ServiceResults))
-            {
-                Debug.WriteLine(_outputFormatter.FormatServiceResult(serviceResultTelemetryData));
-
-            }
-
+            DoWriteTelemetry(serviceResultTelemetryData, TelemetryTypes.ServiceResults, OutputFormatter.FormatServiceResult);
             return Task.Delay(0);
         }
 
         public Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Entities))
-            {
-                Debug.WriteLine(_outputFormatter.FormatEntity(entityTelemetryData));
-            }
-
+            DoWriteTelemetry(entityTelemetryData, TelemetryTypes.Entities, OutputFormatter.FormatEntity);
             return Task.Delay(0);
         }
 
         public Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Intents))
-            {
-                Debug.WriteLine(_outputFormatter.FormatIntent(intentTelemetryData));
-            }
-
+            DoWriteTelemetry(intentTelemetryData, TelemetryTypes.Intents, OutputFormatter.FormatIntent);
             return Task.Delay(0);
         }
 
         public Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Responses))
-            {
-                Debug.WriteLine(_outputFormatter.FormatRequest(requestTelemetryData));
-            }
-
+            DoWriteTelemetry(requestTelemetryData, TelemetryTypes.Requests, OutputFormatter.FormatRequest);
             return Task.Delay(0);
         }
 
         public Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Responses))
+            DoWriteTelemetry(responseTelemetryData, TelemetryTypes.Responses, OutputFormatter.FormatResponse);
+            return Task.Delay(0);
+        }
+
+        public override Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
+        {
+            if (_configuration.Handles(TelemetryTypes.CustomEvents))
             {
-                Debug.WriteLine(_outputFormatter.FormatResponse(responseTelemetryData));
+                Debug.WriteLine(OutputFormatter.FormatEvent(properties, metrics));
             }
 
             return Task.Delay(0);
         }
 
-        public void SetContext(ITelemetryContext context)
+        protected override Task DoWriteTelemetry<TTelemetryData>(TTelemetryData telemetryData, TelemetryTypes handleTypes, Func<TTelemetryData, string> formatter)
         {
-            _outputFormatter.SetContext(context);
-        }
-
-        public async Task WriteEventAsync(string key, string value)
-        {
-            await WriteEventAsync(new Dictionary<string, string> { { key, value } });
-        }
-
-        public async Task WriteEventAsync(string key, double value)
-        {
-            await WriteEventAsync(new Dictionary<string, double> { { key, value } });
-        }
-
-        public async Task WriteEventAsync(Dictionary<string, double> metrics)
-        {
-            await WriteEventAsync(new Dictionary<string, string>(), metrics);
-        }
-
-        public Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
-        {
-            if (_configuration.Handles(TelemetryTypes.CustomEvents))
+            if (_configuration.Handles(handleTypes))
             {
-                Debug.WriteLine(_outputFormatter.FormatEvent(properties, metrics));
+                Debug.WriteLine(formatter(telemetryData));
             }
 
             return Task.Delay(0);

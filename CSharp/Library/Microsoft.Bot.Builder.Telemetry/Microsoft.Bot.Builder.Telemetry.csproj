@@ -112,6 +112,7 @@
     <Compile Include="TelemetryReporterConfiguration.cs" />
     <Compile Include="TelemetryException.cs" />
     <Compile Include="TelemetryTypes.cs" />
+    <Compile Include="StringOutputTelemetryWriterBase.cs" />
     <Compile Include="TypeDiscriminatingTelemetryWriterConfigurationBase.cs" />
   </ItemGroup>
   <ItemGroup>
