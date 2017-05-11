@@ -16,7 +16,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TextFileWriterTests
 
         protected void OneTimeSetUp()
         {
-            var logFile = new TextFileTelemetryWriterConfiguration(new PerDayShardStrategy()).Filename;
+            var logFile = new TextFileTelemetryWriterConfiguration(new ShardPerDayStrategy()).Filename;
 
             if (File.Exists(logFile))
             {
@@ -31,12 +31,12 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TextFileWriterTests
             await WriteTracingData(testParams.RowCount, testParams.Concurrent, testParams.UniqueTestRunId);
 
             var expectedEntryCount = LogEntriesExpectedPerTestCaseRun * testParams.RowCount;
-            TextFileAssert.HasExpectedNumberOfLogEntries(new TextFileTelemetryWriterConfiguration(new PerDayShardStrategy()).Filename, expectedEntryCount);
+            TextFileAssert.HasExpectedNumberOfLogEntries(new TextFileTelemetryWriterConfiguration(new ShardPerDayStrategy()).Filename, expectedEntryCount);
         }
 
         protected override ITelemetryWriter GetTelemetryWriter()
         {
-            var config = new TextFileTelemetryWriterConfiguration(new PerDayShardStrategy());
+            var config = new TextFileTelemetryWriterConfiguration(new ShardPerDayStrategy());
             var context = BuildTestTracingContext();
             var formatter = new MachineOptimizedOutputFormatter(context);
 

@@ -29,7 +29,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
 
             //register necessary dependencies
             _containerBuilder.RegisterType<TextFileTelemetryWriterConfiguration>();
-            _containerBuilder.RegisterType<PerDayShardStrategy>().As<IShardStrategy>();
+            _containerBuilder.RegisterType<ShardPerDayStrategy>().As<IShardStrategy>();
 
             _containerBuilder.RegisterModule(new TelemetryModule(config));
             var container = _containerBuilder.Build();
@@ -47,7 +47,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             //register necessary dependencies
             _containerBuilder.RegisterType<TextFileTelemetryWriterConfiguration>();
             _containerBuilder.RegisterType<DebugWindowTelemetryWriterConfiguration>();
-            _containerBuilder.RegisterType<PerDayShardStrategy>().As<IShardStrategy>();
+            _containerBuilder.RegisterType<ShardPerDayStrategy>().As<IShardStrategy>();
             
 
 

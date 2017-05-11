@@ -37,7 +37,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
         {
             return new TextFileTelemetryWriter(
                 new TextFileTelemetryWriterConfiguration(
-                    new PerDayShardStrategy()), 
+                    new ShardPerDayStrategy()), 
                 new MachineOptimizedOutputFormatter(new TelemetryContext(new DateTimeProvider())));
         }
 
