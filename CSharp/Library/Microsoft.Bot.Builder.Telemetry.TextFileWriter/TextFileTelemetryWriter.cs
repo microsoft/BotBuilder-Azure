@@ -112,7 +112,7 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
 
         public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Counters))
+            if (_configuration.Handles(TelemetryTypes.Measures))
             {
                 await Task.Run(() =>
                 {

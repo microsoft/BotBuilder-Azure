@@ -30,7 +30,7 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
 
         public Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Counters))
+            if (_configuration.Handles(TelemetryTypes.Measures))
             {
                 Debug.WriteLine(_outputFormatter.FormatMeasure(measureTelemetryData));
             }

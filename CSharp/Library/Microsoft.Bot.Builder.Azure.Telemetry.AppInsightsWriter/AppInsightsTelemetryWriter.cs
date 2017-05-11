@@ -166,7 +166,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter
 
         public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
         {
-            if (_configuration.Handles(TelemetryTypes.Counters))
+            if (_configuration.Handles(TelemetryTypes.Measures))
             {
                 await Task.Run(() =>
                 {
