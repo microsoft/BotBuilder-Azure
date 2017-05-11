@@ -38,62 +38,62 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
+            public Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
+            public Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
+            public Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
+            public Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
+            public Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
+            public Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
+            public Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteEventAsync(string key, string value)
+            public Task WriteEventAsync(string key, string value)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteEventAsync(string key, double value)
+            public Task WriteEventAsync(string key, double value)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteEventAsync(Dictionary<string, double> metrics)
+            public Task WriteEventAsync(Dictionary<string, double> metrics)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
+            public Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
             {
                 throw new System.NotImplementedException();
             }
 
-            public async Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
+            public Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
             {
                 throw new System.NotImplementedException();
             }

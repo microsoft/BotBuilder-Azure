@@ -18,69 +18,85 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             SetField.NotNull(out _outputFormatter, nameof(formatter), formatter);
         }
 
-        public async Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
+        public Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
                 Debug.WriteLine(_outputFormatter.FormatCounter(counterTelemetryData));
             }
+
+            return Task.Delay(0);
         }
 
-        public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
+        public Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
             {
                 Debug.WriteLine(_outputFormatter.FormatMeasure(measureTelemetryData));
             }
+
+            return Task.Delay(0);
         }
 
-        public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
+        public Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
             {
                 Debug.WriteLine(_outputFormatter.FormatException(exceptionTelemetryData));
             }
+
+            return Task.Delay(0);
         }
 
-        public async Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
+        public Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
             {
                 Debug.WriteLine(_outputFormatter.FormatServiceResult(serviceResultTelemetryData));
 
             }
+
+            return Task.Delay(0);
         }
 
-        public async Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
+        public Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
             {
                 Debug.WriteLine(_outputFormatter.FormatEntity(entityTelemetryData));
             }
+
+            return Task.Delay(0);
         }
 
-        public async Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
+        public Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
             {
                 Debug.WriteLine(_outputFormatter.FormatIntent(intentTelemetryData));
             }
+
+            return Task.Delay(0);
         }
 
-        public async Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
+        public Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
                 Debug.WriteLine(_outputFormatter.FormatRequest(requestTelemetryData));
             }
+
+            return Task.Delay(0);
         }
 
-        public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
+        public Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
             {
                 Debug.WriteLine(_outputFormatter.FormatResponse(responseTelemetryData));
             }
+
+            return Task.Delay(0);
         }
 
         public void SetContext(ITelemetryContext context)
@@ -103,12 +119,14 @@ namespace Microsoft.Bot.Builder.Telemetry.DebugWriter
             await WriteEventAsync(new Dictionary<string, string>(), metrics);
         }
 
-        public async Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
+        public Task WriteEventAsync(Dictionary<string, string> properties, Dictionary<string, double> metrics = null)
         {
             if (_configuration.Handles(TelemetryTypes.CustomEvents))
             {
                 Debug.WriteLine(_outputFormatter.FormatEvent(properties, metrics));
             }
+
+            return Task.Delay(0);
         }
     }
 }

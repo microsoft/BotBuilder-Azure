@@ -91,7 +91,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public async Task SetContextFrom(IActivity activity, ITelemetryContext context = null)
+        public Task SetContextFrom(IActivity activity, ITelemetryContext context = null)
         {
             if (null == context)
             {
@@ -105,6 +105,8 @@ namespace Microsoft.Bot.Builder.Telemetry
 
             //flow the context through to all the children objects which depend upon it
             SetContext(context);
+
+            return Task.Delay(0);
         }
 
         private IEnumerable<Task> ProcessEntities(IEnumerable<IEntityTelemetryData> entities)
