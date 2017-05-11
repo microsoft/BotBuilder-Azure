@@ -18,19 +18,19 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
         }
 
 
-        public static void Throws<TException>(Action action) where TException : Exception
+        public static void Throws<TExpectedException>(Action action) where TExpectedException : Exception
         {
             try
             {
                 action.Invoke();
             }
-            catch (TException)
+            catch (TExpectedException)
             {
                 //silently swallow this, since its expected
             }
             catch (Exception e)
             {
-                Assert.Fail($"Expected Exception of type {typeof(TException)}, got {e}");
+                Assert.Fail($"Expected Exception of type {typeof(TExpectedException)}, got {e}");
             }
         }
     }
