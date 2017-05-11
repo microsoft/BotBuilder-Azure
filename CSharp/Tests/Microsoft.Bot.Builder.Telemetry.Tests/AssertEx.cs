@@ -16,5 +16,22 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests
                 Assert.Fail($"Expected no Exception, got {e}");
             }
         }
+
+
+        public static void Throws<TException>(Action action) where TException : Exception
+        {
+            try
+            {
+                action.Invoke();
+            }
+            catch (TException)
+            {
+                //silently swallow this, since its expected
+            }
+            catch (Exception e)
+            {
+                Assert.Fail($"Expected Exception of type {typeof(TException)}, got {e}");
+            }
+        }
     }
 }

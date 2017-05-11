@@ -8,15 +8,14 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public class TelemetryReporter : ITelemetryReporter
     {
+        public TelemetryReporterConfiguration Configuration { get; }
+        public List<ITelemetryWriter> TelemetryWriters { get; set; }
+
         public TelemetryReporter(IEnumerable<ITelemetryWriter> writers, TelemetryReporterConfiguration configuration = null)
         {
             Configuration = configuration ?? new TelemetryReporterConfiguration();
             TelemetryWriters = new List<ITelemetryWriter>(writers);
         }
-
-        public TelemetryReporterConfiguration Configuration { get; }
-
-        public List<ITelemetryWriter> TelemetryWriters { get; set; }
 
         public async Task ReportIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
@@ -33,8 +32,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
 
@@ -50,8 +51,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
 
@@ -67,8 +70,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
 
@@ -85,8 +90,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
 
@@ -106,7 +113,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             SetContext(context);
         }
 
-        private List<Task> ProcessEntities(IEnumerable<IEntityTelemetryData> entities)
+        private IEnumerable<Task> ProcessEntities(IEnumerable<IEntityTelemetryData> entities)
         {
             var tasks = new List<Task>();
             foreach (var entity in entities)
@@ -128,8 +135,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
 
@@ -160,8 +169,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
 
@@ -193,8 +204,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
 
@@ -211,8 +224,10 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
             catch (Exception e)
             {
-                //We will write this into a debug window as the logging into Telemetry Writers may fail also.
-                throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                if (!Configuration.FailSilently)
+                {
+                    throw new TelemetryException("Failed to write to TelemetryWriters.", e);
+                }
             }
         }
     }

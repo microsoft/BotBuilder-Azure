@@ -62,6 +62,7 @@
     <Compile Include="TelemetryModuleTests\TelemetryWriterTypeRegistrationTests.cs" />
     <Compile Include="TelemetryModuleTests\TelemetryWriterInstanceRegistrationTests.cs" />
     <Compile Include="TelemetryModuleTests\TelemetryWriterConfigurationRegistrationTests.cs" />
+    <Compile Include="TelemetryReporterTests.cs" />
     <Compile Include="TextFileWriterTests\TextFileAssert.cs" />
     <Compile Include="TextFileWriterTests\TextFileTelemetryTestBase.cs" />
     <Compile Include="TextFileWriterTests\WhenInvokedInParallel.cs" />
