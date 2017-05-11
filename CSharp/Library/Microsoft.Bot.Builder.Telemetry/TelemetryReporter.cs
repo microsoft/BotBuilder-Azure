@@ -22,12 +22,9 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue intent
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteIntentAsync(intentTelemetryData)); });
-                //enqueue every entity
                 TelemetryWriters.ForEach(tw => { tasks.AddRange(ProcessEntities(intentTelemetryData.IntentEntities)); });
 
-                //await all in parallel.
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
@@ -44,9 +41,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue all tasks
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteRequestAsync(requestTelemetryData)); });
-                //await all in parallel.
+
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
@@ -63,9 +59,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue all tasks
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteResponseAsync(responseTelemetryData)); });
-                //await all in parallel.
+
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
@@ -83,9 +78,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue all tasks
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteExceptionAsync(exceptionTelemetryData)); });
-                //await all in parallel.
+
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
@@ -128,9 +122,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue all tasks
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteServiceResultAsync(serviceResultTelemetryData)); });
-                //await all in parallel.
+
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
@@ -162,9 +155,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue all tasks
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteCounterAsync(new TelemetryData { CounterName = dialog, CounterValue = 1 })); });
-                //await all in parallel.
+
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
@@ -196,10 +188,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue intent
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteEventAsync(metrics)); });
 
-                //await all in parallel.
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
@@ -216,10 +206,8 @@ namespace Microsoft.Bot.Builder.Telemetry
             try
             {
                 var tasks = new List<Task>();
-                //enqueue intent
                 TelemetryWriters.ForEach(tw => { tasks.Add(tw.WriteEventAsync(properties, metrics)); });
 
-                //await all in parallel.
                 await Task.WhenAll(tasks);
             }
             catch (Exception e)
