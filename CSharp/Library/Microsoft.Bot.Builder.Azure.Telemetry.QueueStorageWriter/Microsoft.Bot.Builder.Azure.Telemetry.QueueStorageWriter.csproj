@@ -97,11 +97,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QueueStorageTelemetryWriter.cs" />
+    <Compile Include="QueueStorageTelemetryWriterConfiguration.cs" />
+    <Compile Include="DefaultQueueShardStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Bot.Builder.Telemetry\Microsoft.Bot.Builder.Telemetry.csproj">
+      <Project>{B2669900-19B3-43CE-B884-5A455C998F33}</Project>
+      <Name>Microsoft.Bot.Builder.Telemetry</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
