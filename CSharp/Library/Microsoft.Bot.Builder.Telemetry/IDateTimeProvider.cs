@@ -4,6 +4,6 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public interface IDateTimeProvider
     {
-        DateTimeOffset GetCurrentTime();
+        DateTimeOffset Now();
     }
 }

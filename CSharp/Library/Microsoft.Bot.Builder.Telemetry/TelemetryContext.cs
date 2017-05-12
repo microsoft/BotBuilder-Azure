@@ -20,7 +20,7 @@ namespace Microsoft.Bot.Builder.Telemetry
             SetField.NotNull(out _dateTimeProvider, nameof(dateTimeProvider), dateTimeProvider);
 
             //set the Timestamp only once so that it will remain consistent for the life of the object
-            Timestamp = dateTimeProvider.GetCurrentTime().ToString("O");
+            Timestamp = dateTimeProvider.Now().ToString("O");
 
             //set a default generator for the correlation id
             CorrelationIdGenerator = correlationIdGenerator ?? new AllIdsAndTimestampTelemetryContextCorrelationIdGenerator();

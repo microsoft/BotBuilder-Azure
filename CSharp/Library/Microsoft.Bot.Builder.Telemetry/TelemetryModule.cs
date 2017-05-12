@@ -89,7 +89,7 @@ namespace Microsoft.Bot.Builder.Telemetry
 
         private void RegisterTelemetryWriterConfigurations(ContainerBuilder builder)
         {
-            foreach (var configuration in _configuration.TelemetryWriterConfigurations)
+            foreach (var configuration in _configuration.TelemetryConfigurations)
             {
                 builder.RegisterInstance(configuration).AsSelf().SingleInstance();
             }

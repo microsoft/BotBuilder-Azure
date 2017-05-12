@@ -137,17 +137,17 @@ namespace Microsoft.Bot.Builder.Telemetry
             }
         }
 
-        public void AddRequestProcessor(ITelemetryWriter processor)
+        public void AddTelemetryWriter(ITelemetryWriter telemetryWriter)
         {
-            TelemetryWriters.Add(processor);
+            TelemetryWriters.Add(telemetryWriter);
         }
 
-        public void RemoveRequestProcessor(ITelemetryWriter processor)
+        public void RemoveTelemetryWriter(ITelemetryWriter telemetryWriter)
         {
-            TelemetryWriters.Remove(processor);
+            TelemetryWriters.Remove(telemetryWriter);
         }
 
-        public void RemoveRequestAllProcessors()
+        public void RemoveAllTelemetryWriters()
         {
             TelemetryWriters.Clear();
         }

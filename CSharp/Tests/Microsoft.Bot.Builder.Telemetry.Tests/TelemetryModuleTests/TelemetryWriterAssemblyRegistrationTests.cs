@@ -26,7 +26,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
         {
             var config = new TelemetryModuleConfiguration();
             config.TelemetryWriterAssemblies.Add(typeof(TextFileTelemetryWriter).Assembly);
-            config.TelemetryWriterConfigurations.Add(new TextFileTelemetryWriterConfiguration(new ShardPerDayStrategy()));
+            config.TelemetryConfigurations.Add(new TextFileTelemetryWriterConfiguration(new ShardPerDayStrategy()));
 
             _containerBuilder.RegisterModule(new TelemetryModule(config));
             var container = _containerBuilder.Build();
@@ -42,8 +42,8 @@ namespace Microsoft.Bot.Builder.Telemetry.Tests.TelemetryModuleTests
             config.TelemetryWriterAssemblies.Add(typeof(TextFileTelemetryWriter).Assembly);
             config.TelemetryWriterAssemblies.Add(typeof(DebugWindowTelemetryWriter).Assembly);
 
-            config.TelemetryWriterConfigurations.Add(new TextFileTelemetryWriterConfiguration(new ShardPerDayStrategy()));
-            config.TelemetryWriterConfigurations.Add(new DebugWindowTelemetryWriterConfiguration());
+            config.TelemetryConfigurations.Add(new TextFileTelemetryWriterConfiguration(new ShardPerDayStrategy()));
+            config.TelemetryConfigurations.Add(new DebugWindowTelemetryWriterConfiguration());
 
             _containerBuilder.RegisterModule(new TelemetryModule(config));
             var container = _containerBuilder.Build();
