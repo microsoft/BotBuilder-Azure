@@ -10,8 +10,18 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
         private readonly IShardStrategy _containerShardStrategy;
         private readonly IShardStrategy _blobShardStrategy;
 
-        public BlobStorageTelemetryWriterConfiguration(IShardStrategy containerShardStrategy, IShardStrategy blobShardStrategy)
+        public BlobStorageTelemetryWriterConfiguration(IShardStrategy containerShardStrategy = null, IShardStrategy blobShardStrategy = null)
         {
+            if (null == containerShardStrategy)
+            {
+                containerShardStrategy = new DefaultContainerShardStrategy();
+            }
+
+            if (null == blobShardStrategy)
+            {
+                blobShardStrategy = new ShardPerDayStrategy();
+            }
+
             SetField.NotNull(out _containerShardStrategy, nameof(containerShardStrategy), containerShardStrategy);
             SetField.NotNull(out _blobShardStrategy, nameof(blobShardStrategy), blobShardStrategy);
 

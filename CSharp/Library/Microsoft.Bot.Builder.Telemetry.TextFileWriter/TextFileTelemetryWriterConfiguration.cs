@@ -8,8 +8,13 @@ namespace Microsoft.Bot.Builder.Telemetry.TextFileWriter
     {
         private readonly IShardStrategy _fileShardStrategy;
 
-        public TextFileTelemetryWriterConfiguration(IShardStrategy fileShardStrategy)
+        public TextFileTelemetryWriterConfiguration(IShardStrategy fileShardStrategy = null)
         {
+            if (null == fileShardStrategy)
+            {
+                fileShardStrategy = new ShardPerDayStrategy();
+            }
+
             SetField.NotNull(out _fileShardStrategy, nameof(fileShardStrategy), fileShardStrategy);
             Filename = BuildDefaultFilename();
         }
