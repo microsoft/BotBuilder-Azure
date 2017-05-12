@@ -108,6 +108,7 @@
     <Compile Include="Data\TelemetryData.cs" />
     <Compile Include="TelemetryContext.cs" />
     <Compile Include="TelemetryModule.cs" />
+    <Compile Include="TelemetryModuleConfiguration.cs" />
     <Compile Include="TelemetryReporter.cs" />
     <Compile Include="TelemetryReporterConfiguration.cs" />
     <Compile Include="TelemetryException.cs" />

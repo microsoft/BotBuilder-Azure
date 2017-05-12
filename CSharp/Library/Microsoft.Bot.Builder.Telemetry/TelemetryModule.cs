@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using Autofac;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Telemetry.Formatters;
@@ -96,23 +93,6 @@ namespace Microsoft.Bot.Builder.Telemetry
             {
                 builder.RegisterInstance(configuration).AsSelf().SingleInstance();
             }
-        }
-    }
-
-    public class TelemetryModuleConfiguration
-    {
-        public IList<object> TelemetryWriterConfigurations { get; set; }
-        public IList<Type> TelemetryWriterTypes { get; set; }
-        public IList<ITelemetryWriter> TelemetryWriterInstances { get; set; }
-        public IList<Assembly> TelemetryWriterAssemblies { get; set; }
-
-
-        public TelemetryModuleConfiguration()
-        {
-            TelemetryWriterConfigurations = new List<object>();
-            TelemetryWriterTypes = new List<Type>();
-            TelemetryWriterInstances = new List<ITelemetryWriter>();
-            TelemetryWriterAssemblies = new List<Assembly>();
         }
     }
 }
