@@ -69,7 +69,7 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
         //IMeasureTelemetryData
         public string MeasureCategory { get; set; }
         public string MeasureName { get; set; }
-        public int MeasureValue { get; set; }
+        public double MeasureValue { get; set; }
 
         //IServiceResultTelemetryData
         public string ServiceResultName { get; set; }

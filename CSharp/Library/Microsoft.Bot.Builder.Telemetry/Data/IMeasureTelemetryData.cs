@@ -4,6 +4,6 @@ namespace Microsoft.Bot.Builder.Telemetry.Data
     {
         string MeasureCategory { get; set; }
         string MeasureName { get; set; }
-        int MeasureValue { get; set; }
+        double MeasureValue { get; set; }
     }
 }
