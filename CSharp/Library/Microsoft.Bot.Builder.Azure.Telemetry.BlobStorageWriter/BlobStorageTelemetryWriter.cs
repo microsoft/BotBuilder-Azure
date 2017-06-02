@@ -65,7 +65,7 @@ namespace Microsoft.Bot.Builder.Azure.Telemetry.BlobStorageWriter
         {
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(record)))
             {
-                await _blob.AppendFromStreamAsync(stream);
+                await _blob.AppendBlockAsync(stream);
             }
         }
 
