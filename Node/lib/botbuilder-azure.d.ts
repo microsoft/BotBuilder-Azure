@@ -184,7 +184,10 @@ export interface IBotServiceConnectorSettings {
     appPassword?: string;
 
     /** If true the bots userData, privateConversationData, and conversationData will be gzipped prior to writing to storage. */
-    gzipData?: boolean;    
+    gzipData?: boolean;
+
+    stateEndpoint?: string;
+    openIdMetadata?: string;
 }
 
 /** Options used to initialize a TableBotStorage instance. */
