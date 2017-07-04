@@ -293,12 +293,11 @@ namespace Microsoft.Bot.Builder.Azure
         
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs arguments)
         {
-            if (arguments.Name == this.assembly.FullName)
-            {
-                return assembly;
-            }
+            var asm = (from a in AppDomain.CurrentDomain.GetAssemblies()
+                where a.GetName().FullName == arguments.Name
+                select a).FirstOrDefault();
 
-            return null;
+            return asm;
         }
     }
 }
