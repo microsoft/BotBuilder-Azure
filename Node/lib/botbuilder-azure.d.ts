@@ -249,6 +249,24 @@ export interface IDocumentDbOptions {
     collection: string;
 }
 
+export interface IAzureSqlConfiguration extends ConnectionConfig {
+    /**
+     * IAzureSqlOptions which extends ConnectionOptions, includes "table" parameter
+     */
+    options: IAzureSqlOptions;
+}
+
+export interface IAzureSqlOptions extends ConnectionOptions {
+    /**
+     * "table" name must be included.
+     */
+    table: string;
+    /**
+     * "encrypt" MUST be set to true to work with Azure SQL
+     */
+    encrypt?: boolean; 
+}
+
 export interface IHttpResponse {
     
     /** Whether the Http request was successful */
@@ -396,3 +414,16 @@ export class DocumentDbClient implements IStorageClient {
     retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
+export class AzureSqlClient implements IStorageClient {
+
+    constructor(options: IAzureSqlConfiguration);
+
+    /** Initializes the Azure SQL client */
+    initialize(callback: (error: Error) => void): void;
+
+    /** Inserts or replaces an entity in the Azure SQL */
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+
+    /** Retrieves an entity from the Azure SQL */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
+}
