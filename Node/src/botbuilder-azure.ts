@@ -35,6 +35,7 @@ import { BotServiceConnector } from './BotServiceConnector';
 import { AzureBotStorage } from './AzureBotStorage';
 import { AzureTableClient } from './AzureTableClient';
 import { DocumentDbClient } from './DocumentDbClient';
+import { AzureSqlClient } from './AzureSqlClient';
 
 declare var exports: any;
 
@@ -42,3 +43,4 @@ exports.BotServiceConnector = BotServiceConnector;
 exports.AzureBotStorage = AzureBotStorage;
 exports.AzureTableClient = AzureTableClient;
 exports.DocumentDbClient = DocumentDbClient;
+exports.AzureSqlClient = AzureSqlClient;

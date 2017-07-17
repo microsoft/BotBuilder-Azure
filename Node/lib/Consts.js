@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.developmentConnectionString = 'UseDevelopmentStorage=true';
 exports.maxDataLength = 65000;
 exports.Fields = {
