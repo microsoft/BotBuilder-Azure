@@ -45,13 +45,13 @@ namespace Microsoft.Bot.Builder.Azure.Tests
     [TestClass]
     public class DocumentDbDataStoreTests : BaseDataStoreTests
     {
-        //This test requires the DocDbEmulator to be installed and started. 
-        //Reference: https://docs.microsoft.com/en-us/azure/documentdb/documentdb-nosql-local-emulator
-        
-        //Fixed docDb emulator local Uri.
+        //This test requires the CosmosDbEmulator to be installed and started. 
+        //Reference: https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator
+
+        //Fixed cosmosDB emulator local Uri.
         private static readonly Uri docDbEmulatorUri = new Uri("https://localhost:8081");
 
-        //Fixed docDb emulator key
+        //Fixed cosmosDB emulator key
         private static readonly string docDbEmulatorKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
 
         private DocumentDbDeleter docDbDeleter;
