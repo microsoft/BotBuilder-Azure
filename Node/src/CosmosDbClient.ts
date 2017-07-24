@@ -38,24 +38,24 @@ import * as async from 'async';
 import Consts = require('./Consts');
 import { DocumentClient, QueryError, DatabaseMeta, CollectionMeta, RetrievedDocument, QueryIterator, UniqueId, RequestOptions, RequestCallback, NewDocument, Collection, SqlQuerySpec, FeedOptions } from 'documentdb';
 
-export interface IDocumentDbOptions {
+export interface ICosmosDbOptions {
     host: string;
     masterKey: string;
     database: string;
     collection: string;
 }
 
-export interface IDocDbEntity extends IBotEntity {
+export interface ICosmosDbEntity extends IBotEntity {
     id: string;
 }
 
-export class DocumentDbClient implements IStorageClient {
+export class CosmosDbClient implements IStorageClient {
 
     private client: IDocumentClient;
     private database: DatabaseMeta;
     private collection: CollectionMeta;
     
-    constructor(private options: IDocumentDbOptions) { }
+    constructor(private options: ICosmosDbOptions) { }
 
     /** Initializes the DocumentDb client */
     public initialize(callback: (error: Error) => void): void {
@@ -66,13 +66,13 @@ export class DocumentDbClient implements IStorageClient {
 
         this.getOrCreateDatabase((error: QueryError, database: DatabaseMeta) => {
             if(error) {
-                callback(DocumentDbClient.getError(error));
+                callback(CosmosDbClient.getError(error));
             }
             else {
                 this.database = database;
                 this.getOrCreateCollection((error: QueryError, collection: CollectionMeta) => {
                     if(error) {
-                        callback(DocumentDbClient.getError(error));
+                        callback(CosmosDbClient.getError(error));
                     }
                     else {
                         this.collection = collection;
@@ -86,10 +86,10 @@ export class DocumentDbClient implements IStorageClient {
     /** Inserts or replaces an entity in the table */
     public insertOrReplace(partitionKey: string, rowKey: string, entity: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void {
 
-        let docDbEntity: IDocDbEntity = { id: partitionKey + ',' + rowKey, data: entity, isCompressed: isCompressed };
+        let docDbEntity: ICosmosDbEntity = { id: partitionKey + ',' + rowKey, data: entity, isCompressed: isCompressed };
 
-        this.client.upsertDocument(this.collection._self, docDbEntity, {}, (error: QueryError, collection: RetrievedDocument<IDocDbEntity>, responseHeaders: any): void => {
-            callback(DocumentDbClient.getError(error), null, responseHeaders);
+        this.client.upsertDocument(this.collection._self, docDbEntity, {}, (error: QueryError, collection: RetrievedDocument<ICosmosDbEntity>, responseHeaders: any): void => {
+            callback(CosmosDbClient.getError(error), null, responseHeaders);
         });
     }
 
@@ -98,18 +98,18 @@ export class DocumentDbClient implements IStorageClient {
 
         let id = partitionKey + ',' + rowKey;
         let querySpec = {
-            query: Consts.DocDbRootQuery,
+            query: Consts.CosmosDbRootQuery,
             parameters: [{
-                name: Consts.DocDbIdParam,
+                name: Consts.CosmosDbIdParam,
                 value: id
             }]
         };
 
-        let iterator: QueryIterator<RetrievedDocument<IDocDbEntity>> = this.client.queryDocuments(this.collection._self, querySpec, {});
+        let iterator: QueryIterator<RetrievedDocument<ICosmosDbEntity>> = this.client.queryDocuments(this.collection._self, querySpec, {});
 
-        iterator.toArray((error: QueryError, result: RetrievedDocument<IDocDbEntity>[], responseHeaders?: any): void => {
+        iterator.toArray((error: QueryError, result: RetrievedDocument<ICosmosDbEntity>[], responseHeaders?: any): void => {
             if(error) {
-                callback(DocumentDbClient.getError(error), null, null);
+                callback(CosmosDbClient.getError(error), null, null);
             }
             else if(result.length == 0) {
                 callback(null, null, null);
@@ -129,9 +129,9 @@ export class DocumentDbClient implements IStorageClient {
     private getOrCreateDatabase(callback: (error: QueryError, database: DatabaseMeta) => void): void {
 
         let querySpec = {
-            query: Consts.DocDbRootQuery,
+            query: Consts.CosmosDbRootQuery,
             parameters: [{
-                name: Consts.DocDbIdParam,
+                name: Consts.CosmosDbIdParam,
                 value: this.options.database
             }]
         };
@@ -159,9 +159,9 @@ export class DocumentDbClient implements IStorageClient {
     private getOrCreateCollection(callback: (error: QueryError, collection: CollectionMeta) => void): void {
 
         let querySpec = {
-            query: Consts.DocDbRootQuery,
+            query: Consts.CosmosDbRootQuery,
             parameters: [{
-                name: Consts.DocDbIdParam,
+                name: Consts.CosmosDbIdParam,
                 value: this.options.collection
             }]
         };

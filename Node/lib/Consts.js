@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.developmentConnectionString = 'UseDevelopmentStorage=true';
 exports.maxDataLength = 65000;
 exports.Fields = {
@@ -16,5 +17,5 @@ exports.ErrorCodes = {
     MessageSize: 'EMSGSIZE',
     BadMessage: 'EBADMSG'
 };
-exports.DocDbRootQuery = 'SELECT * FROM root r WHERE r.id = @id';
-exports.DocDbIdParam = '@id';
+exports.CosmosDbRootQuery = 'SELECT * FROM root r WHERE r.id = @id';
+exports.CosmosDbIdParam = '@id';

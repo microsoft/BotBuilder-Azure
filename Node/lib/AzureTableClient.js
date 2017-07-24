@@ -1,5 +1,6 @@
 "use strict";
-var Consts = require('./Consts');
+Object.defineProperty(exports, "__esModule", { value: true });
+var Consts = require("./Consts");
 var azure = require('azure-storage');
 var AzureTableClient = (function () {
     function AzureTableClient(tableName, accountName, accountKey) {

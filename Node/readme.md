@@ -6,7 +6,7 @@ Bot Builder Azure Extensions for Node.js enable bot developers to integrate bots
 ## High level features:
 
 * Azure Table Storage: Allows bot developers to store bot state in their own Azure Storage accounts. For more information on Azure Table Storage, visit the **[Azure Table Storage Documentation](https://azure.microsoft.com/en-us/services/storage/tables/)**
-* Azure DocumentDB: Allows bot developers to store bot state in DocumentDB. For more information on Azure DocumentDB, visit the **[Azure DocumentDB Documentation](https://azure.microsoft.com/en-us/services/documentdb/)**
+* Azure Cosmos DB: Allows bot developers to store bot state in Cosmos DB. For more information on Azure Cosmos DB, visit the **[Azure Cosmos DB Documentation](https://azure.microsoft.com/en-us/services/cosmos-db/)**
  
 ## Prepare to Build a Bot
 
@@ -22,7 +22,7 @@ Get the BotBuilder, BotBuilder-Azure and Restify modules using npm.
 
 ## Sample
 
-You can base your first bot on one of our samples, which showcase using [Azure Table Storage](examples/feature-azureTable/app.js) and [DocumentDb](examples/feature-documentDb/app.js). Read the detailed steps in the sample to set up storage emulators or connect to Azure.
+You can base your first bot on one of our samples, which showcase using [Azure Table Storage](examples/feature-azureTable/app.js) and [Cosmos DB](examples/feature-cosmos-db/app.js). Read the detailed steps in the sample to set up storage emulators or connect to Azure.
 
 ## Test your bot
 Use the [Bot Framework Emulator](http://docs.botframework.com/connector/tools/bot-framework-emulator/) to test your bot on localhost. 

@@ -34,11 +34,11 @@
 import { BotServiceConnector } from './BotServiceConnector';
 import { AzureBotStorage } from './AzureBotStorage';
 import { AzureTableClient } from './AzureTableClient';
-import { DocumentDbClient } from './DocumentDbClient';
+import { CosmosDbClient } from './CosmosDbClient';
 
 declare var exports: any;
 
 exports.BotServiceConnector = BotServiceConnector;
 exports.AzureBotStorage = AzureBotStorage;
 exports.AzureTableClient = AzureTableClient;
-exports.DocumentDbClient = DocumentDbClient;
+exports.CosmosDbClient = CosmosDbClient;

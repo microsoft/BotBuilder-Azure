@@ -1,23 +1,24 @@
 "use strict";
-var Consts = require('./Consts');
-var documentdb_1 = require('documentdb');
-var DocumentDbClient = (function () {
-    function DocumentDbClient(options) {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Consts = require("./Consts");
+var documentdb_1 = require("documentdb");
+var CosmosDbClient = (function () {
+    function CosmosDbClient(options) {
         this.options = options;
     }
-    DocumentDbClient.prototype.initialize = function (callback) {
+    CosmosDbClient.prototype.initialize = function (callback) {
         var _this = this;
         var client = new documentdb_1.DocumentClient(this.options.host, { masterKey: this.options.masterKey });
         this.client = client;
         this.getOrCreateDatabase(function (error, database) {
             if (error) {
-                callback(DocumentDbClient.getError(error));
+                callback(CosmosDbClient.getError(error));
             }
             else {
                 _this.database = database;
                 _this.getOrCreateCollection(function (error, collection) {
                     if (error) {
-                        callback(DocumentDbClient.getError(error));
+                        callback(CosmosDbClient.getError(error));
                     }
                     else {
                         _this.collection = collection;
@@ -27,25 +28,25 @@ var DocumentDbClient = (function () {
             }
         });
     };
-    DocumentDbClient.prototype.insertOrReplace = function (partitionKey, rowKey, entity, isCompressed, callback) {
+    CosmosDbClient.prototype.insertOrReplace = function (partitionKey, rowKey, entity, isCompressed, callback) {
         var docDbEntity = { id: partitionKey + ',' + rowKey, data: entity, isCompressed: isCompressed };
         this.client.upsertDocument(this.collection._self, docDbEntity, {}, function (error, collection, responseHeaders) {
-            callback(DocumentDbClient.getError(error), null, responseHeaders);
+            callback(CosmosDbClient.getError(error), null, responseHeaders);
         });
     };
-    DocumentDbClient.prototype.retrieve = function (partitionKey, rowKey, callback) {
+    CosmosDbClient.prototype.retrieve = function (partitionKey, rowKey, callback) {
         var id = partitionKey + ',' + rowKey;
         var querySpec = {
-            query: Consts.DocDbRootQuery,
+            query: Consts.CosmosDbRootQuery,
             parameters: [{
-                    name: Consts.DocDbIdParam,
+                    name: Consts.CosmosDbIdParam,
                     value: id
                 }]
         };
         var iterator = this.client.queryDocuments(this.collection._self, querySpec, {});
         iterator.toArray(function (error, result, responseHeaders) {
             if (error) {
-                callback(DocumentDbClient.getError(error), null, null);
+                callback(CosmosDbClient.getError(error), null, null);
             }
             else if (result.length == 0) {
                 callback(null, null, null);
@@ -56,17 +57,17 @@ var DocumentDbClient = (function () {
             }
         });
     };
-    DocumentDbClient.getError = function (error) {
+    CosmosDbClient.getError = function (error) {
         if (!error)
             return null;
         return new Error('Error Code: ' + error.code + ' Error Body: ' + error.body);
     };
-    DocumentDbClient.prototype.getOrCreateDatabase = function (callback) {
+    CosmosDbClient.prototype.getOrCreateDatabase = function (callback) {
         var _this = this;
         var querySpec = {
-            query: Consts.DocDbRootQuery,
+            query: Consts.CosmosDbRootQuery,
             parameters: [{
-                    name: Consts.DocDbIdParam,
+                    name: Consts.CosmosDbIdParam,
                     value: this.options.database
                 }]
         };
@@ -89,12 +90,12 @@ var DocumentDbClient = (function () {
             }
         });
     };
-    DocumentDbClient.prototype.getOrCreateCollection = function (callback) {
+    CosmosDbClient.prototype.getOrCreateCollection = function (callback) {
         var _this = this;
         var querySpec = {
-            query: Consts.DocDbRootQuery,
+            query: Consts.CosmosDbRootQuery,
             parameters: [{
-                    name: Consts.DocDbIdParam,
+                    name: Consts.CosmosDbIdParam,
                     value: this.options.collection
                 }]
         };
@@ -117,6 +118,6 @@ var DocumentDbClient = (function () {
             }
         });
     };
-    return DocumentDbClient;
+    return CosmosDbClient;
 }());
-exports.DocumentDbClient = DocumentDbClient;
+exports.CosmosDbClient = CosmosDbClient;
