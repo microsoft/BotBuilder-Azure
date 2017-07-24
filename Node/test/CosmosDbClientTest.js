@@ -30,25 +30,27 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 var azure = require('../');
 var assert = require('assert');
 
-describe('DocumentDbClient', function() {
+describe('CosmosDbClient', function() {
     
+    const options = {
+        host: 'https://localhost:8081',
+        masterKey: 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==',
+        database: 'testdb',
+        collection: 'testcollection'
+    };
+
     it('should write and read a valid entity', function(done) {
         
         var partitionKey = 'pk';
         var rowKey = 'rk';
         var data = { field1: 'data', field2: 3};
 
-        const options = {
-            host: 'https://localhost:8081',
-            masterKey: 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==',
-            database: 'testdb',
-            collection: 'testcollection'
-        };
-        var client = new azure.DocumentDbClient(options);
+        var client = new azure.CosmosDbClient(options);
 
         client.initialize(function(error){
              console.log(error);
@@ -83,7 +85,7 @@ describe('DocumentDbClient', function() {
         var data = { field1: 'data', field2: 3};
         var data2 = { field1: 'data2', field2: 3};
 
-        var client = new azure.AzureTableClient('testTable1');
+        var client = new azure.CosmosDbClient(options);
         client.initialize(function(error){
             console.log(error);
             if(error){
@@ -117,12 +119,12 @@ describe('DocumentDbClient', function() {
         });
     });
 
-    it('should return null when retrieving a non-existing entity', function(done) {
-        
+    it('should return null when retrieving a non-existing entity', function(done) {        
+
         var partitionKey = Math.floor((Math.random() * 100000000) + 1).toString();
         var rowKey = 'rk';
-
-        var client = new azure.AzureTableClient('testTable1');
+        
+        var client = new azure.CosmosDbClient(options);
         client.initialize(function(error){
             console.log(error);
             if(error){

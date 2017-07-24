@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/DocumentDbClientTest.js",
+            "program": "${workspaceRoot}/CosmosDbClientTest.js",
             "cwd": "${workspaceRoot}"
         },
         {

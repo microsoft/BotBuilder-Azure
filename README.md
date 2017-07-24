@@ -17,7 +17,7 @@ Bots (or conversation agents) are rapidly becoming an integral part of one’s d
 The Bot Builder SDK Azure Extensions enable bot developers to integrate bots with specific Azure components. 
 
 * Azure Table Storage: Allows bot developers to store bot state in their own Azure Storage accounts. For more information on Azure Table Storage, visit the **[Azure Table Storage Documentation](https://azure.microsoft.com/en-us/services/storage/tables/)**
-* Azure DocumentDB: Allows bot developers to store bot state in DocumentDB. For more information on Azure DocumentDB, visit the **[Azure DocumentDB Documentation](https://azure.microsoft.com/en-us/services/documentdb/)**
+* Azure Cosmos DB: Allows bot developers to store bot state in Cosmos DB. For more information on Azure Cosmos DB, visit the **[Azure Cosmos DB Documentation](https://azure.microsoft.com/en-us/services/cosmos-db/)**
 
 ### Azure Table Logging
 
@@ -28,7 +28,7 @@ The Bot Builder SDK Azure Extensions also include [TableLogger](CSharp/Library/M
 Get started quickly with our samples:
 
 * Azure Table [C#](CSharp/Samples/AzureTable) [Node.js](Node/examples/feature-azureTable)
-* DocumentDB [C#](CSharp/Samples/DocumentDb) [Node.js](Node/examples/feature-documentDb)
+* Cosmos DB [C#](CSharp/Samples/DocumentDb) [Node.js](Node/examples/feature-cosmos-db)
 
 See all the support options **[here](https://docs.botframework.com/en-us/support/)**.
 
