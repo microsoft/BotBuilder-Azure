@@ -92,6 +92,13 @@ namespace Microsoft.Bot.Builder.Azure
                     .AsSelf()
                     .SingleInstance();
             }
+            else if (ShouldUseCosmosDb())
+            {
+                builder.Register(c => MakeCosmosDbBotDataStore())
+                    .Keyed<IBotDataStore<BotData>>(Key_DataStore)
+                    .AsSelf()
+                    .SingleInstance();
+            }
             else
             {
                 builder.Register(c => new ConnectorStore(c.Resolve<IStateClient>()))
@@ -165,6 +172,32 @@ namespace Microsoft.Bot.Builder.Azure
             bool shouldUseTableStorage = false;
             var useTableStore = Utils.GetAppSetting(AppSettingKeys.UseTableStorageForConversationState);
             return bool.TryParse(useTableStore, out shouldUseTableStorage) && shouldUseTableStorage;
+        }
+
+        private bool ShouldUseCosmosDb()
+        {
+            bool shouldUseCosmosDb = false;
+            var useCosmosDb = Utils.GetAppSetting(AppSettingKeys.UseCosmosDbForConversationState);
+            return bool.TryParse(useCosmosDb, out shouldUseCosmosDb) && shouldUseCosmosDb;
+        }
+
+        private DocumentDbBotDataStore MakeCosmosDbBotDataStore()
+        {
+            var endpoint = Utils.GetAppSetting(AppSettingKeys.CosmosDbEndpoint);
+            var key = Utils.GetAppSetting(AppSettingKeys.CosmosDbKey);
+
+            if (string.IsNullOrEmpty(endpoint))
+            {
+                throw new ArgumentException("Endpoint for cosmos db is not set in application settings");
+            }
+
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentException("Key for cosmos db is not set in application settings");
+            }
+
+            return new DocumentDbBotDataStore(new Uri(endpoint), key);
+            
         }
 
         private TableBotDataStore MakeTableBotDataStore()
