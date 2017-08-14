@@ -1,17 +1,17 @@
 /*-----------------------------------------------------------------------------
-This Bot demonstrates how to use Azure DocumentDb for bot storage. 
+This Bot demonstrates how to use Azure Cosmos DB for bot storage. 
 
 # RUN THE BOT:
 
--Using local DocumentDb emulator:
-    -Install DocumentDb emulator (https://docs.microsoft.com/en-us/azure/documentdb/documentdb-nosql-local-emulator)
-    -Start the DocumentDb emulator
+-Using local Cosmos DB emulator:
+    -Install Cosmos DB emulator (https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator)
+    -Start the Cosmos DB emulator
     -Set the environment variable NODE_TLS_REJECT_UNAUTHORIZED to the value 0
     -Run the bot from the command line using "node app.js"
     -Type anything, and the bot will respond showing the text you typed
 
--Using Azure DocumentDb
-    -Create a DocumentDb database (https://azure.microsoft.com/en-us/resources/videos/create-documentdb-on-azure/)
+-Using Azure Cosmos DB
+    -Create a Cosmos DB database (https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-nodejs-get-started)
     -Replace host, masterKey, database and collection to your preference in the code below
     -Run the bot from the command line using "node app.js"
     -Type anything, and the bot will respond showing the text you typed
@@ -22,16 +22,16 @@ var builder = require('botbuilder');
 var azure = require('../../');
 var restify = require('restify');
 
-var documentDbOptions = {
-    host: 'https://localhost:8081', // Host for local DocDb emulator
-    masterKey: 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==', // Fixed key for local DocDb emulator
-    database: 'botdocdb',
+var cosmosDbOptions = {
+    host: 'https://localhost:8081', // Host for local Cosmos DB emulator
+    masterKey: 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==', // Fixed key for local Cosmos DB emulator
+    database: 'botcosmosdb',
     collection: 'botdata'
 };
 
-var docDbClient = new azure.DocumentDbClient(documentDbOptions);
+var cosmosDbClient = new azure.CosmosDbClient(cosmosDbOptions);
 
-var tableStorage = new azure.AzureBotStorage({ gzipData: false }, docDbClient);
+var tableStorage = new azure.AzureBotStorage({ gzipData: false }, cosmosDbClient);
 
 var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
