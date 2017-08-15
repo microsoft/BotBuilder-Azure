@@ -4,6 +4,6 @@ namespace Microsoft.Bot.Builder.Telemetry
 {
     public class ShardPerMinuteStrategy : IShardStrategy
     {
-        public string CurrentShardKey => $"{DateTime.UtcNow.Year:yyyy-MM-dd-HH-mm}";
+        public string CurrentShardKey => $"{DateTime.UtcNow:yyyy-MM-dd-HH-mm}";
     }
 }
