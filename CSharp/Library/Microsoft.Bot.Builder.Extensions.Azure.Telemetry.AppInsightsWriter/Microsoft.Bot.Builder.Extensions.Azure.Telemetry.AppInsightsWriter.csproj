@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\UnitTesting\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\Debug\Microsoft.Bot.Builder.Azure.Telemetry.AppInsightsWriter.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Microsoft.Bot.Builder.Extensions.Azure.Telemetry.AppInsightsWriter.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -100,7 +100,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Bot.Builder.Extensions.Telemetry\Microsoft.Bot.Builder.Extensions.Telemetry.csproj">
       <Project>{b2669900-19b3-43ce-b884-5a455c998f33}</Project>
-      <Name>Microsoft.Bot.Builder.Telemetry</Name>
+      <Name>Microsoft.Bot.Builder.Extensions.Telemetry</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
