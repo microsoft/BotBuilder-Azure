@@ -116,12 +116,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Bot.Builder.Extensions.Telemetry\Microsoft.Bot.Builder.Extensions.Telemetry.csproj">
-      <Project>{b2669900-19b3-43ce-b884-5a455c998f33}</Project>
-      <Name>Microsoft.Bot.Builder.Extensions.Telemetry</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

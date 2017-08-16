@@ -106,11 +106,5 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Bot.Builder.Extensions.Telemetry\Microsoft.Bot.Builder.Extensions.Telemetry.csproj">
-      <Project>{B2669900-19B3-43CE-B884-5A455C998F33}</Project>
-      <Name>Microsoft.Bot.Builder.Extensions.Telemetry</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
