@@ -1,8 +1,9 @@
 "use strict";
-var async = require('async');
-var Promise = require('promise');
-var Consts = require('./Consts');
-var zlib = require('zlib');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async = require("async");
+var Promise = require("promise");
+var Consts = require("./Consts");
+var zlib = require("zlib");
 var azure = require('azure-storage');
 var AzureBotStorage = (function () {
     function AzureBotStorage(options, storageClient) {
