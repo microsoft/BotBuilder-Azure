@@ -120,6 +120,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="createpackage.cmd" />
+    <None Include="Microsoft.Bot.Builder.Extensions.Azure.Telemetry.BlobStorageWriter.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
