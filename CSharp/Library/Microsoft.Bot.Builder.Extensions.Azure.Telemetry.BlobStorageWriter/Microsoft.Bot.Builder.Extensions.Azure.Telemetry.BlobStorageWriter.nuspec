@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Microsoft.Bot.Builder.Extensions.Azure.Telemetry.BlobStorageWriter</id>
+    <version>$version$</version>
+    <authors>Microsoft</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      Provide interfaces and classes for capturing extended telemetry data in the Microsoft Bot Builder to Azure BLOB Storage.
+    </description>
+    <projectUrl>https://github.com/Microsoft/BotBuilder</projectUrl>
+    <iconUrl>http://docs.botframework.com/images/bot_icon.png</iconUrl>
+    <summary>Microsoft Telemetry BLOB STORAGE writer for Microsoft.Bot.Builder.</summary>
+    <language>en-US</language>
+    <dependencies>
+      <dependency id="Microsoft.Bot.Builder.Extensions.Telemetry" version="$telemetry$"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\release\Microsoft.Bot.Builder.Extensions.Azure.Telemetry.BlobStorageWriter.dll" target="lib\net46"/>
+    <file src="bin\release\Microsoft.Bot.Builder.Extensions.Azure.Telemetry.BlobStorageWriter.xml" target="lib\net46" />
+    <file src="bin\release\Microsoft.Bot.Builder.Extensions.Azure.Telemetry.BlobStorageWriter.pdb" target="lib\net46" />
+    <file src="**\*.cs" exclude="**\obj\**\*.cs" target="src" />
+  </files>
+</package>
