@@ -1,21 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Extensions.Telemetry;
 using Microsoft.Bot.Builder.Extensions.Telemetry.Data;
+using Microsoft.Bot.Builder.Internals.Fibers;
 
-namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
+namespace Microsoft.Bot.Builder.Extensions.Azure.Telemetry.AppInsightsWriter
 {
+    /// <summary>
+    /// Class AppInsightsTelemetryWriter.
+    /// </summary>
+    /// <seealso cref="Microsoft.Bot.Builder.Extensions.Telemetry.ITelemetryWriter" />
     public class AppInsightsTelemetryWriter : ITelemetryWriter
     {
+        /// <summary>
+        /// The context
+        /// </summary>
         private ITelemetryContext _context;
+        
+        /// <summary>
+        /// The telemetry
+        /// </summary>
         private TelemetryClient _telemetry;
+        
+        /// <summary>
+        /// The telemetry configuration
+        /// </summary>
         private TelemetryConfiguration _telemetryConfiguration;
+        
+        /// <summary>
+        /// The configuration
+        /// </summary>
         private readonly AppInsightsTelemetryWriterConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppInsightsTelemetryWriter"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="context">The context.</param>
         public AppInsightsTelemetryWriter(AppInsightsTelemetryWriterConfiguration configuration, ITelemetryContext context)
         {
             SetField.NotNull(out _configuration, nameof(configuration), configuration);
@@ -24,6 +47,9 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             Initialize();
         }
 
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         private void Initialize()
         {
             //set initial configuration
@@ -45,11 +71,19 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
 #endif
         }
 
+        /// <summary>
+        /// Does the post log actions.
+        /// </summary>
         private void DoPostLogActions()
         {
             if (_configuration.FlushEveryWrite) _telemetry.Flush();
         }
 
+        /// <summary>
+        /// write intent as an asynchronous operation.
+        /// </summary>
+        /// <param name="intentTelemetryData">The intent telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteIntentAsync(IIntentTelemetryData intentTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Intents))
@@ -75,6 +109,11 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             }
         }
 
+        /// <summary>
+        /// write entity as an asynchronous operation.
+        /// </summary>
+        /// <param name="entityTelemetryData">The entity telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteEntityAsync(IEntityTelemetryData entityTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Entities))
@@ -100,6 +139,11 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             }
         }
 
+        /// <summary>
+        /// write request as an asynchronous operation.
+        /// </summary>
+        /// <param name="requestTelemetryData">The request telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteRequestAsync(IRequestTelemetryData requestTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
@@ -124,6 +168,11 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             }
         }
 
+        /// <summary>
+        /// write response as an asynchronous operation.
+        /// </summary>
+        /// <param name="responseTelemetryData">The response telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteResponseAsync(IResponseTelemetryData responseTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Responses))
@@ -145,6 +194,11 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             }
         }
 
+        /// <summary>
+        /// write counter as an asynchronous operation.
+        /// </summary>
+        /// <param name="counterTelemetryData">The counter telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteCounterAsync(ICounterTelemetryData counterTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Counters))
@@ -164,6 +218,11 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             }
         }
 
+        /// <summary>
+        /// write measure as an asynchronous operation.
+        /// </summary>
+        /// <param name="measureTelemetryData">The measure telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteMeasureAsync(IMeasureTelemetryData measureTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Measures))
@@ -183,6 +242,11 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             }
         }
 
+        /// <summary>
+        /// write service result as an asynchronous operation.
+        /// </summary>
+        /// <param name="serviceResultTelemetryData">The service result telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteServiceResultAsync(IServiceResultTelemetryData serviceResultTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.ServiceResults))
@@ -208,6 +272,11 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
 
         }
 
+        /// <summary>
+        /// write exception as an asynchronous operation.
+        /// </summary>
+        /// <param name="exceptionTelemetryData">The exception telemetry data.</param>
+        /// <returns>Task.</returns>
         public async Task WriteExceptionAsync(IExceptionTelemetryData exceptionTelemetryData)
         {
             if (_configuration.Handles(TelemetryTypes.Exceptions))
@@ -226,11 +295,19 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
             }
         }
 
+        /// <summary>
+        /// Sets the telemetry context.
+        /// </summary>
+        /// <param name="context">The telemetry context.</param>
         public void SetContext(ITelemetryContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Gets the bot context properties.
+        /// </summary>
+        /// <returns>Dictionary&lt;System.String, System.String&gt;.</returns>
         private Dictionary<string, string> GetBotContextProperties()
         {
             return new Dictionary<string, string>
@@ -243,21 +320,44 @@ namespace Microsoft.Bot.Builder.Azure.Extensions.Telemetry.AppInsightsWriter
                 {"correlationId", _context.CorrelationId },
             };
         }
+        /// <summary>
+        /// write event as an asynchronous operation.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>Task.</returns>
         public async Task WriteEventAsync(string key, string value)
         {
             await WriteEventAsync(new Dictionary<string, string> { { key, value } });
         }
 
+        /// <summary>
+        /// write event as an asynchronous operation.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>Task.</returns>
         public async Task WriteEventAsync(string key, double value)
         {
             await WriteEventAsync(new Dictionary<string, double> { { key, value } });
         }
 
+        /// <summary>
+        /// write event as an asynchronous operation.
+        /// </summary>
+        /// <param name="metrics">The metrics.</param>
+        /// <returns>Task.</returns>
         public async Task WriteEventAsync(Dictionary<string, double> metrics)
         {
             await WriteEventAsync(GetBotContextProperties(), metrics);
         }
 
+        /// <summary>
+        /// write event as an asynchronous operation.
+        /// </summary>
+        /// <param name="eventProperties">The event properties.</param>
+        /// <param name="eventMetrics">The event metrics.</param>
+        /// <returns>Task.</returns>
         public async Task WriteEventAsync(Dictionary<string, string> eventProperties, Dictionary<string, double> eventMetrics = null)
         {
             if (_configuration.Handles(TelemetryTypes.CustomEvents))
