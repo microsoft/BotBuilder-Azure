@@ -14,7 +14,7 @@
     <language>en-US</language>
     <dependencies>
       <dependency id="Microsoft.Bot.Builder.Extensions.Telemetry" version="$telemetry$"/>
-      <dependency id="Microsoft.WindowsAzure.Storage" version="8.1.4"/>
+      <dependency id="WindowsAzure.Storage" version="8.1.4"/>
     </dependencies>
   </metadata>
   <files>
