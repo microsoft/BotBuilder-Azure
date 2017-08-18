@@ -72,11 +72,25 @@ namespace Microsoft.Bot.Builder.Azure
         /// </summary>
         public const string TableStorageConnectionString = "AzureWebJobsStorage";
 
-
         /// <summary>
         /// Key for the flag indicating if table storage should be used as bot state store.
         /// </summary>
         public const string UseTableStorageForConversationState = "UseTableStorageForConversationState";
+
+        /// <summary>
+        /// Key for the flag indicating if cosmos db should be used as bot state store.
+        /// </summary>
+        public const string UseCosmosDbForConversationState = "UseCosmosDbForConversationState";
+
+        /// <summary>
+        /// The endpoint cosmos db storage if the UseCosmosDbForConversationState flag was set
+        /// </summary>
+        public const string CosmosDbEndpoint = "CosmosDbEndpoint";
+
+        /// <summary>
+        /// The key cosmos db storage if the UseCosmosDbForConversationState flag was set
+        /// </summary>
+        public const string CosmosDbKey = "CosmosDbKey";
     }
 
 
