@@ -32,6 +32,7 @@
 //
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -159,7 +160,7 @@ namespace Microsoft.Bot.Builder.Azure
     /// </summary>
     public class BotServiceDelegateSurrogate : Serialization.ISurrogateProvider
     {
-        
+
         /// <summary>
         /// The key for the type of delegate in the SerializationInfo.
         /// </summary>
@@ -199,7 +200,7 @@ namespace Microsoft.Bot.Builder.Azure
             return handles;
         }
 
-        
+
         void ISerializationSurrogate.GetObjectData(object obj, SerializationInfo info, StreamingContext context)
         {
             var lambda = (Delegate)obj;
@@ -254,7 +255,7 @@ namespace Microsoft.Bot.Builder.Azure
         {
             SetField.NotNull(out this.assembly, nameof(assembly), assembly);
         }
-        
+
         /// <summary>
         /// <see cref="SerializationBinder.BindToType"/>
         /// </summary>
@@ -280,7 +281,7 @@ namespace Microsoft.Bot.Builder.Azure
     public sealed class ResolveAssembly : IDisposable
     {
         private readonly Assembly assembly;
-        
+
         /// <summary>
         /// Creates an instance of ResovelCallingAssembly
         /// </summary>
@@ -304,14 +305,51 @@ namespace Microsoft.Bot.Builder.Azure
         {
             AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
         }
-        
+
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs arguments)
         {
+            Assembly resolvedAssembly = null;
+
             if (arguments.Name == this.assembly.FullName)
             {
-                return assembly;
+                resolvedAssembly = assembly;
+            }
+            else
+            {
+                resolvedAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                                            .FirstOrDefault(a => a.GetName().FullName == arguments.Name);
+
+                // Fix based on following comment: https://github.com/Microsoft/BotBuilder/issues/2407#issuecomment-325097648
+                if (resolvedAssembly == null)
+                {
+                    resolvedAssembly = LoadFromFile(arguments.Name);
+                }
             }
 
+            return resolvedAssembly;
+        }
+
+        private Assembly LoadFromFile(string name)
+        {
+            var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var assemblyName = new AssemblyName(name);
+            var assemblyFileName = assemblyName.Name + ".dll";
+            string assemblyPath;
+
+            if (assemblyName.Name.EndsWith(".resources"))
+            {
+                var resourceDirectory = Path.Combine(assemblyDirectory, assemblyName.CultureName);
+                assemblyPath = Path.Combine(resourceDirectory, assemblyFileName);
+            }
+            else
+            {
+                assemblyPath = Path.Combine(assemblyDirectory, assemblyFileName);
+            }
+
+            if (File.Exists(assemblyPath))
+            {
+                return Assembly.LoadFrom(assemblyPath);
+            }
             return null;
         }
     }
