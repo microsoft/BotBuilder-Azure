@@ -21,47 +21,42 @@ namespace Microsoft.Bot.Sample.AzureTable
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-            {
-                // http://docs.autofac.org/en/latest/integration/webapi.html#quick-start
-                var builder = new ContainerBuilder();
+            Conversation.UpdateContainer(
+                builder =>
+                {
+                    // register the Bot Builder module
+                    builder.RegisterModule(new DialogModule());
+                    // register the alarm dependencies
+                    builder.RegisterModule(new AzureModule(Assembly.GetExecutingAssembly()));
 
-                // register the Bot Builder module
-                builder.RegisterModule(new DialogModule());
-                // register the alarm dependencies
-                builder.RegisterModule(new AzureModule(Assembly.GetExecutingAssembly()));
+                    builder
+                        .RegisterInstance(new EchoDialog())
+                        .As<IDialog<object>>();
 
-                builder
-                    .RegisterInstance(new EchoDialog())
-                    .As<IDialog<object>>();
-
-                var store = new TableBotDataStore(CloudStorageAccount.DevelopmentStorageAccount);
-                builder.Register(c => store)
-                    .Keyed<IBotDataStore<BotData>>(AzureModule.Key_DataStore)
-                    .AsSelf()
-                    .SingleInstance();
+                    var store = new TableBotDataStore(CloudStorageAccount.DevelopmentStorageAccount);
+                    builder.Register(c => store)
+                        .Keyed<IBotDataStore<BotData>>(AzureModule.Key_DataStore)
+                        .AsSelf()
+                        .SingleInstance();
 
 
-                builder.Register(c => new CachingBotDataStore(store,
-                                                              CachingBotDataStoreConsistencyPolicy.ETagBasedConsistency))
-                    .As<IBotDataStore<BotData>>()
-                    .AsSelf()
-                    .InstancePerLifetimeScope();
+                    builder.Register(c => new CachingBotDataStore(store,
+                                                                    CachingBotDataStoreConsistencyPolicy.ETagBasedConsistency))
+                        .As<IBotDataStore<BotData>>()
+                        .AsSelf()
+                        .InstancePerLifetimeScope();
 
-                // Get your HttpConfiguration.
-                var config = GlobalConfiguration.Configuration;
+                    // Get your HttpConfiguration.
+                    var config = GlobalConfiguration.Configuration;
 
-                // Register your Web API controllers.
-                builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+                    // Register your Web API controllers.
+                    builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-                // OPTIONAL: Register the Autofac filter provider.
-                builder.RegisterWebApiFilterProvider(config);
+                    // OPTIONAL: Register the Autofac filter provider.
+                    builder.RegisterWebApiFilterProvider(config);
 
-                // Set the dependency resolver to be Autofac.
-                //var container = builder.Build();
-                builder.Update(Conversation.Container);
-                config.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
-                
-            }
+                    config.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
+                });   
 
             // WebApiConfig stuff
             GlobalConfiguration.Configure(config =>
