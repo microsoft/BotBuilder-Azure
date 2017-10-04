@@ -12,6 +12,7 @@
       * AzureModule -- Module for setting up components for bot builder based on Azure dependencies
       * TableBotDataStore -- IBotDataStore implementation based on Azure table storage.
       * DocumentDbBotDataStore -- IBotDataStore implementation based on Azure table storage.
+      * SqlBotDataStore -- IBotDataStore implementation based on Azure Sql Server.
     </description>
     <projectUrl>https://github.com/Microsoft/BotBuilder</projectUrl>
     <iconUrl>http://docs.botframework.com/images/bot_icon.png</iconUrl>
@@ -23,6 +24,7 @@
       <dependency id="Newtonsoft.Json" version="8.0.3" />
       <dependency id="WindowsAzure.Storage" version="7.2.1" />
       <dependency id="Microsoft.Azure.DocumentDB" version="1.11.0" />
+      <dependency id="EntityFramework" version="6.1.3" />
     </dependencies>
   </metadata>
   <files>

@@ -92,6 +92,17 @@ namespace Microsoft.Bot.Builder.Azure
         /// The key cosmos db storage if the UseCosmosDbForConversationState flag was set
         /// </summary>
         public const string CosmosDbKey = "CosmosDbKey";
+
+        /// <summary>
+        /// Key for the flag indicating if sql server should be used as bot state store.
+        /// </summary>
+        public const string UseSqlServerForConversationState = "UseSqlServerForConversationState";
+
+        /// <summary>
+        /// The key for sql table storage connection string.
+        /// </summary>
+        public const string SqlServerConnectionString = "SqlServerConnection";
+
     }
 
 

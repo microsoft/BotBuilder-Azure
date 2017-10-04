@@ -1,7 +1,7 @@
 ﻿namespace Microsoft.Bot.Builder.Azure
 {
     /// <summary>
-    /// Enumeration for hadling of large messages
+    /// Enumeration for handling of large messages
     /// </summary>
     public enum LargeMessageMode
     {
