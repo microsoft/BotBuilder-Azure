@@ -7,6 +7,9 @@ var AzureTableClient = (function () {
         if (!accountName && !accountKey) {
             this.useDevelopmentStorage = true;
         }
+        else if (accountName && !accountKey) {
+            this.connectionString = accountName;
+        }
         else if (!accountName || !accountKey) {
             throw Error('Storage account name and account key are mandatory when not using development storage');
         }
@@ -63,9 +66,16 @@ var AzureTableClient = (function () {
         return entity;
     };
     AzureTableClient.prototype.buildTableService = function () {
-        var tableService = this.useDevelopmentStorage
-            ? azure.createTableService(Consts.developmentConnectionString)
-            : azure.createTableService(this.accountName, this.accountKey);
+        var tableService = null;
+        if (this.useDevelopmentStorage) {
+            tableService = azure.createTableService(Consts.developmentConnectionString);
+        }
+        else if (this.connectionString) {
+            tableService = azure.createTableService(this.connectionString);
+        }
+        else {
+            tableService = azure.createTableService(this.accountName, this.accountKey);
+        }
         return tableService.withFilter(new azure.ExponentialRetryPolicyFilter());
     };
     AzureTableClient.getError = function (error, response) {

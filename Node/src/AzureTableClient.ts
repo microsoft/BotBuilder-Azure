@@ -46,6 +46,7 @@ export interface IBotTableEntity extends IBotEntity {
 
 export class AzureTableClient implements IStorageClient {
 
+    private readonly connectionString: string;
     private readonly accountName: string;
     private readonly accountKey: string;
     private readonly tableName: string;
@@ -53,9 +54,16 @@ export class AzureTableClient implements IStorageClient {
 
     constructor(tableName: string, accountName?: string, accountKey?: string) {
         
+        // Development storage is used if no accountName and key are provided
         if(!accountName && !accountKey){
             this.useDevelopmentStorage = true;
         }
+        // If only account name is provided, we assume it is a full connection string
+        else if(accountName && !accountKey){
+            this.connectionString = accountName;
+        }
+
+        // If no account info is provided, we error out
         else if(!accountName || !accountKey){
             throw Error('Storage account name and account key are mandatory when not using development storage');
         }
@@ -129,9 +137,22 @@ export class AzureTableClient implements IStorageClient {
     }
 
     private buildTableService(): any {
-        let tableService = this.useDevelopmentStorage 
-            ? azure.createTableService(Consts.developmentConnectionString) 
-            : azure.createTableService(this.accountName, this.accountKey);
+        
+        let tableService = null;
+
+        // Dev Storage
+        if (this.useDevelopmentStorage) {
+            tableService = azure.createTableService(Consts.developmentConnectionString) 
+        }
+        // Connection string provided
+        else if (this.connectionString) {
+            tableService = azure.createTableService(this.connectionString)
+        }
+        // Account name / key
+        else {
+            tableService = azure.createTableService(this.accountName, this.accountKey);
+        }
+
         return tableService.withFilter(new azure.ExponentialRetryPolicyFilter());
     }
 
