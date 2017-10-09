@@ -385,7 +385,7 @@ export class AzureTableClient implements IAzureTableClient {
     /** 
      * Creates a new instance of the AzureTableClient.
      * @param name of the table to be used in Azure Table 
-     * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started
+     * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started. If only accountName is provided but no account key, accountName is used as a full connection string
      * @param optional Azure storage account key. If not specified, development storage is used and Azure Storage Emulator should be started 
      */
     constructor(tableName: string, accountName?: string, accountKey?: string);
