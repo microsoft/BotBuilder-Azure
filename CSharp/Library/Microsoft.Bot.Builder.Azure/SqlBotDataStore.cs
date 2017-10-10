@@ -66,6 +66,9 @@ namespace Microsoft.Bot.Builder.Azure
         public SqlBotDataStore(string connectionString)
         {
             _connectionString = connectionString;
+            using(var db = new SqlBotDataContext(_connectionString))            
+                db.Database.CreateIfNotExists();
+            
         }
         async Task<BotData> IBotDataStore<BotData>.LoadAsync(IAddress key, BotStoreType botStoreType, CancellationToken cancellationToken)
         {
