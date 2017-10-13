@@ -44,6 +44,11 @@ export interface IAzureSqlConfiguration extends ConnectionConfig {
      * Includes "table" parameter
      */
     options: IAzureSqlOptions;
+    /**
+     * Flag to set if user wishes BotBuilder-Azure to create specified table if it doesn't exist.
+     * By default is set to false.
+     */
+    enforceTable: boolean;
 }
 
 /**
@@ -62,7 +67,13 @@ export interface IAzureSqlOptions extends ConnectionOptions {
 
 export class AzureSqlClient implements IStorageClient {
 
-    constructor(private options: IAzureSqlConfiguration) { }
+    constructor(private options: IAzureSqlConfiguration) {
+        if (typeof options.enforceTable == 'boolean') {
+            this.options.enforceTable = options.enforceTable;
+        } else {
+            this.options.enforceTable = false;
+        }
+    }
 
     /** Initializes the SQL Server client */
     public initialize(callback: (error: any) => void): void {
@@ -78,12 +89,18 @@ export class AzureSqlClient implements IStorageClient {
                             client.close();
                             callback(AzureSqlClient.getError(error));
                         } else if (!rowCount) {
-                            let createTableRequest = new Request(`CREATE TABLE ${this.options.options.table} (id NVARCHAR(200), data NVARCHAR(1000), isCompressed BIT)`,
-                            (error: Error, rowCount: number, rows: any[]) => {
+                            if (!this.options.enforceTable) {
+                                let error = new Error(`Table "${this.options.options.table}" has not been found. Please create your Table before connecting your bot to it or set "enforceTable" to true in your AzureSqlClient configuration to create the table if it does not exist.`);
                                 client.close();
                                 callback(AzureSqlClient.getError(error));
-                            });
-                            client.execSql(createTableRequest);
+                            } else {
+                                let createTableRequest = new Request(`CREATE TABLE ${this.options.options.table} (id NVARCHAR(200), data NVARCHAR(1000), isCompressed BIT)`,
+                                (error: Error, rowCount: number, rows: any[]) => {
+                                    client.close();
+                                    callback(AzureSqlClient.getError(error));
+                                });
+                                client.execSql(createTableRequest);
+                            }
                         } else {
                             client.close();
                             callback(null);

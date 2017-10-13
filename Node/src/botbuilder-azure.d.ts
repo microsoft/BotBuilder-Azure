@@ -254,6 +254,11 @@ export interface IAzureSqlConfiguration extends ConnectionConfig {
      * IAzureSqlOptions which extends ConnectionOptions, includes "table" parameter
      */
     options: IAzureSqlOptions;
+    /**
+     * Flag to set if user wishes BotBuilder-Azure to create specified table if it doesn't exist.
+     * By default is set to false.
+     */
+    enforceTable: boolean;
 }
 
 export interface IAzureSqlOptions extends ConnectionOptions {
