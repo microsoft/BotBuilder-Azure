@@ -254,19 +254,19 @@ namespace Microsoft.Bot.Builder.Azure
 
         public static string GetEntityKey(IAddress key, BotStoreType botStoreType)
         {
+            string result;
             switch (botStoreType)
             {
                 case BotStoreType.BotConversationData:
-                    var result = $"{key.ChannelId}:conversation{key.ConversationId.SanitizeForAzureKeys()}";
+                    result = $"{key.ChannelId}:conversation{key.ConversationId.SanitizeForAzureKeys()}";
                     return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
 
-
                 case BotStoreType.BotUserData:
-                    var result = $"{key.ChannelId}:user{key.UserId.SanitizeForAzureKeys()}";
+                    result = $"{key.ChannelId}:user{key.UserId.SanitizeForAzureKeys()}";
                     return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
 
                 case BotStoreType.BotPrivateConversationData:
-                    var result = $"{key.ChannelId}:private{key.ConversationId.SanitizeForAzureKeys()}:{key.UserId.SanitizeForAzureKeys()}";
+                    result = $"{key.ChannelId}:private{key.ConversationId.SanitizeForAzureKeys()}:{key.UserId.SanitizeForAzureKeys()}";
                     return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
 
                 default:
