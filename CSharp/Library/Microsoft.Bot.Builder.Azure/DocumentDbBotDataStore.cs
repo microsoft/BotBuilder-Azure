@@ -239,7 +239,7 @@ namespace Microsoft.Bot.Builder.Azure
 
     internal class DocDbBotDataEntity
     {
-        internal const int MAX_KEY_LENGTH = 255;
+        internal const int MAX_KEY_LENGTH = 254;
         public DocDbBotDataEntity() { }
 
         internal DocDbBotDataEntity(IAddress key, BotStoreType botStoreType, BotData botData)
