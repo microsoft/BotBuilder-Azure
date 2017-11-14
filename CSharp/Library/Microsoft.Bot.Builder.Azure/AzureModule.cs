@@ -101,6 +101,8 @@ namespace Microsoft.Bot.Builder.Azure
             }
             else if (ShouldUseSqlServer())
             {
+                SqlBotDataContext.AssertDatabaseReady();
+
                 builder.Register(c => MakeSqlBotDataStore())
                     .Keyed<IBotDataStore<BotData>>(Key_DataStore)
                     .AsSelf()
@@ -224,7 +226,7 @@ namespace Microsoft.Bot.Builder.Azure
             }
 
             // no connection string in application settings but should use table storage flag is set.
-            throw new ArgumentException("connection string for table storage is not set in application setting.");
+            throw new ArgumentException("Connection string for table storage is not set in application setting.");
         }
 
         private SqlBotDataStore MakeSqlBotDataStore()
@@ -237,7 +239,7 @@ namespace Microsoft.Bot.Builder.Azure
             }
 
             // no connection string in application settings but should use sql server flag is set.
-            throw new ArgumentException("connection string for sql server is not set in application settings.");
+            throw new ArgumentException("Connection string for sql server is not set in application settings.");
         }
     }
 }
