@@ -4,6 +4,12 @@ var tedious_1 = require("tedious");
 var AzureSqlClient = (function () {
     function AzureSqlClient(options) {
         this.options = options;
+        if (typeof options.enforceTable == 'boolean') {
+            this.options.enforceTable = options.enforceTable;
+        }
+        else {
+            this.options.enforceTable = false;
+        }
     }
     AzureSqlClient.prototype.initialize = function (callback) {
         var _this = this;
@@ -19,11 +25,18 @@ var AzureSqlClient = (function () {
                         callback(AzureSqlClient.getError(error));
                     }
                     else if (!rowCount) {
-                        var createTableRequest = new tedious_1.Request("CREATE TABLE " + _this.options.options.table + " (id NVARCHAR(200), data NVARCHAR(1000), isCompressed BIT)", function (error, rowCount, rows) {
+                        if (!_this.options.enforceTable) {
+                            var error_1 = new Error("Table \"" + _this.options.options.table + "\" has not been found. Please create your Table before connecting your bot to it or set \"enforceTable\" to true in your AzureSqlClient configuration to create the table if it does not exist.");
                             client.close();
-                            callback(AzureSqlClient.getError(error));
-                        });
-                        client.execSql(createTableRequest);
+                            callback(AzureSqlClient.getError(error_1));
+                        }
+                        else {
+                            var createTableRequest = new tedious_1.Request("CREATE TABLE " + _this.options.options.table + " (id NVARCHAR(200), data NVARCHAR(1000), isCompressed BIT)", function (error, rowCount, rows) {
+                                client.close();
+                                callback(AzureSqlClient.getError(error));
+                            });
+                            client.execSql(createTableRequest);
+                        }
                     }
                     else {
                         client.close();
