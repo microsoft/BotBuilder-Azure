@@ -31,6 +31,8 @@ namespace Microsoft.Bot.Sample.DocumentDb
                 //Fixed docDb emulator key
                 const string docDbEmulatorKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
 
+                var config = GlobalConfiguration.Configuration;
+
                 Conversation.UpdateContainer(
                     builder =>
                     {
@@ -43,9 +45,13 @@ namespace Microsoft.Bot.Sample.DocumentDb
                             .AsSelf()
                             .SingleInstance();
 
+                        // Register your Web API controllers.
+                        builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+                        builder.RegisterWebApiFilterProvider(config);
+
                     });
 
-                GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
+                config.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
             }
 
             // WebApiConfig stuff

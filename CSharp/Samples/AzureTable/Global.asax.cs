@@ -22,6 +22,7 @@ namespace Microsoft.Bot.Sample.AzureTable
         protected void Application_Start(object sender, EventArgs e)
         {
             {
+                var config = GlobalConfiguration.Configuration;
                 Conversation.UpdateContainer(
                     builder =>
                     {
@@ -33,9 +34,13 @@ namespace Microsoft.Bot.Sample.AzureTable
                             .AsSelf()
                             .SingleInstance();
 
+                        // Register your Web API controllers.
+                        builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+                        builder.RegisterWebApiFilterProvider(config);
+
                     });
 
-                GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
+                config.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
             }
 
             // WebApiConfig stuff

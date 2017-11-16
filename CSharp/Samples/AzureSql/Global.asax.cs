@@ -17,6 +17,8 @@ namespace Microsoft.Bot.Sample.AzureSql
         protected void Application_Start(object sender, EventArgs e)
         {
             {
+                var config = GlobalConfiguration.Configuration;
+
                 Conversation.UpdateContainer(
                     builder =>
                         {
@@ -29,9 +31,14 @@ namespace Microsoft.Bot.Sample.AzureSql
                                 .AsSelf()
                                 .SingleInstance();
 
+
+                            // Register your Web API controllers.
+                            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+                            builder.RegisterWebApiFilterProvider(config);
+
                         });
 
-                GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
+                config.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
             }
 
             // WebApiConfig stuff
