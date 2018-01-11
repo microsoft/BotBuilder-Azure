@@ -19,7 +19,7 @@ var AzureSqlClient = (function () {
                 callback(AzureSqlClient.getError(error));
             }
             else {
-                var checkTableRequest = new tedious_1.Request("IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.Tables WHERE TABLE_NAME = N'" + _this.options.options.table + "') BEGIN SELECT TOP 1 * FROM " + _this.options.options.table + " END", function (error, rowCount, rows) {
+                var checkTableRequest = new tedious_1.Request("SELECT * FROM INFORMATION_SCHEMA.Tables WHERE TABLE_NAME = N'" + _this.options.options.table + "'", function (error, rowCount, rows) {
                     if (error) {
                         client.close();
                         callback(AzureSqlClient.getError(error));
@@ -117,8 +117,11 @@ var AzureSqlClient = (function () {
                     }
                     else {
                         client.close();
-                        var row = rows[0];
-                        callback(null, row, rows[0]);
+                        var rowData = {
+                            data: JSON.parse(rows[0][1].value),
+                            isCompressed: rows[0][2].value
+                        };
+                        callback(null, rowData, null);
                     }
                 });
                 var id = partitionKey + ',' + rowKey;
