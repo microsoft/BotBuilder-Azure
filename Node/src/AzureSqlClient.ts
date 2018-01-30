@@ -83,7 +83,7 @@ export class AzureSqlClient implements IStorageClient {
             if (error) {
                 callback(AzureSqlClient.getError(error));
             } else {
-                let checkTableRequest = new Request(`IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.Tables WHERE TABLE_NAME = N'${this.options.options.table}') BEGIN SELECT TOP 1 * FROM ${this.options.options.table} END`,
+                let checkTableRequest = new Request(`SELECT * FROM INFORMATION_SCHEMA.Tables WHERE TABLE_NAME = N'${this.options.options.table}'`,
                     (error: Error, rowCount: number, rows: any[]) => {
                         if (error) {
                             client.close();
@@ -180,8 +180,13 @@ export class AzureSqlClient implements IStorageClient {
                         callback(null, null, null);
                     } else {
                         client.close();
-                        let row: any = rows[0];
-                        callback(null, <IBotEntity>row, rows[0]);
+
+                        let rowData: IBotEntity = {
+                            data: JSON.parse(rows[0][1].value),
+                            isCompressed: rows[0][2].value
+                        }
+
+                        callback(null, rowData, null);
                     }
                 });
                 let id = partitionKey + ',' + rowKey;
