@@ -254,24 +254,35 @@ namespace Microsoft.Bot.Builder.Azure
 
         public static string GetEntityKey(IAddress key, BotStoreType botStoreType)
         {
-            string result;
+            string entityKey;
             switch (botStoreType)
             {
                 case BotStoreType.BotConversationData:
-                    result = $"{key.ChannelId}:conversation{key.ConversationId.SanitizeForAzureKeys()}";
-                    return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
+                    entityKey = $"{key.ChannelId}:conversation{key.ConversationId.SanitizeForAzureKeys()}";
+                    return TruncateEntityKey(entityKey);
 
                 case BotStoreType.BotUserData:
-                    result = $"{key.ChannelId}:user{key.UserId.SanitizeForAzureKeys()}";
-                    return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
+                    entityKey = $"{key.ChannelId}:user{key.UserId.SanitizeForAzureKeys()}";
+                    return TruncateEntityKey(entityKey);
 
                 case BotStoreType.BotPrivateConversationData:
-                    result = $"{key.ChannelId}:private{key.ConversationId.SanitizeForAzureKeys()}:{key.UserId.SanitizeForAzureKeys()}";
-                    return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
+                    entityKey = $"{key.ChannelId}:private{key.ConversationId.SanitizeForAzureKeys()}:{key.UserId.SanitizeForAzureKeys()}";
+                    return TruncateEntityKey(entityKey);
 
                 default:
                     throw new ArgumentException("Unsupported bot store type!");
             }
+        }
+
+        private static string TruncateEntityKey(string entityKey)
+        {
+            if (entityKey.Length > MAX_KEY_LENGTH)
+            {
+                var hash = entityKey.GetHashCode().ToString("x");
+                entityKey = entityKey.Substring(0, MAX_KEY_LENGTH - hash.Length) + hash;
+            }
+
+            return entityKey;
         }
 
         [JsonProperty(PropertyName = "id")]
