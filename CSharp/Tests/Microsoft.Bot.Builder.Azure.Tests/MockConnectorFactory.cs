@@ -55,9 +55,9 @@ namespace Microsoft.Bot.Builder.Azure.Tests
             );
             return address;
         }
-        protected async Task<HttpOperationResponse<object>> UpsertData(string channelId, string userId, string conversationId, BotStoreType storeType, BotData data)
+        protected async Task<HttpOperationResponse<BotData>> UpsertData(string channelId, string userId, string conversationId, BotStoreType storeType, BotData data)
         {
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<BotData>();
             _result.Request = new HttpRequestMessage();
             try
             {
@@ -66,7 +66,7 @@ namespace Microsoft.Bot.Builder.Azure.Tests
             }
             catch (HttpException e)
             {
-                _result.Body = e.Data;
+                //_result.Body = e.Data;
                 _result.Response = new HttpResponseMessage { StatusCode = HttpStatusCode.PreconditionFailed };
                 return _result;
             }
@@ -81,9 +81,9 @@ namespace Microsoft.Bot.Builder.Azure.Tests
             return _result;
         }
 
-        protected async Task<HttpOperationResponse<object>> GetData(string channelId, string userId, string conversationId, BotStoreType storeType)
+        protected async Task<HttpOperationResponse<BotData>> GetData(string channelId, string userId, string conversationId, BotStoreType storeType)
         {
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<BotData>();
             _result.Request = new HttpRequestMessage();
             BotData data;
             var address = AddressFrom(channelId, userId, conversationId);
