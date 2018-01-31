@@ -22,45 +22,25 @@ namespace Microsoft.Bot.Sample.AzureTable
         protected void Application_Start(object sender, EventArgs e)
         {
             {
-                // http://docs.autofac.org/en/latest/integration/webapi.html#quick-start
-                var builder = new ContainerBuilder();
-
-                // register the Bot Builder module
-                builder.RegisterModule(new DialogModule());
-                // register the alarm dependencies
-                builder.RegisterModule(new AzureModule(Assembly.GetExecutingAssembly()));
-
-                builder
-                    .RegisterInstance(new EchoDialog())
-                    .As<IDialog<object>>();
-
-                var store = new TableBotDataStore(CloudStorageAccount.DevelopmentStorageAccount);
-                builder.Register(c => store)
-                    .Keyed<IBotDataStore<BotData>>(AzureModule.Key_DataStore)
-                    .AsSelf()
-                    .SingleInstance();
-
-
-                builder.Register(c => new CachingBotDataStore(store,
-                                                              CachingBotDataStoreConsistencyPolicy.ETagBasedConsistency))
-                    .As<IBotDataStore<BotData>>()
-                    .AsSelf()
-                    .InstancePerLifetimeScope();
-
-                // Get your HttpConfiguration.
                 var config = GlobalConfiguration.Configuration;
+                Conversation.UpdateContainer(
+                    builder =>
+                    {
+                        builder.RegisterModule(new AzureModule(Assembly.GetExecutingAssembly()));
 
-                // Register your Web API controllers.
-                builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+                        var store = new TableBotDataStore(CloudStorageAccount.DevelopmentStorageAccount);
+                        builder.Register(c => store)
+                            .Keyed<IBotDataStore<BotData>>(AzureModule.Key_DataStore)
+                            .AsSelf()
+                            .SingleInstance();
 
-                // OPTIONAL: Register the Autofac filter provider.
-                builder.RegisterWebApiFilterProvider(config);
+                        // Register your Web API controllers.
+                        builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+                        builder.RegisterWebApiFilterProvider(config);
 
-                // Set the dependency resolver to be Autofac.
-                //var container = builder.Build();
-                builder.Update(Conversation.Container);
+                    });
+
                 config.DependencyResolver = new AutofacWebApiDependencyResolver(Conversation.Container);
-                
             }
 
             // WebApiConfig stuff

@@ -1,9 +1,12 @@
 "use strict";
-var BotServiceConnector_1 = require('./BotServiceConnector');
-var AzureBotStorage_1 = require('./AzureBotStorage');
-var AzureTableClient_1 = require('./AzureTableClient');
-var DocumentDbClient_1 = require('./DocumentDbClient');
+Object.defineProperty(exports, "__esModule", { value: true });
+var BotServiceConnector_1 = require("./BotServiceConnector");
+var AzureBotStorage_1 = require("./AzureBotStorage");
+var AzureTableClient_1 = require("./AzureTableClient");
+var DocumentDbClient_1 = require("./DocumentDbClient");
+var AzureSqlClient_1 = require("./AzureSqlClient");
 exports.BotServiceConnector = BotServiceConnector_1.BotServiceConnector;
 exports.AzureBotStorage = AzureBotStorage_1.AzureBotStorage;
 exports.AzureTableClient = AzureTableClient_1.AzureTableClient;
 exports.DocumentDbClient = DocumentDbClient_1.DocumentDbClient;
+exports.AzureSqlClient = AzureSqlClient_1.AzureSqlClient;

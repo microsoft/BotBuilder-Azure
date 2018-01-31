@@ -184,7 +184,10 @@ export interface IBotServiceConnectorSettings {
     appPassword?: string;
 
     /** If true the bots userData, privateConversationData, and conversationData will be gzipped prior to writing to storage. */
-    gzipData?: boolean;    
+    gzipData?: boolean;
+
+    stateEndpoint?: string;
+    openIdMetadata?: string;
 }
 
 /** Options used to initialize a TableBotStorage instance. */
@@ -247,6 +250,29 @@ export interface IDocumentDbOptions {
 
     /** DocumentDb collection name */
     collection: string;
+}
+
+export interface IAzureSqlConfiguration extends ConnectionConfig {
+    /**
+     * IAzureSqlOptions which extends ConnectionOptions, includes "table" parameter
+     */
+    options: IAzureSqlOptions;
+    /**
+     * Flag to set if user wishes BotBuilder-Azure to create specified table if it doesn't exist.
+     * By default is set to false.
+     */
+    enforceTable: boolean;
+}
+
+export interface IAzureSqlOptions extends ConnectionOptions {
+    /**
+     * "table" name must be included.
+     */
+    table: string;
+    /**
+     * "encrypt" MUST be set to true to work with Azure SQL
+     */
+    encrypt?: boolean; 
 }
 
 export interface IHttpResponse {
@@ -367,7 +393,7 @@ export class AzureTableClient implements IAzureTableClient {
     /** 
      * Creates a new instance of the AzureTableClient.
      * @param name of the table to be used in Azure Table 
-     * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started
+     * @param optional Azure storage account name. If not specified, development storage is used and Azure Storage Emulator should be started. If only accountName is provided but no account key, accountName is used as a full connection string
      * @param optional Azure storage account key. If not specified, development storage is used and Azure Storage Emulator should be started 
      */
     constructor(tableName: string, accountName?: string, accountKey?: string);
@@ -396,3 +422,16 @@ export class DocumentDbClient implements IStorageClient {
     retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
 }
 
+export class AzureSqlClient implements IStorageClient {
+
+    constructor(options: IAzureSqlConfiguration);
+
+    /** Initializes the Azure SQL client */
+    initialize(callback: (error: Error) => void): void;
+
+    /** Inserts or replaces an entity in the Azure SQL */
+    insertOrReplace(partitionKey: string, rowKey: string, data: any, isCompressed: boolean, callback: (error: Error, etag: any, response: IHttpResponse) => void): void;
+
+    /** Retrieves an entity from the Azure SQL */
+    retrieve(partitionKey: string, rowKey: string, callback: (error: Error, entity: IBotEntity, response: IHttpResponse) => void): void;
+}

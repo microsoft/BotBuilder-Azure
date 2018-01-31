@@ -49,7 +49,7 @@ export interface IAzureBotStorageOptions {
 
 export class AzureBotStorage implements builder.IBotStorage {
 
-    private initializeTableClientPromise: Promise.IThenable<boolean>;
+    private initializeTableClientPromise: Promise<boolean>;
     private storageClientInitialized: boolean;
 
     constructor(private options: IAzureBotStorageOptions, private storageClient?: IStorageClient) { }
@@ -226,7 +226,7 @@ export class AzureBotStorage implements builder.IBotStorage {
         }, (err) => callback(err));
     }
 
-    private initializeStorageClient(): Promise.IThenable<boolean>{
+    private initializeStorageClient(): Promise<boolean>{
         if(!this.initializeTableClientPromise)
         {
             // The first call will trigger the initialization of the table client, which creates the Azure table if it 

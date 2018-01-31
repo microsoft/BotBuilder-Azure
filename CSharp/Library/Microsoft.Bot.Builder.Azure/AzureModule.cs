@@ -92,6 +92,22 @@ namespace Microsoft.Bot.Builder.Azure
                     .AsSelf()
                     .SingleInstance();
             }
+            else if (ShouldUseCosmosDb())
+            {
+                builder.Register(c => MakeCosmosDbBotDataStore())
+                    .Keyed<IBotDataStore<BotData>>(Key_DataStore)
+                    .AsSelf()
+                    .SingleInstance();
+            }
+            else if (ShouldUseSqlServer())
+            {
+                SqlBotDataContext.AssertDatabaseReady();
+
+                builder.Register(c => MakeSqlBotDataStore())
+                    .Keyed<IBotDataStore<BotData>>(Key_DataStore)
+                    .AsSelf()
+                    .SingleInstance();
+            }
             else
             {
                 builder.Register(c => new ConnectorStore(c.Resolve<IStateClient>()))
@@ -167,6 +183,39 @@ namespace Microsoft.Bot.Builder.Azure
             return bool.TryParse(useTableStore, out shouldUseTableStorage) && shouldUseTableStorage;
         }
 
+        private bool ShouldUseCosmosDb()
+        {
+            bool shouldUseCosmosDb = false;
+            var useCosmosDb = Utils.GetAppSetting(AppSettingKeys.UseCosmosDbForConversationState);
+            return bool.TryParse(useCosmosDb, out shouldUseCosmosDb) && shouldUseCosmosDb;
+        }
+
+        private bool ShouldUseSqlServer()
+        {
+            bool shouldUseSqlServer = false;
+            var useSqlServer = Utils.GetAppSetting(AppSettingKeys.UseSqlServerForConversationState);
+            return bool.TryParse(useSqlServer, out shouldUseSqlServer) && shouldUseSqlServer;
+        }
+
+        private DocumentDbBotDataStore MakeCosmosDbBotDataStore()
+        {
+            var endpoint = Utils.GetAppSetting(AppSettingKeys.CosmosDbEndpoint);
+            var key = Utils.GetAppSetting(AppSettingKeys.CosmosDbKey);
+
+            if (string.IsNullOrEmpty(endpoint))
+            {
+                throw new ArgumentException("Endpoint for cosmos db is not set in application settings");
+            }
+
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentException("Key for cosmos db is not set in application settings");
+            }
+
+            return new DocumentDbBotDataStore(new Uri(endpoint), key);
+            
+        }
+
         private TableBotDataStore MakeTableBotDataStore()
         {
             var connectionString = Utils.GetAppSetting(AppSettingKeys.TableStorageConnectionString);
@@ -177,7 +226,20 @@ namespace Microsoft.Bot.Builder.Azure
             }
 
             // no connection string in application settings but should use table storage flag is set.
-            throw new ArgumentException("connection string for table storage is not set in application setting.");
+            throw new ArgumentException("Connection string for table storage is not set in application setting.");
+        }
+
+        private SqlBotDataStore MakeSqlBotDataStore()
+        {
+            var connectionString = Utils.GetAppSetting(AppSettingKeys.SqlServerConnectionString);
+
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                return new SqlBotDataStore(connectionString);
+            }
+
+            // no connection string in application settings but should use sql server flag is set.
+            throw new ArgumentException("Connection string for sql server is not set in application settings.");
         }
     }
 }

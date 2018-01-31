@@ -1,6 +1,7 @@
 "use strict";
-var Consts = require('./Consts');
-var documentdb_1 = require('documentdb');
+Object.defineProperty(exports, "__esModule", { value: true });
+var Consts = require("./Consts");
+var documentdb_1 = require("documentdb");
 var DocumentDbClient = (function () {
     function DocumentDbClient(options) {
         this.options = options;

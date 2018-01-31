@@ -22,7 +22,7 @@ var azure = require('../../');
 
 var tableName = 'BotStore';
 
-var azureTableClient = new azure.AzureTableClient(tableName);
+var azureTableClient = new azure.AzureTableClient(tableName, 'UseDevelopmentStorage=true');
 
 var tableStorage = new azure.AzureBotStorage({ gzipData: false }, azureTableClient);
 

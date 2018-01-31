@@ -6,7 +6,8 @@ Bot Builder Azure Extensions for Node.js enable bot developers to integrate bots
 ## High level features:
 
 * Azure Table Storage: Allows bot developers to store bot state in their own Azure Storage accounts. For more information on Azure Table Storage, visit the **[Azure Table Storage Documentation](https://azure.microsoft.com/en-us/services/storage/tables/)**
-* Azure DocumentDB: Allows bot developers to store bot state in DocumentDB. For more information on Azure DocumentDB, visit the **[Azure DocumentDB Documentation](https://azure.microsoft.com/en-us/services/documentdb/)**
+* Azure CosmosDb: Allows bot developers to store bot state in CosmosDb. For more information on Azure CosmosDb, visit the **[Azure CosmosDB Documentation](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction)**
+* Azure SQL Database: Allows bot developers to store bot state using Azure SQL. For more information on Azure SQL, visit the  **[Azure SQL Database Documentation](https://docs.microsoft.com/en-us/azure/sql-database/)**
  
 ## Prepare to Build a Bot
 
@@ -22,7 +23,7 @@ Get the BotBuilder, BotBuilder-Azure and Restify modules using npm.
 
 ## Sample
 
-You can base your first bot on one of our samples, which showcase using [Azure Table Storage](examples/feature-azureTable/app.js) and [DocumentDb](examples/feature-documentDb/app.js). Read the detailed steps in the sample to set up storage emulators or connect to Azure.
+You can base your first bot on one of our samples, which showcase using [Azure Table Storage](examples/feature-azureTable/app.js), [CosmosDb](examples/feature-documentDb/app.js) and [Azure SQL Database](examples/feature-azureSql/app.js). Read the detailed steps in the sample to set up storage emulators or connect to Azure.
 
 ## Test your bot
 Use the [Bot Framework Emulator](http://docs.botframework.com/connector/tools/bot-framework-emulator/) to test your bot on localhost. 
@@ -41,8 +42,6 @@ NOTE: When you register your bot with the Bot Framework you'll want to update th
 ## Bot Framework
 
 The Microsoft Bot Framework provides just what you need to build and connect intelligent bots that interact naturally wherever your users are talking, from text/sms to Skype, Slack, Office 365 mail and other popular services.
-
-![Bot Framework Diagram](http://docs.botframework.com/en-us/images/faq-overview/botframework_overview_july.png)
 
 Bots (or conversation agents) are rapidly becoming an integral part of one’s digital experience – they are as vital a way for users to interact with a service or application as is a web site or a mobile experience. Developers writing bots all face the same problems: bots require basic I/O; they must have language and dialog skills; and they must connect to users – preferably in any conversation experience and language the user chooses. The Bot Framework provides tools to easily solve these problems and more for developers e.g., automatic translation to more than 30 languages, user and conversation state management, debugging tools, an embeddable web chat control and a way for users to discover, try, and add bots to the conversation experiences they love.
 
