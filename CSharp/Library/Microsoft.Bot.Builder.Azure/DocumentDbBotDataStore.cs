@@ -94,7 +94,7 @@ namespace Microsoft.Bot.Builder.Azure
         /// ResourceToken obtained from the permission feed for the user.
         /// Using Direct connectivity, wherever possible, is recommended.</remarks>
         public DocumentDbBotDataStore(Uri serviceEndpoint, string authKey, string databaseId = "botdb", string collectionId = "botcollection")
-            : this( new DocumentClient(serviceEndpoint, authKey), databaseId, collectionId) { }
+            : this(new DocumentClient(serviceEndpoint, authKey), databaseId, collectionId) { }
 
         async Task<BotData> IBotDataStore<BotData>.LoadAsync(IAddress key, BotStoreType botStoreType,
             CancellationToken cancellationToken)
@@ -108,7 +108,7 @@ namespace Microsoft.Bot.Builder.Azure
                 // The Resource property of the response, of type IDynamicMetaObjectProvider, has a dynamic nature, 
                 // similar to DynamicTableEntity in Azure storage. When casting to a static type, properties that exist in the static type will be 
                 // populated from the dynamic type.
-                DocDbBotDataEntity entity = (dynamic) response.Resource;
+                DocDbBotDataEntity entity = (dynamic)response.Resource;
                 return new BotData(response?.Resource.ETag, entity?.Data);
             }
             catch (DocumentClientException e)
@@ -118,7 +118,7 @@ namespace Microsoft.Bot.Builder.Azure
                     return new BotData(string.Empty, null);
                 }
 
-                throw new HttpException(e.StatusCode.HasValue ? (int) e.StatusCode.Value : 0, e.Message, e);
+                throw new HttpException(e.StatusCode.HasValue ? (int)e.StatusCode.Value : 0, e.Message, e);
             }
         }
 
@@ -239,6 +239,7 @@ namespace Microsoft.Bot.Builder.Azure
 
     internal class DocDbBotDataEntity
     {
+        internal const int MAX_KEY_LENGTH = 254;
         public DocDbBotDataEntity() { }
 
         internal DocDbBotDataEntity(IAddress key, BotStoreType botStoreType, BotData botData)
@@ -253,16 +254,20 @@ namespace Microsoft.Bot.Builder.Azure
 
         public static string GetEntityKey(IAddress key, BotStoreType botStoreType)
         {
+            string result;
             switch (botStoreType)
             {
                 case BotStoreType.BotConversationData:
-                    return $"{key.ChannelId}:conversation{key.ConversationId.SanitizeForAzureKeys()}";
+                    result = $"{key.ChannelId}:conversation{key.ConversationId.SanitizeForAzureKeys()}";
+                    return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
 
                 case BotStoreType.BotUserData:
-                    return $"{key.ChannelId}:user{key.UserId.SanitizeForAzureKeys()}";
+                    result = $"{key.ChannelId}:user{key.UserId.SanitizeForAzureKeys()}";
+                    return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
 
                 case BotStoreType.BotPrivateConversationData:
-                    return $"{key.ChannelId}:private{key.ConversationId.SanitizeForAzureKeys()}:{key.UserId.SanitizeForAzureKeys()}";
+                    result = $"{key.ChannelId}:private{key.ConversationId.SanitizeForAzureKeys()}:{key.UserId.SanitizeForAzureKeys()}";
+                    return result.Substring(0, Math.Min(result.Length, MAX_KEY_LENGTH));
 
                 default:
                     throw new ArgumentException("Unsupported bot store type!");
