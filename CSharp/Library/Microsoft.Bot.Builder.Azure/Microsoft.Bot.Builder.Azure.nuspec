@@ -4,7 +4,10 @@
     <id>Microsoft.Bot.Builder.Azure</id>
     <version>$version$</version>
     <authors>Microsoft</authors>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <owners>microsoft, BotFramework, nugetbotbuilder </owners>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/Microsoft/BotBuilder-Azure/blob/master/LICENSE</licenseUrl>
     <description>
       Provide Microsoft Azure extensions to the Microsoft Bot Builder.  In particular this includes:
       * TableLogger -- Activity logger for table storage which allows recording and retrieving conversation activities.
@@ -14,7 +17,7 @@
       * DocumentDbBotDataStore -- IBotDataStore implementation based on Azure table storage.
       * SqlBotDataStore -- IBotDataStore implementation based on Azure Sql Server.
     </description>
-    <projectUrl>https://github.com/Microsoft/BotBuilder</projectUrl>
+    <projectUrl>https://github.com/Microsoft/BotBuilder-Azure</projectUrl>
     <iconUrl>http://docs.botframework.com/images/bot_icon.png</iconUrl>
     <summary>Microsoft Azure extensions for Microsoft Bot Builder.</summary>
     <language>en-US</language>

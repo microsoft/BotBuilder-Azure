@@ -174,6 +174,16 @@ namespace Microsoft.Bot.Builder.Azure
             {
                 return $"{timestamp.Ticks:D19}";
             }
+
+            /// <summary>
+            /// Generate row key for ascending <paramref name="timestamp"/>.
+            /// </summary>
+            /// <param name="timestamp">Timestamp of activity.</param>
+            /// <returns></returns>
+            public static string GenerateRowKey(DateTimeOffset timestamp)
+            {
+                return $"{timestamp.Ticks:D19}";
+            }
         }
 
         private CloudTable _table = null;
