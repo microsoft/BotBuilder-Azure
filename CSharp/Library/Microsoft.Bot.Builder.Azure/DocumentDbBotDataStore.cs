@@ -55,6 +55,8 @@ namespace Microsoft.Bot.Builder.Azure
     /// </summary>
     public class DocumentDbBotDataStore : IBotDataStore<BotData>
     {
+        private const string entityKeyParameterName = "@entityKey";
+
         private static readonly TimeSpan MaxInitTime = TimeSpan.FromSeconds(5);
 
         private readonly IDocumentClient documentClient;
@@ -103,13 +105,32 @@ namespace Microsoft.Bot.Builder.Azure
             {
                 var entityKey = DocDbBotDataEntity.GetEntityKey(key, botStoreType);
 
-                var response = await documentClient.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseId, collectionId, entityKey));
+                // query to retrieve the document if it exists
+                SqlQuerySpec querySpec = new SqlQuerySpec(
+                                                queryText: $"SELECT * FROM {collectionId} b WHERE (b.id = {entityKeyParameterName})", 
+                                                parameters: new SqlParameterCollection()
+                                                {
+                                                    new SqlParameter(entityKeyParameterName, entityKey)
+                                                });
+                var collectionUri = UriFactory.CreateDocumentCollectionUri(databaseId, collectionId);
+                var query = documentClient.CreateDocumentQuery(collectionUri, querySpec)
+                                          .AsDocumentQuery();
+                var feedResponse = await query.ExecuteNextAsync<Document>(CancellationToken.None);
+                Document document = feedResponse.FirstOrDefault();
 
-                // The Resource property of the response, of type IDynamicMetaObjectProvider, has a dynamic nature, 
-                // similar to DynamicTableEntity in Azure storage. When casting to a static type, properties that exist in the static type will be 
-                // populated from the dynamic type.
-                DocDbBotDataEntity entity = (dynamic)response.Resource;
-                return new BotData(response?.Resource.ETag, entity?.Data);
+                if (document != null)
+                {
+                    // The document, of type IDynamicMetaObjectProvider, has a dynamic nature, 
+                    // similar to DynamicTableEntity in Azure storage. When casting to a static type, properties that exist in the static type will be 
+                    // populated from the dynamic type.
+                    DocDbBotDataEntity entity = (dynamic)document;
+                    return new BotData(document?.ETag, entity?.Data);
+                }
+                else
+                {
+                    // the document does not exist in the database, return an empty BotData object
+                    return new BotData(string.Empty, null);
+                }
             }
             catch (DocumentClientException e)
             {
