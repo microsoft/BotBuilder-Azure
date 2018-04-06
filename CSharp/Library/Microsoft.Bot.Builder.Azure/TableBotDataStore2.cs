@@ -50,9 +50,17 @@ namespace Microsoft.Bot.Builder.Azure
     /// <see cref="IBotDataStore{T}"/> Implementation using Azure Storage Table,
     /// </summary>
     /// <notes>
-    /// The original TableBotDataStore put all conversation data in 1 partition in 1 table which severely limits the scalability. 
-    /// This TableBotDataStore2 class changes to use multiple tables, one tableName="{BotId}{ChannelId}[Conversation|User]" 
-    /// It then uses the UserId and ConversationId as the PartitionKeys within those tables to achieve much higher scalability charateristics
+    /// The original TableBotDataStore put all conversation data in 1 partition in 1 table which severely limited the scalability of it. 
+    /// The TableBotDataStore2 implementaion uses multiple tables, and the UserId or ConversationId as the PartitionKey within those tables to 
+    /// achieve much higher scalability charateristics.
+    /// 
+    /// tableName="{BotId}{ChannelId}"
+    /// BotStoreType             | PartitionKey      | RowKey         |
+    /// ---------------------------------------------------------------
+    /// UserData                 | {UserId}          | "user"         |
+    /// ConverationData          | {ConversationId}  | "conversation" |
+    /// PrivateConverationData   | {ConversationId}  | {UserId}       |
+    /// ---------------------------------------------------------------
     /// </notes>
     public class TableBotDataStore2 : IBotDataStore<BotData>
     {
@@ -81,22 +89,9 @@ namespace Microsoft.Bot.Builder.Azure
 
         public IEnumerable<CloudTable> Tables { get { return tables.Values; } }
 
-        private CloudTable GetTable(IAddress key, BotStoreType botStoreType)
+        private CloudTable GetTable(IAddress key)
         {
-            string tableName;
-            switch (botStoreType)
-            {
-                case BotStoreType.BotConversationData:
-                case BotStoreType.BotPrivateConversationData:
-                    tableName = $"{key.BotId}{key.ChannelId}Conversations".SanitizeForAzureKeys();
-                    break;
-                case BotStoreType.BotUserData:
-                    tableName = $"{key.BotId}{key.ChannelId}Users".SanitizeForAzureKeys();
-                    break;
-                default:
-                    throw new ArgumentException("BotStoreType is unknown");
-            }
-
+            string tableName = $"{key.BotId}{key.ChannelId}";
             lock (tables)
             {
                 CloudTable table;
@@ -129,10 +124,10 @@ namespace Microsoft.Bot.Builder.Azure
         }
 
 
-        async Task<BotData> IBotDataStore<BotData>.LoadAsync(IAddress key, BotStoreType botStoreType, CancellationToken cancellationToken)
+        async Task<BotData> IBotDataStore<BotData>.LoadAsync(IAddress address, BotStoreType botStoreType, CancellationToken cancellationToken)
         {
-            var entityKey = GetEntityKey(key, botStoreType);
-            var table = this.GetTable(key, botStoreType);
+            var table = this.GetTable(address);
+            var entityKey = GetEntityKey(address, botStoreType);
             try
             {
                 var result = await table.ExecuteAsync(TableOperation.Retrieve<BotDataEntity>(entityKey.PartitionKey, entityKey.RowKey));
@@ -150,11 +145,11 @@ namespace Microsoft.Bot.Builder.Azure
             }
         }
 
-        async Task IBotDataStore<BotData>.SaveAsync(IAddress key, BotStoreType botStoreType, BotData botData, CancellationToken cancellationToken)
+        async Task IBotDataStore<BotData>.SaveAsync(IAddress address, BotStoreType botStoreType, BotData botData, CancellationToken cancellationToken)
         {
-            var table = this.GetTable(key, botStoreType);
-            var entityKey = GetEntityKey(key, botStoreType);
-            BotDataEntity entity = new BotDataEntity(key.BotId, key.ChannelId, key.ConversationId, key.UserId, botData.Data)
+            var table = this.GetTable(address);
+            var entityKey = GetEntityKey(address, botStoreType);
+            BotDataEntity entity = new BotDataEntity(address.BotId, address.ChannelId, address.ConversationId, address.UserId, botData.Data)
             {
                 ETag = botData.ETag
             };
