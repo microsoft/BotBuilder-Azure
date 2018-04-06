@@ -171,8 +171,8 @@ namespace Microsoft.Bot.Builder.Azure
     {
         public EntityKey(string partition, string row)
         {
-            PartitionKey = partition;
-            RowKey = row;
+            PartitionKey = partition.SanitizeForAzureKeys();
+            RowKey = row.SanitizeForAzureKeys();
         }
 
         public string PartitionKey { get; private set; }

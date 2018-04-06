@@ -140,6 +140,7 @@
     <Compile Include="DocumentDbBotDataStore.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="SqlBotDataStore.cs" />
+    <Compile Include="TableBotDataStore2.cs" />
     <Compile Include="TableBotDataStore.cs" />
     <Compile Include="TableLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
