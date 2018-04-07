@@ -13,7 +13,7 @@
       * TableLogger -- Activity logger for table storage which allows recording and retrieving conversation activities.
       * ReplayTranscript -- Replay activity history on any channel.
       * AzureModule -- Module for setting up components for bot builder based on Azure dependencies
-      * TableBotDataStore -- IBotDataStore implementation based on Azure table storage.
+      * TableBotDataStore2 -- IBotDataStore implementation based on Azure table storage.
       * DocumentDbBotDataStore -- IBotDataStore implementation based on Azure table storage.
       * SqlBotDataStore -- IBotDataStore implementation based on Azure Sql Server.
     </description>

@@ -53,6 +53,12 @@ namespace Microsoft.Bot.Builder.Azure
     /// <summary>
     /// <see cref="IBotDataStore{T}"/> Implementation using Azure Storage Table 
     /// </summary>
+    /// <notes>
+    /// This implementation stores all conversation data in one partition which will not scale for heavy use.  If you think
+    /// you will have high traffic load you should use TableBotDataStore2 which splits data between multiple tables with fine grained partitionkeys.
+    /// If you have need for geo-distributed datacenters and or deeper queries (like for supporting GDPR requirements) then you are strongly encouraged 
+    /// to use the DocumentDbBotDataStore (aka CosmosDB) 
+    /// </notes>
     public class TableBotDataStore : IBotDataStore<BotData>
     {
         private static HashSet<string> checkedTables = new HashSet<string>();
@@ -171,8 +177,8 @@ namespace Microsoft.Bot.Builder.Azure
     {
         public EntityKey(string partition, string row)
         {
-            PartitionKey = partition;
-            RowKey = row;
+            PartitionKey = partition.SanitizeForAzureKeys();
+            RowKey = row.SanitizeForAzureKeys();
         }
 
         public string PartitionKey { get; private set; }

@@ -79,6 +79,11 @@ namespace Microsoft.Bot.Builder.Azure
         public const string UseTableStorageForConversationState = "UseTableStorageForConversationState";
 
         /// <summary>
+        /// Key for the flag indicating if table storage2 should be used as bot state store.
+        /// </summary>
+        public const string UseTableStorage2ForConversationState = "UseTableStorage2ForConversationState";
+
+        /// <summary>
         /// Key for the flag indicating if cosmos db should be used as bot state store.
         /// </summary>
         public const string UseCosmosDbForConversationState = "UseCosmosDbForConversationState";

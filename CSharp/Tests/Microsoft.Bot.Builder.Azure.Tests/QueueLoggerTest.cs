@@ -190,6 +190,7 @@ namespace Microsoft.Bot.Builder.Tests
             await RunTestCase(true, LargeMessageMode.Error, QueueKind.AzureQueue);
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Azure")]
         public async Task ServiceBusTestUnCompressed()
@@ -199,6 +200,7 @@ namespace Microsoft.Bot.Builder.Tests
             await RunTestCase(false, LargeMessageMode.Error, QueueKind.ServiceBus);
         }
 
+        [Ignore]
         [TestMethod]
         [TestCategory("Azure")]
         public async Task ServiceBusTestCompressed()

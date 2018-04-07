@@ -79,33 +79,6 @@ namespace Microsoft.Bot.Builder.Azure.Tests
 
         [TestMethod]
         [TestCategory("BotDataStoreBridge")]
-        public async Task Memory_TestBotConversationDataMigration()
-        {
-            var sourceStore = GetSourceStore();
-            var targetStore = new InMemoryDataStore();
-            await TestStoreType(BotStoreType.BotConversationData, 10, sourceStore, targetStore);
-        }
-
-        [TestMethod]
-        [TestCategory("BotDataStoreBridge")]
-        public async Task Memory_TestBotPrivateConversationDataMigration()
-        {
-            var sourceStore = GetSourceStore();
-            var targetStore = new InMemoryDataStore();
-            await TestStoreType(BotStoreType.BotPrivateConversationData, 10, sourceStore, targetStore);
-        }
-
-        [TestMethod]
-        [TestCategory("BotDataStoreBridge")]
-        public async Task Memory_TestBotUserDataMigration()
-        {
-            var sourceStore = GetSourceStore();
-            var targetStore = new InMemoryDataStore();
-            await TestStoreType(BotStoreType.BotUserData, 10, sourceStore, targetStore);
-        }
-
-        [TestMethod]
-        [TestCategory("BotDataStoreBridge")]
         public async Task Table_TestBotConversationDataMigration()
         {
             var sourceStore = GetSourceStore();
