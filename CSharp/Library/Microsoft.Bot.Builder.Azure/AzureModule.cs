@@ -92,6 +92,13 @@ namespace Microsoft.Bot.Builder.Azure
                     .AsSelf()
                     .SingleInstance();
             }
+            else if (ShouldUseTableStorage2())
+            {
+                builder.Register(c => MakeTableBotDataStore2())
+                    .Keyed<IBotDataStore<BotData>>(Key_DataStore)
+                    .AsSelf()
+                    .SingleInstance();
+            }
             else if (ShouldUseCosmosDb())
             {
                 builder.Register(c => MakeCosmosDbBotDataStore())
@@ -183,6 +190,13 @@ namespace Microsoft.Bot.Builder.Azure
             return bool.TryParse(useTableStore, out shouldUseTableStorage) && shouldUseTableStorage;
         }
 
+        private bool ShouldUseTableStorage2()
+        {
+            bool shouldUseTableStorage = false;
+            var useTableStore = Utils.GetAppSetting(AppSettingKeys.UseTableStorage2ForConversationState);
+            return bool.TryParse(useTableStore, out shouldUseTableStorage) && shouldUseTableStorage;
+        }
+
         private bool ShouldUseCosmosDb()
         {
             bool shouldUseCosmosDb = false;
@@ -223,6 +237,19 @@ namespace Microsoft.Bot.Builder.Azure
             if (!string.IsNullOrEmpty(connectionString))
             {
                 return new TableBotDataStore(connectionString);
+            }
+
+            // no connection string in application settings but should use table storage flag is set.
+            throw new ArgumentException("Connection string for table storage is not set in application setting.");
+        }
+
+        private TableBotDataStore2 MakeTableBotDataStore2()
+        {
+            var connectionString = Utils.GetAppSetting(AppSettingKeys.TableStorageConnectionString);
+
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                return new TableBotDataStore2(connectionString);
             }
 
             // no connection string in application settings but should use table storage flag is set.
