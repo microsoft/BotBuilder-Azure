@@ -91,7 +91,13 @@ namespace Microsoft.Bot.Builder.Azure
 
         private CloudTable GetTable(IAddress key)
         {
-            string tableName = $"{key.BotId}{key.ChannelId}";
+            string tableName = $"botdata{key.BotId}{key.ChannelId}";
+
+            if (tableName.Length>63)
+            {
+                tableName = tableName.Substring(0, 63);
+            }
+            
             lock (tables)
             {
                 CloudTable table;
