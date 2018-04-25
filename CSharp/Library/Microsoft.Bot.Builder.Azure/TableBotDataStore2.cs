@@ -91,7 +91,7 @@ namespace Microsoft.Bot.Builder.Azure
 
         private CloudTable GetTable(IAddress key)
         {
-            string tableName = $"{key.BotId}{key.ChannelId}";
+            string tableName = $"bd{key.BotId}{key.ChannelId}";
             lock (tables)
             {
                 CloudTable table;
