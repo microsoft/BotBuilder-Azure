@@ -36,6 +36,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using Microsoft.Bot.Builder.Dialogs.Internals;
@@ -92,7 +93,7 @@ namespace Microsoft.Bot.Builder.Azure
         private CloudTable GetTable(IAddress key)
         {
             var tableName = $"botdata{key.ChannelId}{key.BotId}";
-
+            tableName = Regex.Replace(tableName, @"[^a-zA-Z0-9]+", "");
             if (tableName.Length>63)
             {
                 tableName = tableName.Substring(0, 63);
