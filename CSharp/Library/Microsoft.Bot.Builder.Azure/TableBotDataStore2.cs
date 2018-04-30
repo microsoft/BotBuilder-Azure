@@ -42,6 +42,7 @@ using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Bot.Builder.Azure
 {
@@ -92,6 +93,12 @@ namespace Microsoft.Bot.Builder.Azure
         private CloudTable GetTable(IAddress key)
         {
             string tableName = $"bd{key.BotId}{key.ChannelId}";
+            tableName = Regex.Replace(tableName, @"[^a-zA-Z0-9]+", "");
+            if (tableName.Length > 63)
+            {
+                tableName = tableName.Substring(0, 63);
+            }
+
             lock (tables)
             {
                 CloudTable table;
