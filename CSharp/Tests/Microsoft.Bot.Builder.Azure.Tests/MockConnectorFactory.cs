@@ -136,5 +136,10 @@ namespace Microsoft.Bot.Builder.Azure.Tests
 
             return botsClient;
         }
+
+        public IOAuthClient MakeOAuthClient()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
