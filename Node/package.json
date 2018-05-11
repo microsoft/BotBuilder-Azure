@@ -23,6 +23,7 @@
   "main": "./lib/botbuilder-azure.js",
   "typings": "./lib/botbuilder-azure.d.ts",
   "dependencies": {
+    "@types/tedious": "^1.8.31",
     "async": "^2.1.2",
     "azure-storage": "^2.6.0",
     "botbuilder": "^3.11.0",
