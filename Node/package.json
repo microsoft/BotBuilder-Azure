@@ -1,6 +1,6 @@
 {
   "name": "botbuilder-azure",
-  "version": "3.0.4",
+  "version": "3.1.0",
   "description": "Bot Builder SDK Azure Extensions",
   "keywords": [
     "botbuilder",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/async": "^2.0.44",
     "@types/documentdb": "0.0.33",
-    "@types/node": "^6.0.90",
+    "@types/node": "^7.0.64",
     "@types/promise": "^7.1.30",
     "@types/tedious": "^1.8.31"
   }
