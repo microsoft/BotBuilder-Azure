@@ -92,13 +92,7 @@ namespace Microsoft.Bot.Builder.Azure
 
         private CloudTable GetTable(IAddress key)
         {
-            string tableName = $"bd{key.BotId}{key.ChannelId}";
-            tableName = Regex.Replace(tableName, @"[^a-zA-Z0-9]+", "");
-            if (tableName.Length > 63)
-            {
-                tableName = tableName.Substring(0, 63);
-            }
-
+            string tableName = $"bd{key.BotId}{key.ChannelId}".SanitizeTableName();
             lock (tables)
             {
                 CloudTable table;
