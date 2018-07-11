@@ -1,3 +1,6 @@
+#
+# Update AssemblyInfo.cs files to support delay signing.
+#
 Param ([string]$rootFolder = $(get-location).Path, 
 	[string]$filePattern
 )
