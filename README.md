@@ -36,3 +36,8 @@ See all the support options **[here](https://docs.botframework.com/en-us/support
 ## Published Libraries
 * Nuget package for .NET [Microsoft.Bot.Builder.Azure](https://www.nuget.org/packages/Microsoft.Bot.Builder.Azure/) 
 * NPM package for nodejs [botbuilder-azure](https://www.npmjs.com/package/botbuilder-azure)
+
+## Botbuilder v4
+
+* V4 for botbuilder-azure [Node.js](https://github.com/Microsoft/botbuilder-js/tree/master/libraries/botbuilder-azure)
+* V4 for botbuilder-azure [CSharp](https://github.com/Microsoft/botbuilder-dotnet/tree/master/libraries/Microsoft.Bot.Builder.Azure)
