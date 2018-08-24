@@ -142,7 +142,7 @@ namespace Microsoft.Bot.Builder.Azure
             }
             catch (StorageException err)
             {
-                throw new HttpException(err.RequestInformation.HttpStatusCode, err.RequestInformation.HttpStatusMessage);
+                throw new HttpException(err.RequestInformation.HttpStatusCode, err.RequestInformation.HttpStatusMessage, err);
             }
         }
 
@@ -178,9 +178,9 @@ namespace Microsoft.Bot.Builder.Azure
             catch (StorageException err)
             {
                 if ((HttpStatusCode)err.RequestInformation.HttpStatusCode == HttpStatusCode.Conflict)
-                    throw new HttpException((int)HttpStatusCode.PreconditionFailed, err.RequestInformation.HttpStatusMessage);
+                    throw new HttpException((int)HttpStatusCode.PreconditionFailed, err.RequestInformation.HttpStatusMessage, err);
 
-                throw new HttpException(err.RequestInformation.HttpStatusCode, err.RequestInformation.HttpStatusMessage);
+                throw new HttpException(err.RequestInformation.HttpStatusCode, err.RequestInformation.HttpStatusMessage, err);
             }
         }
 
