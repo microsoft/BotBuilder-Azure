@@ -18,6 +18,15 @@ namespace Microsoft.Bot.Builder.Azure
             var repmap = replacements ?? _DefaultReplacementsForCharactersDisallowedByAzure;
             return input.Trim().Replace("/", repmap["/"]).Replace(@"\", repmap[@"\"]).Replace("#", repmap["#"]).Replace("?", repmap["?"]);
         }
-
+        
+        internal static string SanitizeTableName(this string input)
+        {
+            if (input.Length > 63)
+            {
+                input = input.Substring(0, 63);
+            }
+            input = Regex.Replace(input, @"[^a-zA-Z0-9]+", "");
+            return input;
+        }
     }
 }
