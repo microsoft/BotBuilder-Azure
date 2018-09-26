@@ -1,6 +1,8 @@
 # Bot Builder Azure Extensions for .NET
 Bot Builder Azure Extensions for .NET enable bot developers to integrate bots with specific Azure components. 
 
+> This repository targets v3 of the SDK.  
+>  The [current version of the SDK is v4](https://github.com/Microsoft/botbuilder-dotnet) and the CosmoDb and Azure Table Storage classes [are now included](https://github.com/Microsoft/botbuilder-dotnet/tree/master/libraries/Microsoft.Bot.Builder.Azure).
 
 
 ## High level features:
