@@ -156,7 +156,7 @@ namespace Microsoft.Bot.Builder.Azure
             return result;
         }
 
-        private static readonly Regex AzureFunctionAssembly = new Regex(@"(\S+)#\d+-\d+", RegexOptions.Compiled);
+        private static readonly Regex AzureFunctionAssembly = new Regex(@"(\S+)__+-*\d+", RegexOptions.Compiled);
 
         internal static string RemoveAzureFunctionsDynamicSuffix(string name)
         {
@@ -165,7 +165,6 @@ namespace Microsoft.Bot.Builder.Azure
             {
                 return match.Groups[1].Value;
             }
-
             return name;
         }
     }
@@ -279,7 +278,8 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="typeName"></param>
         public override Type BindToType(string assemblyName, string typeName)
         {
-            if (Utils.RemoveAzureFunctionsDynamicSuffix(assemblyName) ==
+            if (assemblyName != this.assembly.FullName
+                && Utils.RemoveAzureFunctionsDynamicSuffix(assemblyName) ==
                 Utils.RemoveAzureFunctionsDynamicSuffix(this.assembly.FullName))
             {
                 assemblyName = this.assembly.FullName;
@@ -326,7 +326,9 @@ namespace Microsoft.Bot.Builder.Azure
         {
             Assembly resolvedAssembly = null;
 
-            if (arguments.Name == this.assembly.FullName)
+            if (arguments.Name == this.assembly.FullName ||
+                Utils.RemoveAzureFunctionsDynamicSuffix(arguments.Name) ==
+                Utils.RemoveAzureFunctionsDynamicSuffix(this.assembly.FullName))
             {
                 resolvedAssembly = assembly;
             }
