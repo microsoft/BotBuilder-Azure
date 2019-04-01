@@ -32,7 +32,7 @@
 //
 
 export var developmentConnectionString = 'UseDevelopmentStorage=true';
-export var maxDataLength = 65000;
+export var maxDataLength = 95000;
 
 export var Fields = {
     UserDataField: 'userData',
