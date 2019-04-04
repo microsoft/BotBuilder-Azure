@@ -113,7 +113,8 @@ namespace Microsoft.Bot.Builder.Azure
                                                     new SqlParameter(entityKeyParameterName, entityKey)
                                                 });
                 var collectionUri = UriFactory.CreateDocumentCollectionUri(databaseId, collectionId);
-                var query = documentClient.CreateDocumentQuery(collectionUri, querySpec)
+                var feedOption = new FeedOptions { EnableCrossPartitionQuery = true };
+                var query = documentClient.CreateDocumentQuery(collectionUri, querySpec, feedOption)
                                           .AsDocumentQuery();
                 var feedResponse = await query.ExecuteNextAsync<Document>(CancellationToken.None);
                 Document document = feedResponse.FirstOrDefault();
