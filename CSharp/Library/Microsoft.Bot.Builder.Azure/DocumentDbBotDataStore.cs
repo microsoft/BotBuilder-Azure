@@ -62,6 +62,7 @@ namespace Microsoft.Bot.Builder.Azure
         private readonly IDocumentClient documentClient;
         private readonly string databaseId;
         private readonly string collectionId;
+        private readonly bool enableCrossPartitionQuery;
 
         /// <summary>
         /// Creates an instance of the <see cref="IBotDataStore{T}"/> that uses the Azure DocumentDb.
@@ -69,7 +70,8 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="documentClient">The DocumentDb client to use.</param>
         /// <param name="databaseId">The name of the DocumentDb database to use.</param>
         /// <param name="collectionId">The name of the DocumentDb collection to use.</param>
-        public DocumentDbBotDataStore(IDocumentClient documentClient, string databaseId = "botdb", string collectionId = "botcollection")
+        /// <param name="enableCrossPartitionQuery">The query param to execute a cross partition query.</param>
+        public DocumentDbBotDataStore(IDocumentClient documentClient, string databaseId = "botdb", string collectionId = "botcollection", bool enableCrossPartitionQuery = false)
         {
             SetField.NotNull(out this.databaseId, nameof(databaseId), databaseId);
             SetField.NotNull(out this.collectionId, nameof(collectionId), collectionId);
@@ -77,6 +79,7 @@ namespace Microsoft.Bot.Builder.Azure
             this.documentClient = documentClient;
             this.databaseId = databaseId;
             this.collectionId = collectionId;
+            this.enableCrossPartitionQuery = enableCrossPartitionQuery;
 
             CreateDatabaseIfNotExistsAsync().GetAwaiter().GetResult();
             CreateCollectionIfNotExistsAsync().GetAwaiter().GetResult();
@@ -89,14 +92,15 @@ namespace Microsoft.Bot.Builder.Azure
         /// <param name="authKey">The authorization key or resource token to use to create the client.</param>
         /// <param name="databaseId">The name of the DocumentDb database to use.</param>
         /// <param name="collectionId">The name of the DocumentDb collection to use.</param>
+        /// <param name="enableCrossPartitionQuery">The query param to execute a cross partition query.</param>
         /// <remarks>The service endpoint can be obtained from the Azure Management Portal. If you
         /// are connecting using one of the Master Keys, these can be obtained along with
         /// the endpoint from the Azure Management Portal If however you are connecting as
         /// a specific DocumentDB User, the value passed to authKeyOrResourceToken is the
         /// ResourceToken obtained from the permission feed for the user.
         /// Using Direct connectivity, wherever possible, is recommended.</remarks>
-        public DocumentDbBotDataStore(Uri serviceEndpoint, string authKey, string databaseId = "botdb", string collectionId = "botcollection")
-            : this(new DocumentClient(serviceEndpoint, authKey), databaseId, collectionId) { }
+        public DocumentDbBotDataStore(Uri serviceEndpoint, string authKey, string databaseId = "botdb", string collectionId = "botcollection", bool enableCrossPartitionQuery = false)
+            : this(new DocumentClient(serviceEndpoint, authKey), databaseId, collectionId, enableCrossPartitionQuery) { }
 
         async Task<BotData> IBotDataStore<BotData>.LoadAsync(IAddress key, BotStoreType botStoreType,
             CancellationToken cancellationToken)
@@ -113,7 +117,9 @@ namespace Microsoft.Bot.Builder.Azure
                                                     new SqlParameter(entityKeyParameterName, entityKey)
                                                 });
                 var collectionUri = UriFactory.CreateDocumentCollectionUri(databaseId, collectionId);
-                var query = documentClient.CreateDocumentQuery(collectionUri, querySpec)
+                // execute the cross partition query if enableCrossPartitionQuery is true
+                var feedOption = new FeedOptions { EnableCrossPartitionQuery = enableCrossPartitionQuery };
+                var query = documentClient.CreateDocumentQuery(collectionUri, querySpec, feedOption)
                                           .AsDocumentQuery();
                 var feedResponse = await query.ExecuteNextAsync<Document>(CancellationToken.None);
                 Document document = feedResponse.FirstOrDefault();
